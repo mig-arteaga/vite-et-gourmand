@@ -47,6 +47,10 @@ p {
     text-align: left;
 }
 
+.p-margin {
+    margin-bottom: 2rem;
+}
+
 a {
     text-decoration: none;
 }
@@ -56,6 +60,12 @@ section {
     overflow: hidden;
     width: 100%;
     text-align: center;
+}
+
+.first-section {
+    /* position: relative; */
+    /* height: 100vh; */
+    padding-top: 16rem;
 }
 
 .container {

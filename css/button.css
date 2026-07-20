@@ -28,6 +28,11 @@
     transition: color 500ms;
 }
 
+.body-btn:hover,
+.body-btn:focus {
+    color: var(--main-font-color-dark);
+}
+
 .btn-underline::before {
     content: '';
     position: absolute;
@@ -37,11 +42,6 @@
     width: 100%;
     background-color: var(--secondary-font-color);
     transition: background-color 500ms;
-}
-
-.body-btn:hover,
-.body-btn:focus {
-    color: var(--main-font-color-dark);
 }
 
 .btn-underline:hover::before,

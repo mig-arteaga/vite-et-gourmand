@@ -1,0 +1,21 @@
+/* Nous */
+
+.team-slide {
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    gap: 2rem;
+    z-index: 250;
+    margin-bottom: 4rem;
+}
+
+.slide-image {
+    width: 40rem;
+    height: 40rem;
+    object-fit: cover;
+    flex-shrink: 0;
+    animation: slideShow 60s linear infinite;
+}

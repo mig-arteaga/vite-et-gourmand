@@ -63,3 +63,13 @@
         transform: translateY(-.5rem);
     }
 }
+
+@keyframes slideShow {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-294rem);
+    }
+}

@@ -170,6 +170,11 @@ h4 {
     background-size: cover;
 }
 
+.perfect-blend {
+    background: url(../images/perfect-blend.jpg) center no-repeat;
+    background-size: cover;
+}
+
 .between {
     min-height: 40vh;
 }
@@ -180,7 +185,7 @@ h4 {
     width: 100%;
     overflow: hidden;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-flow: column;
     gap: 2rem;
 }
 
