@@ -28,16 +28,16 @@ header {
     align-items: center;
     cursor: pointer;
     z-index: 1500;
-  }
-  
-  .icon-box {
+}
+
+.icon-box {
     width: 18px;
     height: 12px;
     position: relative;
     transition: all 300ms ease-in-out;
-  }
-  
-  .icon-box i {
+}
+
+.icon-box i {
     position: absolute;
     display: block;
     height: 2px;
@@ -45,19 +45,19 @@ header {
     width: 18px;
     left: 0;
     transition: all 300ms;
-  }
-  
-  .toggle-menu .top-line {
+}
+
+.toggle-menu .top-line {
     top: 0;
-  }
-  
-  .toggle-menu .middle-line {
+}
+
+.toggle-menu .middle-line {
     top: 5px;
-  }
-  
-  .toggle-menu .bottom-line {
+}
+
+.toggle-menu .bottom-line {
     top: 10px;
-  }
+}
 
 .nav-list {
     list-style: none;
@@ -141,4 +141,14 @@ header {
     left: 0;
     transform: initial;
     bottom: -3px;
+}
+
+.login {
+    width: 2.8rem;
+    height: 2.8rem;
+    padding: 0.6rem;
+    background-color: var(--body-font-color-light);
+    color: var(--body-font-color);
+    font-size: 1.6rem;
+    border-radius: 50%;
 }

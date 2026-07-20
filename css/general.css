@@ -5,6 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* border: solid 1px red; */
 }
 
 :root{
@@ -14,6 +15,7 @@
     --main-font-color-dark: #252525;
     --secondary-font-color: #c59d5f;
     --body-font-color: #515151;
+    --body-font-color-light: #D9D9D9;
 }
 
 html {
