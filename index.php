@@ -16,5 +16,21 @@
     <?php
         require "assets/header.php";
     ?>
+
+    <!-- Main section -->
+    <section class="menu-section" id="main-section">
+        <!-- <img src="images/hero.jpg" alt="" class="parallax"> -->
+        <div class="container">
+            <h2 class="sub-headline">
+                <span class="first-letter">T</span>ous les
+            </h2>
+            <h1 class="headline headline-dark">Menus</h1>
+
+            <!-- Menu -->
+            <?php
+                require "assets/menu.php";
+            ?>
+        </div>
+    </section>
 </body>
 </html>

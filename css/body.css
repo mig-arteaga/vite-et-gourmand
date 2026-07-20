@@ -1,0 +1,138 @@
+/* Main-section */
+
+.main-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* background: url(../images/hero.jpg) center no-repeat;
+    background-size: cover; */
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.sub-headline {
+    font-size: 8.5rem;
+    font-family: var(--secondary-font);
+    color: var(--secondary-font-color);
+    font-weight: 100;
+    line-height: .4;
+    letter-spacing: 2px;
+}
+
+.first-letter {
+    text-transform: uppercase;
+    font-size: 10.3rem;
+}
+
+.headline {
+    font-size: 3.7rem;
+    font-family: var(--main-font);
+    color: var(--main-font-color-dark);
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: .5rem;
+    margin-right: -.5rem;
+    margin-bottom: 5rem;
+}
+
+h3 {
+    font-size: 2.2rem;
+    font-family: var(--main-font);
+    color: var(--main-font-color-dark);
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 3rem;
+}
+
+.btn {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: -2px;
+}
+
+.body-btn {
+    font-size: 1.5rem;
+    color: var(--secondary-font-color);
+    position: relative;
+    transition: color 500ms;
+}
+
+.body-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 2px;
+    width: 100%;
+    background-color: var(--secondary-font-color);
+    transition: background-color 500ms;
+}
+
+.body-btn:hover,
+.body-btn:focus {
+    color: var(--main-font-color-dark);
+}
+
+.body-btn:hover::before,
+.body-btn:focus::before {
+    background-color: var(--main-font-color-dark);
+}
+
+.menu-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    padding-top: 16rem;
+}
+
+.menu {
+    background-color: #FFF;
+    width: 100%;
+    height: 30rem;
+    position: relative;
+    border-radius: 6rem 0 0 0;
+    box-shadow: .5rem .5rem 1rem #00000040;
+    padding: 4rem;
+    padding-left: 34rem;
+}
+
+.menu-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30rem;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6rem 0 0 0;
+}
+
+.menu-flex {
+    display: grid;
+    grid-template-columns: 1fr 0.1rem 20rem;
+    gap: 4rem;
+    border: solid 1px red;
+    height: 22rem;
+}
+
+.menu-separator {
+    background-color: #B3B3B3;
+}
+
+.menu-plus {
+    position: relative;
+    border: solid 1px red;
+}
+
+.menu-plus a {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.menu-list-item {
+    line-height: 1.8;
+}
