@@ -9,12 +9,30 @@
         <div class="menu-separator"></div>
         <div class="menu-plus">
             <ul class="menu-list">
-                <li class="menu-list-item">Anniversaire</li>
-                <li class="menu-list-item">Pas de régime</li>
-                <li class="menu-list-item">Entrée + plat + dessert</li>
-                <li class="menu-list-item">10 allergènes</li>
-                <li class="menu-list-item">5 personnes min.</li>
-                <li class="menu-list-item">60€ / personne</li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-champagne-glasses color-1"></i>
+                    Anniversaire
+                </li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-wheat-awn-circle-exclamation color-2"></i>
+                    Pas de régime
+                </li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-bowl-food color-3"></i>
+                    Entrée + plat + dessert
+                </li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-shrimp color-4"></i>
+                    10 allergènes
+                </li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-people-group color-5"></i>
+                    5 personnes min.
+                </li>
+                <li class="menu-list-item">
+                    <i class="fa-solid fa-euro-sign color-2"></i>
+                    60€ / personne
+                </li>
             </ul>
             <a href="#" class="btn body-btn">Voir plus</a>
         </div>

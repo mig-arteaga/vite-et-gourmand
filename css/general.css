@@ -13,9 +13,14 @@
     --secondary-font: 'Herr Von Muellerhoff', cursive;
     --body-font: 'Cabin', sans-serif;
     --main-font-color-dark: #252525;
-    --secondary-font-color: #c59d5f;
+    --secondary-font-color: #C59D5F;
     --body-font-color: #515151;
     --body-font-color-light: #D9D9D9;
+    --color-1 : #DE6396;
+    --color-2 : #E79D47;
+    --color-3 : #9D5BDB;
+    --color-4 : #485BD8;
+    --color-5 : #59C28A;
 }
 
 html {
@@ -64,4 +69,24 @@ ul {
 li {
     font-size: 1.6rem;
     text-align: left;
+}
+
+.color-1 {
+    color: var(--color-1);
+}
+
+.color-2 {
+    color: var(--color-2);
+}
+
+.color-3{
+    color: var(--color-3);
+}
+
+.color-4 {
+    color: var(--color-4);
+}
+
+.color-5 {
+    color: var(--color-5);
 }
