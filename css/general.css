@@ -47,6 +47,10 @@ p {
     text-align: left;
 }
 
+.p-margin {
+    margin-bottom: 2rem;
+}
+
 a {
     text-decoration: none;
 }

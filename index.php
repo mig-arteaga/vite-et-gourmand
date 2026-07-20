@@ -54,7 +54,7 @@
                     <a href="#" class="btn body-btn btn-underline">Sur nous</a>
                 </div>
                 <div class="restaurant-info-img animate-right">
-                    <img src="images/team.jpg" alt="">
+                    <img src="images/team-1.jpg" alt="">
                 </div>
             </div>
         </div>
