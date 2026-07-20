@@ -17,8 +17,8 @@
         require "assets/header.php";
     ?>
 
-    <!-- Menu section -->
-    <section class="menu-section">
+    <!-- Nous section -->
+    <section class="nous-section first-section">
         <!-- <img src="images/hero.jpg" alt="" class="parallax"> -->
         <div class="container">
             <h2 class="sub-headline">

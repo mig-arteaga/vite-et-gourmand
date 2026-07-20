@@ -62,6 +62,12 @@ section {
     text-align: center;
 }
 
+.first-section {
+    /* position: relative; */
+    /* height: 100vh; */
+    padding-top: 16rem;
+}
+
 .container {
     width: 100%;
     max-width: 122.5rem;

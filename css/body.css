@@ -170,6 +170,11 @@ h4 {
     background-size: cover;
 }
 
+.perfect-blend {
+    background: url(../images/perfect-blend.jpg) center no-repeat;
+    background-size: cover;
+}
+
 .between {
     min-height: 40vh;
 }
