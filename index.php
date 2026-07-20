@@ -32,5 +32,10 @@
             ?>
         </div>
     </section>
+
+    <!-- Footer -->
+    <?php
+        require "assets/footer.php";
+    ?>
 </body>
 </html>

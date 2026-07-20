@@ -16,6 +16,7 @@
     --secondary-font-color: #C59D5F;
     --body-font-color: #515151;
     --body-font-color-light: #D9D9D9;
+    --bg-color-dark: #121212;
     --color-1 : #DE6396;
     --color-2 : #E79D47;
     --color-3 : #9D5BDB;
@@ -36,7 +37,7 @@ body {
 }
 
 section {
-    padding: 7.9rem;
+    padding: 8rem 0;
     overflow: hidden;
 }
 
@@ -59,7 +60,7 @@ a {
     width: 100%;
     max-width: 122.5rem;
     margin: 0 auto;
-    padding: 0 2.4rem;
+    /* padding: 0 2.4rem; */
 }
 
 ul {

@@ -3,7 +3,7 @@
     <div class="container">
         <nav class="nav">
             <a href="index.php">
-                <img src="images/vg-logo.png" alt="" class="title-img">
+                <img src="images/vg-logo-1.png" alt="" class="title-img">
             </a>
             <ul class="nav-list">
                 <li class="nav-item">
