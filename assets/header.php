@@ -3,14 +3,14 @@
     <div class="container">
         <nav class="nav">
             <a href="index.php">
-                <img src="images/vg-logo-1.png" alt="" class="title-img">
+                <img src="images/vg-logo-2.png" alt="" class="title-img">
             </a>
             <ul class="nav-list">
                 <li class="nav-item">
                     <a href="index.php" class="nav-link active">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Menus</a>
+                    <a href="menus.php" class="nav-link">Menus</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Nous</a>

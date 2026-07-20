@@ -25,9 +25,6 @@
                         <li>
                             <a href="#"><i class="fab fa-linkedin-in"></i></a>
                         </li>
-                        <li>
-                            <a href="#"><i class="fab fa-tripadvisor"></i></a>
-                        </li>
                     </ul>
                 </div>
                 <div class="newsletter-container">

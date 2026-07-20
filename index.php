@@ -18,18 +18,45 @@
     ?>
 
     <!-- Main section -->
-    <section class="menu-section" id="main-section">
-        <!-- <img src="images/hero.jpg" alt="" class="parallax"> -->
+    <section class="main-section">
+        <img src="images/hero.jpg" alt="" class="parallax">
         <div class="container">
             <h2 class="sub-headline">
-                <span class="first-letter">T</span>ous les
+                <span class="first-letter">B</span>ienvenue
             </h2>
-            <h1 class="headline headline-dark">Menus</h1>
+            <img src="images/vg-logo-3.png" alt="" class="main-logo">
+            <div class="headline-description">
+                <div class="separator">
+                    <div class="line left-line"></div>
+                    <div class="asterisk"><i class="fas fa-asterisk"></i></div>
+                    <div class="line right-line"></div>
+                </div>
+                <div class="single-animation">
+                    <a href="#" class="btn main-btn">Voir menus</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <!-- Menu -->
-            <?php
-                require "assets/menu.php";
-            ?>
+    <!-- Notre équipe -->
+    <section class="team-section">
+        <div class="container">
+            <div class="team-info">
+                <div class="team-description">
+                    <div class="team-headline">
+                        <h2 class="sub-headline">
+                            <span class="first-letter">N</span>otre
+                        </h2>
+                        <h1 class="headline">Equipe</h1>
+                    </div>
+                    <div class="asterisk"><i class="fas fa-asterisk"></i></div>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus suscipit repudiandae vel alias, eius incidunt quis. Facilis, commodi iste. Modi neque ipsa maiores eligendi porro quia, nulla facilis totam ab!</p>
+                    <a href="#" class="btn body-btn btn-underline">Sur nous</a>
+                </div>
+                <div class="restaurant-info-img animate-right">
+                    <img src="images/team.jpg" alt="">
+                </div>
+            </div>
         </div>
     </section>
 
@@ -38,7 +65,7 @@
     </section>
 
     <!-- Avis clients -->
-    <section>
+    <section class="review-section">
         <div class="container">
             <h2 class="sub-headline">
                 <span class="first-letter">A</span>vis
@@ -46,9 +73,17 @@
             <h1 class="headline headline-dark">Clients</h1>
 
             <!-- Avis -->
-            <?php
-                require "assets/review.php";
-            ?>
+             <div class="review-wrap">
+                <?php
+                    require "assets/review.php";
+                ?>
+                <?php
+                    require "assets/review.php";
+                ?>
+                <?php
+                    require "assets/review.php";
+                ?>
+             </div>
         </div>
     </section>
 

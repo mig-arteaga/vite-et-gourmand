@@ -7,6 +7,20 @@
     margin-right: -2px;
 }
 
+.main-btn {
+    font-size: 1.1rem;
+    background-color: #FFF;
+    padding: .9rem 1.8rem;
+    color: var(--body-font-color);
+    border-radius: .4rem;
+    transition: background-color 500ms;
+}
+
+.main-btn:hover {
+    color: #FFF;
+    background-color: var(--secondary-font-color);
+}
+
 .body-btn {
     font-size: 1.5rem;
     color: var(--secondary-font-color);
