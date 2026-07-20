@@ -1,5 +1,5 @@
 <!-- Header -->
-<header>
+<header class="header-2">
     <div class="container">
         <nav class="nav">
             <a href="index.php">

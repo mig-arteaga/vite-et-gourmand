@@ -1,7 +1,7 @@
 <!-- Menu -->
 <div class="menu">
     <img src="images/menu1-1.jpg" alt="" class="menu-img">
-    <div class="menu-flex">
+    <div class="menu-grid">
         <div class="menu-info">
             <h3>Premier menu</h3>
             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat debitis architecto quia culpa blanditiis. Culpa voluptatibus obcaecati, possimus suscipit iste, cupiditate assumenda autem eum eligendi sequi dignissimos eaque accusantium odio.</p>
@@ -34,7 +34,7 @@
                     60€ / personne
                 </li>
             </ul>
-            <a href="#" class="btn body-btn">Voir plus</a>
+            <a href="#" class="btn body-btn btn-underline">Voir plus</a>
         </div>
     </div>
 </div>

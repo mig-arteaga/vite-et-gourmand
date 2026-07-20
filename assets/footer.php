@@ -35,7 +35,7 @@
                     <form action="" class="newsletter-form">
                         <input type="text" class="newsletter-input" placeholder="Your email address...">
                         <button class="newsletter-btn" type="submit">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fa-regular fa-envelope"></i>
                         </button>
                     </form>
                 </div>

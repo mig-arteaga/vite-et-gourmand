@@ -36,11 +36,6 @@ body {
     background-color: var(--body-font-color-light);
 }
 
-section {
-    padding: 8rem 0;
-    overflow: hidden;
-}
-
 img {
     width: 100%;
     max-width:100%;
@@ -54,6 +49,13 @@ p {
 
 a {
     text-decoration: none;
+}
+
+section {
+    padding: 8rem 0;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
 }
 
 .container {

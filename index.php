@@ -33,6 +33,25 @@
         </div>
     </section>
 
+    <!-- Between 1 -->
+    <section class="tasteful-recipes between">
+    </section>
+
+    <!-- Avis clients -->
+    <section>
+        <div class="container">
+            <h2 class="sub-headline">
+                <span class="first-letter">A</span>vis
+            </h2>
+            <h1 class="headline headline-dark">Clients</h1>
+
+            <!-- Avis -->
+            <?php
+                require "assets/review.php";
+            ?>
+        </div>
+    </section>
+
     <!-- Footer -->
     <?php
         require "assets/footer.php";

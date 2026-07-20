@@ -1,0 +1,36 @@
+/* Button */
+
+.btn {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-right: -2px;
+}
+
+.body-btn {
+    font-size: 1.5rem;
+    color: var(--secondary-font-color);
+    position: relative;
+    transition: color 500ms;
+}
+
+.btn-underline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 2px;
+    width: 100%;
+    background-color: var(--secondary-font-color);
+    transition: background-color 500ms;
+}
+
+.body-btn:hover,
+.body-btn:focus {
+    color: var(--main-font-color-dark);
+}
+
+.btn-underline:hover::before,
+.btn-underline:focus::before {
+    background-color: var(--main-font-color-dark);
+}
