@@ -27,20 +27,20 @@
             <h1 class="headline">Sommes-nous</h1>
 
             <div class="team-slide">
-                <img src="images/team-1.jpg" alt="" class="slide-image">
-                <img src="images/team-2.jpg" alt="" class="slide-image">
-                <img src="images/team-3.jpg" alt="" class="slide-image">
-                <img src="images/team-4.jpg" alt="" class="slide-image">
-                <img src="images/team-5.jpg" alt="" class="slide-image">
-                <img src="images/team-6.jpg" alt="" class="slide-image">
-                <img src="images/team-7.jpg" alt="" class="slide-image">
-                <img src="images/team-1.jpg" alt="" class="slide-image">
-                <img src="images/team-2.jpg" alt="" class="slide-image">
-                <img src="images/team-3.jpg" alt="" class="slide-image">
-                <img src="images/team-4.jpg" alt="" class="slide-image">
-                <img src="images/team-5.jpg" alt="" class="slide-image">
-                <img src="images/team-6.jpg" alt="" class="slide-image">
-                <img src="images/team-7.jpg" alt="" class="slide-image">
+                <img src="images/team-1.jpg" alt="" class="team-slide-image">
+                <img src="images/team-2.jpg" alt="" class="team-slide-image">
+                <img src="images/team-3.jpg" alt="" class="team-slide-image">
+                <img src="images/team-4.jpg" alt="" class="team-slide-image">
+                <img src="images/team-5.jpg" alt="" class="team-slide-image">
+                <img src="images/team-6.jpg" alt="" class="team-slide-image">
+                <img src="images/team-7.jpg" alt="" class="team-slide-image">
+                <img src="images/team-1.jpg" alt="" class="team-slide-image">
+                <img src="images/team-2.jpg" alt="" class="team-slide-image">
+                <img src="images/team-3.jpg" alt="" class="team-slide-image">
+                <img src="images/team-4.jpg" alt="" class="team-slide-image">
+                <img src="images/team-5.jpg" alt="" class="team-slide-image">
+                <img src="images/team-6.jpg" alt="" class="team-slide-image">
+                <img src="images/team-7.jpg" alt="" class="team-slide-image">
             </div>
             <p class="p-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit. Phasellus viverra leo nec turpis efficitur, et tincidunt nulla sodales. Curabitur dapibus eget ipsum ac rutrum. Vivamus bibendum tincidunt quam. Aliquam laoreet, leo nec pulvinar tincidunt, quam augue pulvinar turpis, sed porta neque urna sit amet tortor. Suspendisse rhoncus erat neque, ac facilisis odio auctor vitae. Aliquam aliquet erat a enim pharetra ultricies id vel dolor. Etiam nibh felis, finibus nec velit at, viverra sodales nunc.</p>
             <p class="p-margin">Sed non blandit arcu. Duis nec placerat mi. Donec malesuada lacus metus, porttitor consequat nibh egestas non. Pellentesque ut felis vitae eros vulputate vulputate vitae non tortor. Aenean porta maximus sapien consectetur commodo. Morbi iaculis, erat tincidunt luctus fringilla, orci nibh lobortis augue, at volutpat tellus nunc sit amet erat. Aenean accumsan, neque at semper efficitur, quam orci laoreet justo, nec eleifend purus elit quis ipsum. Proin gravida nisi ultrices elit lobortis finibus. Phasellus at arcu cursus, interdum nisl ut, malesuada nunc. Nulla et magna quis nisl consequat maximus.</p>
