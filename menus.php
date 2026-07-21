@@ -50,5 +50,7 @@
     <?php
         require "assets/footer.php";
     ?>
+    
+    <script src="js/script.js"></script>
 </body>
 </html>
