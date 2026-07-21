@@ -29,17 +29,47 @@
                 <h4>Filtres</h4>
             </div>
 
-            <!-- Menu -->
+            <!-- Gather menus -->
             <?php
-                require "assets/menu.php";
-                require "assets/menu.php";
-                require "assets/menu.php";
-                require "assets/menu.php";
+                try {
+                    $pdo = new PDO(
+                        'mysql:host=localhost;dbname=vite_et_gourmand', 
+                        'root', 
+                        '');
+                    
+                    $sql = "SELECT 
+                        m.id_menu,
+                        m.titre as title,
+                        m.description,
+                        m.min_personnes as min_people,
+                        m.prix_personne as unit_price,
+                        t.libelle as theme,
+                        r.libelle as diet,
+                        MAX(pm.chemin) as photo,
+                        COUNT(IF(p.type = 'Entrée', 1, NULL)) as appetizer,
+                        COUNT(IF(p.type = 'Plat', 1, NULL)) as main_course,
+                        COUNT(IF(p.type = 'Dessert', 1, NULL)) as dessert,
+                        COUNT(pa.allergene) as allergenic
+                    FROM menus m
+                    INNER JOIN themes t ON m.theme = t.id_theme
+                    INNER JOIN regimes r ON m.regime = r.id_regime
+                    INNER JOIN photos_menu pm ON m.id_menu = pm.menu AND pm.ordre = 1
+                    INNER JOIN menus_plats mp ON m.id_menu = mp.menu
+                    INNER JOIN plats p ON mp.plat = p.id_plat
+                    INNER JOIN plats_allergenes pa ON p.id_plat = pa.plat
+                    GROUP BY m.id_menu;";
+                    
+                    foreach ($pdo->query($sql, PDO::FETCH_ASSOC) as $menu) {
+                        include "assets/menu.php";
+                    }
+                } catch (PDOException $e) {
+                    echo 'Erreur : ' . $e->getMessage();
+                }
             ?>
 
             <!-- Detailed menu -->
             <?php
-                require "assets/detail-menu.php";
+                include "assets/detail-menu.php";
             ?>
         </div>
     </section>

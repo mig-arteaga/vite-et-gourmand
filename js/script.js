@@ -62,23 +62,68 @@ window.addEventListener('scroll', function () {
 
 // Open detail menu
 
-const menuButton = document.querySelector('.menu-btn');
-const detailMenu = document.getElementById('detail-bg');
+// const detailButtons = document.querySelectorAll('.menu-btn');
+// const detailBg = document.getElementById('detail-bg');
 
-menuButton.addEventListener('click', () => {
-    detailMenu.classList.add("visible");
+// menuButton.addEventListener('click', () => {
+//     detailMenu.classList.add("visible");
+// });
+
+// Close detail menu
+
+// const closeMenuButton = document.querySelector('.close-btn');
+
+// closeMenuButton.addEventListener('click', () => {
+//     detailBg.classList.remove("visible");
+// });
+
+// detailMenu.addEventListener('click', (e) => {
+//     if (e.target === e.currentTarget) {
+//         detailBg.classList.remove("visible");
+//     }
+// });
+
+
+// Open detail menu
+
+const detailButtons = document.querySelectorAll('.menu-btn');
+const detailBg = document.getElementById('detail-bg');
+
+console.log("Number of buttons found:", detailButtons.length);
+
+detailButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const menuId = button.id;
+
+        console.log("Sending menu ID:", menuId);
+
+        detailBg.classList.add('visible');
+
+        const formData = new FormData();
+
+        formData.append('menu', menuId);
+
+        fetch('assets/detail-menu.php', {
+            method: 'POST',
+            body: formData
+        })
+
+        .then(response => response.json())
+        .then(data => {
+            console.log("PHP response:");
+            console.log(data);
+
+            const title = document.getElementById('detail-title');
+            title.textContent = data.titre;
+        });
+    });
 });
+
 
 // Close detail menu
 
 const closeMenuButton = document.querySelector('.close-btn');
 
 closeMenuButton.addEventListener('click', () => {
-    detailMenu.classList.remove("visible");
-});
-
-detailMenu.addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
-        detailMenu.classList.remove("visible");
-    }
+    detailBg.classList.remove("visible");
 });

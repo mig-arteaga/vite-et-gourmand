@@ -69,7 +69,7 @@ CREATE TABLE plats_allergenes (
 CREATE TABLE menus (
 	id_menu INT PRIMARY KEY AUTO_INCREMENT,
 	titre VARCHAR(50) NOT NULL,
-	description VARCHAR(50) NOT NULL,
+	description VARCHAR(255) NOT NULL,
 	theme INT NOT NULL,
 	regime INT NOT NULL,
 	min_personnes INT NOT NULL DEFAULT 5,
@@ -102,6 +102,14 @@ CREATE TABLE commandes (
 	statut VARCHAR(50) NOT NULL DEFAULT "En attente",
 	FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
 	FOREIGN KEY (menu) REFERENCES menus(id_menu)
+);
+
+CREATE TABLE photos_menu (
+    id_photo INT PRIMARY KEY AUTO_INCREMENT,
+    menu INT NOT NULL,
+    chemin VARCHAR(255) NOT NULL,
+    ordre INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (menu) REFERENCES menus(id_menu)
 );
 
 -- Initialize data
@@ -211,16 +219,16 @@ INSERT INTO plats_allergenes (plat, allergene) VALUES
 (15, 3);
 
 INSERT INTO menus (titre, description, theme, regime, min_personnes, prix_personne, jours_avant, stock) VALUES
-('Menu Anniversaire Gourmand', 'Un menu complet pour célébrer un anniversaire', 2, 1, 8, 35.00, 5, 30),
-('Menu Élégance', 'Une sélection raffinée pour vos événements', 7, 1, 6, 45.00, 7, 25),
-('Menu Afterwork Convivial', 'Un menu simple et gourmand entre collègues', 3, 1, 10, 28.00, 5, 50),
-('Menu Brunch Fraîcheur', 'Une formule légère et équilibrée', 4, 2, 5, 30.00, 6, 20),
-('Menu Cocktail Prestige', 'Une formule idéale pour vos réceptions', 5, 1, 10, 40.00, 7, 35),
-('Menu Picnic Nature', 'Une formule pratique pour vos repas extérieurs', 6, 1, 8, 32.00, 5, 40),
-('Menu Végétarien Découverte', 'Une sélection sans viande pleine de saveurs', 1, 2, 6, 29.00, 6, 25),
-('Menu Saveurs du Terroir', 'Des plats traditionnels et généreux', 1, 1, 10, 38.00, 7, 45),
-('Menu Sans Gluten', 'Une formule adaptée aux intolérances', 7, 4, 5, 36.00, 6, 20),
-('Menu Douceur Chocolatée', 'Une formule gourmande avec dessert inclus', 2, 1, 7, 34.00, 5, 30);
+('Anniversaire Gourmand', 'Une composition généreuse et festive pensée pour accompagner vos moments de célébration, avec des recettes gourmandes et raffinées qui raviront tous vos invités.', 2, 1, 8, 35.00, 5, 30),
+('Élégance', 'Une sélection raffinée de mets soigneusement préparés pour vos événements prestigieux, alliant finesse, équilibre des saveurs et présentation élégante.', 7, 1, 6, 45.00, 7, 25),
+('Team-building Convivial', 'Une formule chaleureuse et accessible idéale pour partager un moment agréable entre collègues autour de plats savoureux et d une ambiance conviviale.', 3, 1, 10, 28.00, 5, 50),
+('Fraîcheur de Midi', 'Une formule légère et équilibrée composée de saveurs fraîches et variées, parfaite pour profiter d un brunch gourmand lors de vos rencontres.', 4, 2, 5, 30.00, 6, 20),
+('Cocktail Prestige', 'Une expérience culinaire élégante conçue pour vos réceptions, avec une association de bouchées délicates et de créations originales adaptées aux grandes occasions.', 5, 1, 10, 40.00, 7, 35),
+('Picnic Nature', 'Une formule pratique et savoureuse spécialement imaginée pour vos repas en extérieur, combinant simplicité, fraîcheur et plaisir autour de produits sélectionnés.', 6, 1, 8, 32.00, 5, 40),
+('Végétarien Découverte', 'Une sélection créative de recettes végétariennes riches en goûts et en couleurs, mettant en valeur des ingrédients frais et des associations gourmandes.', 1, 2, 6, 29.00, 6, 25),
+('Saveurs du Terroir', 'Un voyage culinaire au cœur des traditions françaises avec des plats généreux inspirés du terroir et préparés avec des produits de qualité.', 1, 1, 10, 38.00, 7, 45),
+('Sans Gluten', 'Une formule adaptée aux besoins spécifiques proposant des recettes savoureuses sans gluten, tout en conservant la richesse des saveurs et le plaisir du repas.', 7, 4, 5, 36.00, 6, 20),
+('Douceur Chocolatée', 'Une formule gourmande dédiée aux amateurs de douceurs, associant des recettes généreuses et des desserts chocolatés pour terminer le repas avec plaisir.', 2, 1, 7, 34.00, 5, 30);
 
 INSERT INTO menus_plats (menu, plat) VALUES
 (1, 1),
@@ -261,3 +269,55 @@ INSERT INTO commandes (utilisateur, menu, date_create, date_livraison, qte_perso
 (6, 8, '2026-05-20', '2026-05-15', 10, 380.00, 25.00, 1, 1, 'Livré'),
 (7, 9, '2026-05-01', '2026-05-20', 5, 180.00, 9.00, 1, 1, 'Livré'),
 (8, 10, '2026-07-10', '2026-08-01', 7, 238.00, 16.00, 1, 1, 'En cours');
+
+INSERT INTO photos_menu (menu, chemin, ordre) VALUES
+(1,'images/menu-1-1.jpg',1),
+(1,'images/menu-1-2.jpg',2),
+(1,'images/menu-1-3.jpg',3),
+(1,'images/menu-1-4.jpg',4),
+(1,'images/menu-1-5.jpg',5),
+(2,'images/menu-1-2.jpg',1),
+(2,'images/menu-1-3.jpg',2),
+(2,'images/menu-1-4.jpg',3),
+(2,'images/menu-1-5.jpg',4),
+(2,'images/menu-1-6.jpg',5),
+(3,'images/menu-1-3.jpg',1),
+(3,'images/menu-1-4.jpg',2),
+(3,'images/menu-1-5.jpg',3),
+(3,'images/menu-1-6.jpg',4),
+(3,'images/menu-1-7.jpg',5),
+(4,'images/menu-1-4.jpg',1),
+(4,'images/menu-1-5.jpg',2),
+(4,'images/menu-1-6.jpg',3),
+(4,'images/menu-1-7.jpg',4),
+(4,'images/menu-1-8.jpg',5),
+(5,'images/menu-1-5.jpg',1),
+(5,'images/menu-1-6.jpg',2),
+(5,'images/menu-1-7.jpg',3),
+(5,'images/menu-1-8.jpg',4),
+(5,'images/menu-1-9.jpg',5),
+(6,'images/menu-1-6.jpg',1),
+(6,'images/menu-1-7.jpg',2),
+(6,'images/menu-1-8.jpg',3),
+(6,'images/menu-1-9.jpg',4),
+(6,'images/menu-1-10.jpg',5),
+(7,'images/menu-1-7.jpg',1),
+(7,'images/menu-1-8.jpg',2),
+(7,'images/menu-1-9.jpg',3),
+(7,'images/menu-1-10.jpg',4),
+(7,'images/menu-1-1.jpg',5),
+(8,'images/menu-1-8.jpg',1),
+(8,'images/menu-1-9.jpg',2),
+(8,'images/menu-1-10.jpg',3),
+(8,'images/menu-1-1.jpg',4),
+(8,'images/menu-1-2.jpg',5),
+(9,'images/menu-1-9.jpg',1),
+(9,'images/menu-1-10.jpg',2),
+(9,'images/menu-1-1.jpg',3),
+(9,'images/menu-1-2.jpg',4),
+(9,'images/menu-1-3.jpg',5),
+(10,'images/menu-1-10.jpg',1),
+(10,'images/menu-1-1.jpg',2),
+(10,'images/menu-1-2.jpg',3),
+(10,'images/menu-1-3.jpg',4),
+(10,'images/menu-1-4.jpg',5);
