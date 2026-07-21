@@ -1,19 +1,20 @@
 /* Detail menu */
 
-.detail-bg{
+.detail-bg {
     position: fixed;
     inset: 0;
     height: 100%;
     width: 100%;
-    background-color: #00000040;
-    display: flex;
+    background-color: #00000066;
+    display: none;
     align-items: center;
+    justify-content: center;
     z-index: 1000;
 }
 
-/* .detail-bg * {
-    border: solid 1px red;
-} */
+.detail-bg.visible {
+    display: flex;
+}
 
 .detail-menu {
     height: 70vh;
@@ -31,7 +32,7 @@
     top: 0;
     right: 0;
     font-size: 2rem;
-    z-index: 10000;
+    z-index: 2000;
     cursor: pointer;
 }
 

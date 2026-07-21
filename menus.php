@@ -38,11 +38,9 @@
             ?>
 
             <!-- Detailed menu -->
-            <div class="detail-bg">
-                <?php
-                    require "assets/detail-menu.php";
-                ?>
-            </div>
+            <?php
+                require "assets/detail-menu.php";
+            ?>
         </div>
     </section>
 

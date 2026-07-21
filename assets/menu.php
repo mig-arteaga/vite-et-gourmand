@@ -34,7 +34,7 @@
                     60€ / personne
                 </li>
             </ul>
-            <a href="#" class="btn body-btn btn-underline">Voir plus</a>
+            <a class="btn body-btn btn-underline menu-btn no-link-btn">Voir plus</a>
         </div>
     </div>
 </div>

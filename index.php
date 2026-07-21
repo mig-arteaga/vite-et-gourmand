@@ -47,7 +47,7 @@
                         <h2 class="sub-headline">
                             <span class="first-letter">N</span>otre
                         </h2>
-                        <h1 class="headline">Equipe</h1>
+                        <h1 class="headline animate-bottom">Equipe</h1>
                     </div>
                     <div class="asterisk"><i class="fas fa-asterisk"></i></div>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus suscipit repudiandae vel alias, eius incidunt quis. Facilis, commodi iste. Modi neque ipsa maiores eligendi porro quia, nulla facilis totam ab!</p>
@@ -92,6 +92,6 @@
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/script.js"></script>
 </body>
 </html>

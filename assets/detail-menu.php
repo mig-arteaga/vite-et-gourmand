@@ -1,5 +1,5 @@
 <!-- Detailed menu -->
- <div class="detail-bg">
+ <div class="detail-bg" id="detail-bg">
     <div class="detail-menu container">
         <div class="close-btn">
             <i class="fa-solid fa-xmark"></i>
@@ -89,7 +89,7 @@
                             <i class="fa-solid fa-calendar color-4"></i>
                         </li>
                     </ul>
-                    <a href="#" class="btn body-btn btn-underline">Commander</a>
+                    <a href="#" class="btn body-btn btn-underline no-link-btn">Commander</a>
                 </div>
             </div>
         </div>
