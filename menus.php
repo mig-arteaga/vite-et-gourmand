@@ -18,8 +18,7 @@
     ?>
 
     <!-- Menu section -->
-    <section class="menu-section">
-        <!-- <img src="images/hero.jpg" alt="" class="parallax"> -->
+    <section class="menu-section first-section">
         <div class="container">
             <h2 class="sub-headline">
                 <span class="first-letter">T</span>ous les
@@ -37,6 +36,13 @@
                 require "assets/menu.php";
                 require "assets/menu.php";
             ?>
+
+            <!-- Detailed menu -->
+            <div class="detail-bg">
+                <?php
+                    require "assets/detail-menu.php";
+                ?>
+            </div>
         </div>
     </section>
 

@@ -1,0 +1,17 @@
+/* Filters */
+
+.filters {
+    width: 100%;
+    height: 6rem;
+    border-radius: 3rem;
+    background-color: #FFFFFF;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem;
+}
+
+.filters h4 {
+    margin-bottom: 0;
+}

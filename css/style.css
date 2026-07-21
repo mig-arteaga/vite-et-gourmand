@@ -4,9 +4,11 @@
 @import url('button.css');
 @import url('header.css');
 @import url('body.css');
-@import url('footer.css');
-@import url('menu.css');
 @import url('review.css');
+@import url('footer.css');
+@import url('menus.css');
+@import url('menu.css');
+@import url('detail-menu.css');
 @import url('animation.css');
 @import url('nous.css');
 @import url('contact.css');

@@ -64,12 +64,22 @@
     }
 }
 
-@keyframes slideShow {
+@keyframes slideShowNous {
     from {
         transform: translateX(0);
     }
 
     to {
         transform: translateX(-294rem);
+    }
+}
+
+@keyframes slideShowMenu {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-155rem);
     }
 }

@@ -1,6 +1,6 @@
 <!-- Menu -->
 <div class="menu">
-    <img src="images/menu1-1.jpg" alt="" class="menu-img">
+    <img src="images/menu-1-1.jpg" alt="" class="menu-img">
     <div class="menu-grid">
         <div class="menu-info">
             <h3>Premier menu</h3>

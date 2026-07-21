@@ -12,10 +12,10 @@
     margin-bottom: 4rem;
 }
 
-.slide-image {
+.team-slide-image {
     width: 40rem;
     height: 40rem;
     object-fit: cover;
     flex-shrink: 0;
-    animation: slideShow 60s linear infinite;
+    animation: slideShowNous 60s linear infinite;
 }
