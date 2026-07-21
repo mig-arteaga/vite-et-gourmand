@@ -38,7 +38,7 @@
         </div>
     </section>
 
-    <!-- Notre équipe -->
+    <!-- Team section -->
     <section class="team-section">
         <div class="container">
             <div class="team-info">
@@ -64,25 +64,45 @@
     <section class="tasteful-recipes between">
     </section>
 
-    <!-- Avis clients -->
+    <!-- Review section -->
     <section class="review-section">
         <div class="container">
             <h2 class="sub-headline">
                 <span class="first-letter">A</span>vis
             </h2>
-            <h1 class="headline headline-dark">Clients</h1>
+            <h1 class="headline">Clients</h1>
 
-            <!-- Avis -->
-             <div class="review-wrap">
-                <?php
-                    require "assets/review.php";
-                ?>
-                <?php
-                    require "assets/review.php";
-                ?>
-                <?php
-                    require "assets/review.php";
-                ?>
+            <!-- Reviews -->
+            <div class="review-wrap">
+            
+            <!-- Gather reviews -->
+            <?php
+                try {
+                    $pdo = new PDO(
+                        'mysql:host=localhost;dbname=vite_et_gourmand', 
+                        'root', 
+                        'Miguel237');
+                    
+                    // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                    $sql = "SELECT 
+                        a.date_avis as review_date,
+                        a.note as score,
+                        a.message,
+                        u.nom as surname,
+                        u.prenom as name,
+                        u.photo
+                    FROM avis a
+                    INNER JOIN utilisateurs u ON a.utilisateur = u.id_utilisateur
+                    WHERE a.statut = 'Validé';";
+                    
+                    foreach ($pdo->query($sql, PDO::FETCH_ASSOC) as $review) {
+                        include "assets/review.php";
+                    }
+                } catch (PDOException $e) {
+                    echo 'Erreur : ' . $e->getMessage();
+                }
+            ?>
              </div>
         </div>
     </section>

@@ -178,13 +178,3 @@ h4 {
 .between {
     min-height: 40vh;
 }
-
-/* Avis */
-
-.review-wrap {
-    width: 100%;
-    overflow: hidden;
-    display: grid;
-    grid-auto-flow: column;
-    gap: 2rem;
-}

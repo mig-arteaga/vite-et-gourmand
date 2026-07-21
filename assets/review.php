@@ -2,27 +2,55 @@
 <div class="review">
     <div class="review-main">
         <div class="review-header">
-            <img src="images/profile-2.jpg" alt="" class="review-img">
+            <img src="<?php echo htmlspecialchars($review['photo']); ?>" alt="" class="review-img">
             <div class="review-name">
-                <h3>Josh P.</h3>
+                <h3>
+                    <?php 
+                        echo htmlspecialchars($review['name']).' '.
+                        htmlspecialchars($review['surname'][0].'.');
+                    ?>
+                </h3>
                 <div class="review-stars">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <i class="fa-solid fa-star <?= $i <= (int)$review['score'] ? 'score' : '' ?>"></i>
+                    <?php endfor; ?>
                 </div>
             </div>
         </div>
         <div class="review-message">
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat debitis architecto quia culpa blanditiis. Culpa voluptatibus obcaecati, possimus suscipit iste.</p>
+            <p>
+                <?php echo htmlspecialchars($review['message']); ?>
+            </p>
         </div>
     </div>
     <div class="review-footer">
-        <p>28 mai 2026</p>
-        <a href="#" class="btn body-btn">
+        <p>
+            <?php
+                $date = new DateTime($review['review_date']);
+
+                $months = [
+                    1 => 'janvier',
+                    2 => 'février',
+                    3 => 'mars',
+                    4 => 'avril',
+                    5 => 'mai',
+                    6 => 'juin',
+                    7 => 'juillet',
+                    8 => 'août',
+                    9 => 'septembre',
+                    10 => 'octobre',
+                    11 => 'novembre',
+                    12 => 'décembre'
+                ];
+
+                echo $date->format('j') . ' ' .
+                    $months[(int)$date->format('n')] . ' ' .
+                    $date->format('Y');
+            ?>    
+        </p>
+        <!-- <a href="#" class="btn body-btn">
             12
             <i class="fa-regular fa-heart"></i>
-        </a>
+        </a> -->
     </div>
 </div>
