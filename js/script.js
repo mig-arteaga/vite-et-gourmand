@@ -119,7 +119,7 @@ detailButtons.forEach(button => {
         .then(response => response.json())
         .then(data => {
             //console.log("PHP response:");
-            console.log(data);
+            //console.log(data);
 
             const title = document.getElementById('detail-title');
             const description = document.getElementById('detail-description');
@@ -140,7 +140,7 @@ detailButtons.forEach(button => {
 
             const priceValue = data.menu.unit_price;
 
-            console.log(priceValue);
+            //console.log(priceValue);
             
             if (priceValue % parseInt(priceValue) == 0) {
                 unitPrice.textContent = parseInt(priceValue);

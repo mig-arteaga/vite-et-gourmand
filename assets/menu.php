@@ -28,7 +28,6 @@
                         $mainCourse = (int)htmlspecialchars($menu['main_course']);
                         $dessert = (int)htmlspecialchars($menu['dessert']);
                         $courses = $appetizer + $mainCourse + $dessert;
-                        echo "<script>console.log(".$courses.")</script>";
                         
                         if ($courses == 3) {
                             echo 'Entrée + plat + dessert';

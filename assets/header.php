@@ -1,3 +1,7 @@
+<?php
+require_once "session.php";
+?>
+
 <!-- Header -->
 <header class="header-2">
     <div class="container">
@@ -18,9 +22,30 @@
                 <li class="nav-item">
                     <a href="contact.php" class="nav-link">Contact</a>
                 </li>
+                <?php if (isEmployee()): ?>
                 <li class="nav-item">
-                    <a href="#" class="login">
-                        <i class="fa-solid fa-user"></i>
+                    <a href="employe.php" class="nav-link">Employé</a>
+                </li>
+                <?php
+                    endif;
+                    if (isAdmin()): ?>
+                <li class="nav-item">
+                    <a href="admin.php" class="nav-link">Administrateur</a>
+                </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a href="assets/logout.php" class="login">
+                        <?php if (isset($_SESSION['photo']) && !empty($_SESSION['photo'])) { ?>
+                            <img 
+                                src="<?= htmlspecialchars($_SESSION['photo']) ?>"
+                                alt="Profile photo"
+                            >
+                        <?php } else { ?>
+                            <img 
+                                src="images/profile-0.jpg"
+                                alt="Profile photo"
+                            >
+                        <?php } ?>
                     </a>
                 </li>
             </ul>
