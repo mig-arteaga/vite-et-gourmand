@@ -46,10 +46,10 @@
                         t.libelle as theme,
                         r.libelle as diet,
                         MAX(pm.chemin) as photo,
-                        COUNT(IF(p.type = 'Entrée', 1, NULL)) as appetizer,
-                        COUNT(IF(p.type = 'Plat', 1, NULL)) as main_course,
-                        COUNT(IF(p.type = 'Dessert', 1, NULL)) as dessert,
-                        COUNT(pa.allergene) as allergenic
+                        COUNT(DISTINCT IF(p.type = 'Entrée', p.id_plat, NULL)) as appetizer,
+                        COUNT(DISTINCT IF(p.type = 'Plat', p.id_plat, NULL)) as main_course,
+                        COUNT(DISTINCT IF(p.type = 'Dessert', p.id_plat, NULL)) as dessert,
+                        COUNT(DISTINCT pa.allergene) as allergenic
                     FROM menus m
                     INNER JOIN themes t ON m.theme = t.id_theme
                     INNER JOIN regimes r ON m.regime = r.id_regime

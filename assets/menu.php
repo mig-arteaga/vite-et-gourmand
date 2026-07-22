@@ -28,11 +28,12 @@
                         $mainCourse = (int)htmlspecialchars($menu['main_course']);
                         $dessert = (int)htmlspecialchars($menu['dessert']);
                         $courses = $appetizer + $mainCourse + $dessert;
+                        echo "<script>console.log(".$courses.")</script>";
                         
                         if ($courses == 3) {
                             echo 'Entrée + plat + dessert';
                         }
-                        elseif ($appetizer == 1) {
+                        else if ($appetizer == 1) {
                             echo 'Entrée + plat';
                             }
                         else {
