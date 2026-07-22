@@ -1,16 +1,14 @@
 <?php
 
-session_start();
+require_once "session.php";
 
-if (!isset($_SESSION['user_id'])) {
-
+if (!isLoggedIn()) {
     header("Location: assets/login.php");
     exit;
-
 }
 
 function requireRoles($roles) {
-    if (!in_array($_SESSION['role'], $roles)) {
+    if (!in_array(getRole(), $roles)) {
         header("Location: index.php");
         exit;
     }

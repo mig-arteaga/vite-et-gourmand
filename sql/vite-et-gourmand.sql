@@ -152,8 +152,8 @@ INSERT INTO regimes (libelle) VALUES
 
 INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, telephone, adresse, code_postal, ville, photo, role) VALUES
 ('Gourmand', 'José', 'j.gourmand@mail.com', '$2y$10$DOkweWyvQXTu38qgL7yokeRa0uuritZMwoXjuytbrdV6NX/4eGynu', '+33 1 23 45 67 89', '3 Place Notre Dame', 38000, 'Grenoble', 'images/profile-1.jpg', 1),
-('Admin', 'Miguel', 'm.admin@mail.com', '$2y$10$b6naitHuE/ltEPCU.VmTcebi53WYSmKNII.JKy0S6z7/Au8jmFLFO', '+33 3 23 45 67 89', 'Adresse 3', 38000, 'Grenoble', 'images/profile-3.jpg', 1),
-('Vite', 'Julie', 'j.vite@mail.com', '$2y$10$SQm/7P7xTSyWXadzHJ/VzOKVWKD9LrSf991b0D6AfH3.1oJ.OLyZm', '+33 2 23 45 67 89', 'Adresse 2', 38000, 'Grenoble', 'images/profile-2.jpg', 2),
+('Admin', 'Miguel', 'm.admin@mail.com', '$2y$10$b6naitHuE/ltEPCU.VmTcebi53WYSmKNII.JKy0S6z7/Au8jmFLFO', '+33 2 23 45 67 89', 'Adresse 2', 38000, 'Grenoble', 'images/profile-2.jpg', 1),
+('Vite', 'Julie', 'j.vite@mail.com', '$2y$10$SQm/7P7xTSyWXadzHJ/VzOKVWKD9LrSf991b0D6AfH3.1oJ.OLyZm', '+33 3 23 45 67 89', 'Adresse 3', 38000, 'Grenoble', 'images/profile-3.jpg', 2),
 ('Peck', 'Josh', 'j.peck@mail.com', '$2y$10$wPv.L1zZZP7iPkqqdcjXqukAaxSygYVDKfC8wVQaiWijeKHSl257O', '+33 4 23 45 67 89', 'Adresse 4', 38000, 'Grenoble', 'images/profile-4.jpg', 3),
 ('Ham', 'Klaudia', 'k.ham@mail.com', '$2y$10$UCmeosMR0opHh84N5KYnHOx6iWBjiA0XsEXO/dFRap1DEPrV1BN56', '+33 5 23 45 67 89', 'Adresse 5', 38000, 'Grenoble', 'images/profile-5.jpg', 3),
 ('Berly', 'Kim', 'k.berly@mail.com', '$2y$10$x4UafOSeJCZQNdsS7m.Bnesaq216GnVuLTJIsIsj9ZKgKRhju46U2', '+33 6 23 45 67 89', 'Adresse 6', 38000, 'Grenoble', 'images/profile-6.jpg', 3),

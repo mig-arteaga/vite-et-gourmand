@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once "assets/session.php";
 ?>
 
 <!DOCTYPE html>

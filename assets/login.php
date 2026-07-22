@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once "session.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 u.nom,
                 u.email,
                 u.mot_de_passe,
+                u.photo,
                 r.libelle AS role
             FROM utilisateurs u
             INNER JOIN roles r ON u.role = r.id_role
@@ -34,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id_utilisateur'];
             $_SESSION['firstname'] = $user['prenom'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['photo'] = $user['photo'];
 
             if ($user['role'] === "Administrateur") {
                 header("Location: ../admin.php");
@@ -60,61 +62,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!-- Login form -->
-<form method="POST" action="login.php">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Accueil - Vite & Gourmand</title>
+    <!--Font awesome CDN-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+    <!--Scroll reveal CDN-->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Main section -->
+    <section class="main-section">
+        <img src="../images/hero.jpg" alt="" class="parallax">
+        <div class="container">
+            <!-- Login form -->
+            <form method="POST" action="login.php">
+            
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    required
+                >
+            
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                >
+            
+                <button type="submit">
+                    Login
+                </button>
+            
+            </form>
+        </div>
+    </section>
 
-    <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-    >
-
-    <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        required
-    >
-
-    <button type="submit">
-        Login
-    </button>
-
-</form>
-
-<?php
-// $pdo = new PDO(
-//     'mysql:host=localhost;dbname=vite_et_gourmand',
-//     'root',
-//     ''
-// );
-
-// // Menu
-// $sql = 
-//     "SELECT 
-//         id_utilisateur,
-//         nom,
-//         prenom,
-//         email,
-//         mot_de_passe,
-//         role
-//     FROM utilisateurs
-//     WHERE email = :email
-// ";
-
-// $statement = $pdo->prepare($sql);
-// $statement->bindValue(':email', 'j.pecks@mail.com');
-
-// if ($statement->execute()) {
-//     $user = $statement->fetch(PDO::FETCH_ASSOC);
-
-//     if ($user === false) {
-//         echo 'Identifiants invalides';
-//     } else {
-//         echo 'Bienvenue, '.$user['prenom'].' !';
-//     }
-// } else {
-//     echo 'Impossible de récupérer l\'utilisateur';
-// }
-?>
+    <script type="module" src="../js/script.js"></script>
+</body>
+</html>
