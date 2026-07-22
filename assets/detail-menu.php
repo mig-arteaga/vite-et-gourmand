@@ -1,5 +1,4 @@
 <?php
-// echo "<script>console.log('detail-menu.php loaded in DOM')</script>";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $menuId = $_POST['menu'];

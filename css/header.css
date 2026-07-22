@@ -155,6 +155,10 @@ header {
     bottom: 2px;
 }
 
+.nav-hidden {
+    display: none;
+}
+
 .login {
     width: 2.8rem;
     height: 2.8rem;

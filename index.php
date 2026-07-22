@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +19,7 @@
     <!-- Header -->
     <?php
         require "assets/header.php";
+        echo '<script>console.log(\''.$_SESSION['role'].'\');</script>'
     ?>
 
     <!-- Main section -->
@@ -32,7 +37,7 @@
                     <div class="line right-line"></div>
                 </div>
                 <div class="single-animation">
-                    <a href="#" class="btn main-btn">Voir menus</a>
+                    <a href="menus.php" class="btn main-btn">Voir menus</a>
                 </div>
             </div>
         </div>
@@ -51,7 +56,7 @@
                     </div>
                     <div class="asterisk"><i class="fas fa-asterisk"></i></div>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus suscipit repudiandae vel alias, eius incidunt quis. Facilis, commodi iste. Modi neque ipsa maiores eligendi porro quia, nulla facilis totam ab!</p>
-                    <a href="#" class="btn body-btn btn-underline">Sur nous</a>
+                    <a href="nous.php" class="btn body-btn btn-underline">Sur nous</a>
                 </div>
                 <div class="restaurant-info-img animate-right">
                     <img src="images/team-1.jpg" alt="">

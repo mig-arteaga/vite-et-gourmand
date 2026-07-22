@@ -18,8 +18,14 @@
                 <li class="nav-item">
                     <a href="contact.php" class="nav-link">Contact</a>
                 </li>
+                <li class="nav-item nav-hidden">
+                    <a href="employe.php" class="nav-link">Employé</a>
+                </li>
+                <li class="nav-item nav-hidden">
+                    <a href="admin.php" class="nav-link">Administrateur</a>
+                </li>
                 <li class="nav-item">
-                    <a href="#" class="login">
+                    <a href="assets/login.php" class="login">
                         <i class="fa-solid fa-user"></i>
                     </a>
                 </li>

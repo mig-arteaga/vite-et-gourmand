@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,6 @@
 
     <!-- Nous section -->
     <section class="nous-section first-section">
-        <!-- <img src="images/hero.jpg" alt="" class="parallax"> -->
         <div class="container">
             <h2 class="sub-headline">
                 <span class="first-letter">Q</span>ui

@@ -31,7 +31,7 @@ CREATE TABLE utilisateurs (
 	nom VARCHAR(50) NOT NULL,
 	prenom VARCHAR(50) NOT NULL,
 	email VARCHAR(100) NOT NULL,
-	mot_de_passe VARCHAR(50) NOT NULL,
+	mot_de_passe VARCHAR(255) NOT NULL,
 	telephone VARCHAR(50) NOT NULL,
 	adresse VARCHAR(100) NOT NULL,
 	code_postal INT NOT NULL,
@@ -151,14 +151,14 @@ INSERT INTO regimes (libelle) VALUES
 ('Sans gluten');
 
 INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, telephone, adresse, code_postal, ville, photo, role) VALUES
-('Gourmand', 'José', 'j.gourmand@mail.com', 'jose123', '+33 1 23 45 67 89', '3 Place Notre Dame', 38000, 'Grenoble', 'images/profile-1.jpg', 1),
-('Vite', 'Julie', 'j.vite@mail.com', 'julie123', '+33 2 23 45 67 89', 'Adresse 2', 38000, 'Grenoble', 'images/profile-2.jpg', 1),
-('Admin', 'Miguel', 'm.admin@mail.com', 'miguel123', '+33 3 23 45 67 89', 'Adresse 3', 38000, 'Grenoble', 'images/profile-3.jpg', 2),
-('Peck', 'Josh', 'j.peck@mail.com', 'josh123', '+33 4 23 45 67 89', 'Adresse 4', 38000, 'Grenoble', 'images/profile-4.jpg', 3),
-('Ham', 'Klaudia', 'k.ham@mail.com', 'klaudia123', '+33 5 23 45 67 89', 'Adresse 5', 38000, 'Grenoble', 'images/profile-5.jpg', 3),
-('Berly', 'Kim', 'k.berly@mail.com', 'kim123', '+33 6 23 45 67 89', 'Adresse 6', 38000, 'Grenoble', 'images/profile-6.jpg', 3),
-('Urban', 'Karl', 'k.urban@mail.com', 'karl123', '+33 7 23 45 67 89', 'Adresse 7', 38000, 'Grenoble', 'images/profile-7.jpg', 3),
-('Zeroual', 'Sif', 's.zeroual@mail.com', 'sif123', '+33 8 23 45 67 89', 'Adresse 8', 38000, 'Grenoble', 'images/profile-8.jpg', 3);
+('Gourmand', 'José', 'j.gourmand@mail.com', '$2y$10$DOkweWyvQXTu38qgL7yokeRa0uuritZMwoXjuytbrdV6NX/4eGynu', '+33 1 23 45 67 89', '3 Place Notre Dame', 38000, 'Grenoble', 'images/profile-1.jpg', 1),
+('Admin', 'Miguel', 'm.admin@mail.com', '$2y$10$b6naitHuE/ltEPCU.VmTcebi53WYSmKNII.JKy0S6z7/Au8jmFLFO', '+33 3 23 45 67 89', 'Adresse 3', 38000, 'Grenoble', 'images/profile-3.jpg', 1),
+('Vite', 'Julie', 'j.vite@mail.com', '$2y$10$SQm/7P7xTSyWXadzHJ/VzOKVWKD9LrSf991b0D6AfH3.1oJ.OLyZm', '+33 2 23 45 67 89', 'Adresse 2', 38000, 'Grenoble', 'images/profile-2.jpg', 2),
+('Peck', 'Josh', 'j.peck@mail.com', '$2y$10$wPv.L1zZZP7iPkqqdcjXqukAaxSygYVDKfC8wVQaiWijeKHSl257O', '+33 4 23 45 67 89', 'Adresse 4', 38000, 'Grenoble', 'images/profile-4.jpg', 3),
+('Ham', 'Klaudia', 'k.ham@mail.com', '$2y$10$UCmeosMR0opHh84N5KYnHOx6iWBjiA0XsEXO/dFRap1DEPrV1BN56', '+33 5 23 45 67 89', 'Adresse 5', 38000, 'Grenoble', 'images/profile-5.jpg', 3),
+('Berly', 'Kim', 'k.berly@mail.com', '$2y$10$x4UafOSeJCZQNdsS7m.Bnesaq216GnVuLTJIsIsj9ZKgKRhju46U2', '+33 6 23 45 67 89', 'Adresse 6', 38000, 'Grenoble', 'images/profile-6.jpg', 3),
+('Urban', 'Karl', 'k.urban@mail.com', '$2y$10$tSoompCjAVD4CMHBiyKokOmcaGzqXD9hnFjQwPiEKZ1zaKrL65.a6', '+33 7 23 45 67 89', 'Adresse 7', 38000, 'Grenoble', 'images/profile-7.jpg', 3),
+('Zeroual', 'Sif', 's.zeroual@mail.com', '$2y$10$tXAKsjYHGCY8Gthcfd5MwOrAZ2WBTDxI/dkL8d2kyVOIPC4S89T.6', '+33 8 23 45 67 89', 'Adresse 8', 38000, 'Grenoble', 'images/profile-8.jpg', 3);
 
 INSERT INTO avis (utilisateur, date_avis, note, message, statut) VALUES
 (4, '2026-06-15', 5, 'Nous avons fait appel à Vite & Gourmand pour un repas de famille et nous avons été très satisfaits. Les plats étaient savoureux, bien présentés et préparés avec des produits de qualité. Toute l’équipe a été très professionnelle du début à la fin.', 'Validé'),
