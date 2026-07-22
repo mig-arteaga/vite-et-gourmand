@@ -83,13 +83,8 @@ require_once "assets/session.php";
             <!-- Gather reviews -->
             <?php
                 try {
-                    $pdo = new PDO(
-                        'mysql:host=localhost;dbname=vite_et_gourmand', 
-                        'root', 
-                        '');
+                    require_once "config/database.php";
                     
-                    // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
                     $sql = "SELECT 
                         a.date_avis as review_date,
                         a.note as score,

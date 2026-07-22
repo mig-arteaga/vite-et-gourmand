@@ -4,11 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $menuId = $_POST['menu'];
 
     try {
-        $pdo = new PDO(
-            'mysql:host=localhost;dbname=vite_et_gourmand',
-            'root',
-            ''
-        );
+        require_once "../config/database.php";
 
         // Menu
         $sql = 

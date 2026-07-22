@@ -79,8 +79,8 @@ detailButtons.forEach(button => {
 
         .then(response => response.json())
         .then(data => {
-            //console.log("PHP response:");
-            //console.log(data);
+            // console.log("PHP response:");
+            // console.log(data);
 
             const title = document.getElementById('detail-title');
             const description = document.getElementById('detail-description');

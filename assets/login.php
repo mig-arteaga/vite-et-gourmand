@@ -4,13 +4,8 @@ require_once "session.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
-        $pdo = new PDO(
-            'mysql:host=localhost;dbname=vite_et_gourmand',
-            'root',
-            ''
-        );
+        require_once "../config/database.php";
     
-        // Menu
         $sql = 
             "SELECT 
                 u.id_utilisateur,
@@ -26,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ";
     
         $stmt = $pdo->prepare($sql);
-        // $stmt->bindValue(':email', 'j.pecks@mail.com');
     
         $stmt->execute([$_POST['email']]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
