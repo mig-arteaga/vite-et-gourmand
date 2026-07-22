@@ -48,7 +48,9 @@
     background-color: #FFFFFF80;
 }
 
-.login-form h3, h4, h5 {
+.login-form h3,
+.login-form h4,
+.login-form h5 {
     color: #FFFFFFCC;
     margin-bottom: 0;
     letter-spacing: 4px;
@@ -72,7 +74,7 @@
 }
 
 .login-content .btn:hover::before,
-.btn:focus::before {
+.login-content .btn:focus::before {
     background-color: #FFF;
 }
 

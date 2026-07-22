@@ -10,19 +10,6 @@
     z-index: 10;
 }
 
-/* .contact::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--between-color);
-    opacity: .7;
-    z-index: -1;
-} */
-
 .contact .container {
     display: grid;
     grid-template-columns: auto 45rem;
