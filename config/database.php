@@ -1,28 +1,28 @@
 <?php
 
-if (getenv("DATABASE_URL")) {
+if (getenv("MYSQLHOST")) {
 
-    // Production (Railway)
-    $database = parse_url(getenv("DATABASE_URL"));
-
-    $host = $database["host"];
-    $dbname = ltrim($database["path"], "/");
-    $username = $database["user"];
-    $password = $database["pass"];
+    // Railway / Heroku
+    $host = getenv("MYSQLHOST");
+    $dbname = getenv("MYSQLDATABASE");
+    $username = getenv("MYSQLUSER");
+    $password = getenv("MYSQLPASSWORD");
+    $port = getenv("MYSQLPORT");
 
 } else {
 
-    // Local (XAMPP)
+    // Local XAMPP
     $host = "localhost";
     $dbname = "vite_et_gourmand";
     $username = "root";
     $password = "";
+    $port = 3306;
 
 }
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8",
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
         $username,
         $password
     );
