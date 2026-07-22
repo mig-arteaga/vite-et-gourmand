@@ -81,7 +81,7 @@
                     $pdo = new PDO(
                         'mysql:host=localhost;dbname=vite_et_gourmand', 
                         'root', 
-                        'Miguel237');
+                        '');
                     
                     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
