@@ -125,7 +125,7 @@ header {
 
 .profile-menu a {
     display: block;
-    padding: .8rem 1.5rem;
+    padding: 1rem 1.5rem;
     color: #FFF;
     font-family: var(--main-font);
     text-align: right;

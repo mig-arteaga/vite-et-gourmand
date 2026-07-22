@@ -36,10 +36,7 @@ require_once "assets/session.php";
             <!-- Gather menus -->
             <?php
                 try {
-                    $pdo = new PDO(
-                        'mysql:host=localhost;dbname=vite_et_gourmand', 
-                        'root', 
-                        '');
+                    require "config/database.php";
                     
                     $sql = "SELECT 
                         m.id_menu,
