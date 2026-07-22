@@ -33,20 +33,39 @@ require_once "session.php";
                     <a href="admin.php" class="nav-link">Administrateur</a>
                 </li>
                 <?php endif; ?>
-                <li class="nav-item">
-                    <a href="assets/logout.php" class="login">
-                        <?php if (isset($_SESSION['photo']) && !empty($_SESSION['photo'])) { ?>
-                            <img 
-                                src="<?= htmlspecialchars($_SESSION['photo']) ?>"
-                                alt="Profile photo"
-                            >
-                        <?php } else { ?>
-                            <img 
-                                src="images/profile-0.jpg"
-                                alt="Profile photo"
-                            >
-                        <?php } ?>
-                    </a>
+                <li class="nav-item nav-profile">
+                    <div class="profile-container">
+                        <div class="profile-button" id="profile-button">
+                            <?php if (isLoggedIn() && !empty($_SESSION['photo'])): ?>
+                                <img 
+                                    src="<?= htmlspecialchars($_SESSION['photo']) ?>"
+                                    alt="Photo de profil"
+                                >
+                            <?php else: ?>
+                                <img 
+                                    src="images/profile-0.jpg"
+                                    alt="Photo de profil"
+                                >
+                            <?php endif; ?>
+                        </div>
+                        <div class="profile-menu" id="profile-menu">
+                            <?php if (isLoggedIn()): ?>
+                                <a href="compte.php">
+                                    Mon compte
+                                </a>
+                                <a href="assets/logout.php">
+                                    Se déconnecter
+                                </a>
+                            <?php else: ?>
+                                <a href="assets/login.php">
+                                    Se connecter
+                                </a>
+                                <a href="register.php">
+                                    Créer un compte
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </nav>
