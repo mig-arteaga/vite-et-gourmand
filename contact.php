@@ -47,7 +47,7 @@ require_once "assets/session.php";
     </section>
 
     <!-- Between 2 -->
-    <section class="perfect-blend between">
+    <section class="tasteful-recipes between">
     </section>
 
     <!-- Contact -->
@@ -62,7 +62,7 @@ require_once "assets/session.php";
                 <div class="signature"><img src="images/logo-pom.png" alt=""></div>
             </div>
             <div class="form-box">
-                <form class="contact-form" action="contact-form.php" method="post">
+                <form class="contact-form" action="assets/contact-form.php" method="post">
                     <div class="form-content">
                         <h5 class="content-sub-title">Nom</h5>
                             <input type="text" name="name" class="nom" autocomplete="name">
