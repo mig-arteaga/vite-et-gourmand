@@ -47,7 +47,7 @@ require_once "assets/session.php";
     </section>
 
     <!-- Between 2 -->
-    <section class="perfect-blend between">
+    <section class="tasteful-recipes between">
     </section>
 
     <!-- Contact -->

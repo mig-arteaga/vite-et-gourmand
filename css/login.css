@@ -1,0 +1,82 @@
+/* Login */
+
+.login-box {
+    display: flex;
+    justify-content: center;
+}
+
+.login-form {
+    width: 45rem;
+    padding: 8rem 4rem;
+    background-color: #1212121A;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 0.3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.login-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 8rem;
+}
+
+.login-head img {
+    width: initial;
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+}
+
+.login-form input {
+    margin-top: 0.5rem;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    font-family: var(--body-font);
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    width: 100%;
+    border: none;
+    border-radius: 0.2rem;
+    outline: none;
+    background-color: #FFFFFF80;
+}
+
+.login-form h3, h4, h5 {
+    color: #FFFFFFCC;
+    margin-bottom: 0;
+    letter-spacing: 4px;
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login-content .btn {
+    align-self: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.login-content .btn:hover {
+    color: #FFF;
+}
+
+.login-content .btn:hover::before,
+.btn:focus::before {
+    background-color: #FFF;
+}
+
+button {
+    font-family: var(--body-font);
+    padding-bottom: 0.4rem;
+}

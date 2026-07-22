@@ -1,6 +1,6 @@
 /* Button */
 
-.btn {
+.btn, button {
     display: inline-block;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -37,8 +37,8 @@
     content: '';
     position: absolute;
     left: 0;
-    bottom: -3px;
-    height: 2px;
+    bottom: -1px;
+    height: 1px;
     width: 100%;
     background-color: var(--secondary-font-color);
     transition: background-color 500ms;

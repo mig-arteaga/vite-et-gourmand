@@ -81,27 +81,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <img src="../images/hero.jpg" alt="" class="parallax">
         <div class="container">
             <!-- Login form -->
-            <form method="POST" action="login.php">
-            
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                >
-            
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                >
-            
-                <button type="submit">
-                    Login
-                </button>
-            
-            </form>
+             <div class="login-box">
+                 <form class="login-form" method="POST" action="login.php">
+                    <div class="login-head">
+                        <a href="../index.php">
+                            <img src="../images/vg-logo-2.png" alt="">
+                        </a>
+                        <h4>Connexion</h4>
+                    </div>
+                    <div class="login-content">
+                         <h4>Email</h4>
+                         <input
+                             type="email"
+                             name="email"
+                             required
+                         >
+     
+                         <h4>Mot de passe</h4>
+                         <input
+                             type="password"
+                             name="password"
+                             required
+                         >
+     
+                        <div class="login-buttons">
+                            <button type="submit" class="btn body-btn btn-underline">
+                                Se connecter
+                            </button>
+                            <a href="../index.php" class="btn body-btn btn-underline">
+                                Accueil
+                            </a>
+                        </div> 
+                     </div>
+                 </form>
+             </div>
         </div>
     </section>
 
