@@ -42,9 +42,9 @@ git clone https://github.com/mig-arteaga/vite-et-gourmand.git
 ---
 
 ### Création de la base
-Importer le fichier SQL présent dans le dossier :
+Importer le fichier SQL :
 ```
-/sql
+/sql/vite-et-gourmand.sql
 ```
 
 Ce fichier contient :
@@ -70,7 +70,7 @@ $username = "root";
 $password = "";
 ```
 
-Adapter les valeurs selon votre installation MySQL.
+avec les valeurs de votre installation MySQL.
 
 ---
 
@@ -125,7 +125,8 @@ Droits :
 
 ### Utilisateur
 Email :
-```j.peck@mail.com
+```
+j.peck@mail.com
 ```
 
 Mot de passe :
