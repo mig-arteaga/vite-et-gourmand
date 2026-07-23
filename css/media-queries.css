@@ -129,9 +129,27 @@
     .menu-conditions {
         position: initial;
     }
+
+    /* Contact */
+    .form-wrap {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media screen and (max-width: 800px) {
+    /* Index */
+    /* Team */
+    .team-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 8rem;
+    }
+
+    /* Between */
+    .between {
+        height: 25rem;
+    }
+    
     /* Detail menu */
     .detail-menu-grid {
         display: flex;
@@ -159,13 +177,68 @@
     .menu-conditions a {
         align-self: flex-end;
     }
+
+    /* Contact */
+    .form-wrap {
+        display: initial;
+    }
 }
 
 @media screen and (max-width: 600px) {
+    /* Index */
     /* Main */
+    .main-logo {
+        width: 28.5rem;
+        height: 2rem;
+        background: url(../images/vg-logo-2.png) center no-repeat;
+    }
+
+    /* Footer */
+    .footer-content-divider {
+        flex-direction: column;
+    }
+
+    .social-media {
+        align-items: center;
+    }
+
+    .newsletter-container {
+        align-items: center;
+    }
+
+    /* Team */
+    .review {
+        width: 40rem;
+        height: initial;
+        min-height: 55rem;
+        border-radius: 9rem 0 0 0;
+    }
+
+    .review-img {
+        width: 10rem;
+        height: 10rem;
+    }
+
+    .review-header {
+        grid-template-columns: 10rem 1fr;
+    }
+
+    .headline {
+        font-size: 3.2rem;
+    }
+    
     .sub-headline {
         font-size: 6rem;
     }
+
+    .first-letter {
+        font-size: 8rem;
+    }
+
+    .line {
+        max-width: 13rem;
+    }
+    
     
     /* Detail menu */
     .detail-menu-plus {

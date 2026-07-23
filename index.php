@@ -28,7 +28,8 @@ require_once "assets/session.php";
             <h2 class="sub-headline">
                 <span class="first-letter">B</span>ienvenue
             </h2>
-            <img src="images/vg-logo-3.png" alt="" class="main-logo">
+            <div class="main-logo"></div>
+            <!-- <img src="images/vg-logo-3.png" alt="" class="main-logo"> -->
             <div class="headline-description">
                 <div class="separator">
                     <div class="line left-line"></div>

@@ -27,57 +27,21 @@ window.addEventListener('scroll', function () {
     }
 });
 
+// Main logo
+// const img = document.querySelector(".main-logo");
+
+// function updateImage() {
+//     if (window.innerWidth <= 600) {
+//         img.src = "images/vg-logo-2.png";
+//     } else {
+//         img.src = "images/vg-logo-3.png";
+//     }
+// };
+
+// updateImage();
+// window.addEventListener("resize", updateImage);
+
 // Toggle nav menu
-// let toggleNav = false;
-// const profileButton = document.getElementById('toggle-menu');
-
-// profileButton.addEventListener('click', () => {
-//     const navMenu = document.getElementById('nav-list');
-
-//     if (toggleNav === false) {
-//         navMenu.classList.add('nav-visible');
-
-//         toggleNav = true;
-//     } else {
-//         navMenu.classList.remove('nav-visible');
-        
-//         toggleNav = false;
-//     }
-// });
-
-// Toggle profile menu
-// let toggleCheck = false;
-// const toggleMenu = document.getElementById('toggle-menu');
-// const toggleProfile = document.getElementById('profile-button');
-
-// toggleMenu.addEventListener('click', () => {
-//     const navMenu = document.getElementById('nav-list');
-
-//     if (toggleCheck === false) {
-//         navMenu.classList.add('nav-visible');
-
-//         toggleCheck = true;
-//     } else {
-//         navMenu.classList.remove('nav-visible');
-        
-//         toggleCheck = false;
-//     }
-// });
-
-// toggleProfile.addEventListener('click', () => {
-//     const profileMenu = document.getElementById('profile-menu');
-
-//     if (toggleCheck === false) {
-//         profileMenu.classList.add('nav-visible');
-
-//         toggleCheck = true;
-//     } else {
-//         profileMenu.classList.remove('nav-visible');
-        
-//         toggleCheck = false;
-//     }
-// });
-
 const toggleMenu = document.getElementById("toggle-menu");
 const toggleProfile = document.getElementById("profile-button");
 

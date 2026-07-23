@@ -10,15 +10,19 @@
     z-index: 10;
 }
 
-.contact .container {
+.form-wrap {
     display: grid;
     grid-template-columns: auto 45rem;
-    gap: 5rem;
+    gap: 4rem;
     align-items: center;
 }
 
+.contact-info {
+    margin-bottom: 4rem;
+}
+
 .form-box {
-    display: block;
+    /* display: block; */
     width: 100%;
     background-color: #FFF;
 

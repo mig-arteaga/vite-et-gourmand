@@ -53,28 +53,29 @@ require_once "assets/session.php";
     <!-- Contact -->
     <section class="contact">
         <div class="container">
-            <div>
-                <h2 class="sub-headline">
-                <span class="first-letter">D</span>ites-nous
-            </h2>
-            <h1 class="headline">Tout</h1>
-                <p class="p-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit. Phasellus viverra leo nec turpis efficitur, et tincidunt nulla sodales. Curabitur dapibus eget ipsum ac rutrum.</p>
-                <div class="signature"><img src="images/logo-pom.png" alt=""></div>
-            </div>
-            <div class="form-box">
-                <form class="contact-form" action="assets/contact-form.php" method="post">
-                    <div class="form-content">
-                        <h5 class="content-sub-title">Nom</h5>
-                            <input type="text" name="name" class="nom" autocomplete="name">
-                        <h5 class="content-sub-title">Adresse mail</h5>
-                            <input type="text" name="mail" class="email" autocomplete="email">
-                        <h5 class="content-sub-title">Sujet</h5>
-                            <input type="text" name="subject" class="sujet" autocomplete="none">
-                        <h5 class="content-sub-title">Message</h5>
-                            <textarea name="message" class="message" name="message"></textarea>
-                        <button type="submit" name="submit" class="btn body-btn btn-underline">Envoyer</a>
-                    </div>
-                </form>
+            <div class="form-wrap">
+                <div class="contact-info">
+                    <h2 class="sub-headline">
+                        <span class="first-letter">D</span>ites-nous
+                    </h2>
+                    <h1 class="headline">Tout</h1>
+                    <p class="p-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit. Phasellus viverra leo nec turpis efficitur, et tincidunt nulla sodales. Curabitur dapibus eget ipsum ac rutrum.</p>
+                </div>
+                <div class="form-box">
+                    <form class="contact-form" action="assets/contact-form.php" method="post">
+                        <div class="form-content">
+                            <h5 class="content-sub-title">Nom</h5>
+                                <input type="text" name="name" class="nom" autocomplete="name">
+                            <h5 class="content-sub-title">Adresse mail</h5>
+                                <input type="text" name="mail" class="email" autocomplete="email">
+                            <h5 class="content-sub-title">Sujet</h5>
+                                <input type="text" name="subject" class="sujet" autocomplete="none">
+                            <h5 class="content-sub-title">Message</h5>
+                                <textarea name="message" class="message" name="message"></textarea>
+                            <button type="submit" name="submit" class="btn body-btn btn-underline">Envoyer</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
