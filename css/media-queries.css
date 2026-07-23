@@ -31,25 +31,27 @@
     .nav-list {
         position: absolute;
         flex-direction: column;
-        /* width: 18rem; */
         right: 0;
         top: 7.5rem;
-        /* padding: 1rem; */
         align-items: flex-end;
         background-color: var(--main-font-color-dark);
         opacity: 0;
         visibility: hidden;
         transform: translateY(-1rem);
+        pointer-events: none;
+        z-index: -2;
         transition: 
             opacity 0.35s ease,
-            visibility 0.35s ease,
+            /* visibility 0.35s ease, */
             transform 0.35s ease;
     }
 
     .nav-list.nav-visible {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateY(0); 
+        pointer-events: auto;
+        /* display:  none; */
     }
 
     .nav-item {
