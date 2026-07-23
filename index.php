@@ -47,7 +47,7 @@ require_once "assets/session.php";
     <section class="team-section">
         <div class="container">
             <div class="team-info">
-                <div class="team-description">
+                <div class="team-description animate-right">
                     <div class="team-headline">
                         <h2 class="sub-headline">
                             <span class="first-letter">N</span>otre
@@ -58,7 +58,7 @@ require_once "assets/session.php";
                     <p>Derrière Vite & Gourmand se trouve une équipe passionnée par la cuisine et le partage. Chaque membre contribue au savoir-faire du restaurant, de la préparation des plats à l'accueil des clients, afin de proposer une expérience conviviale et de qualité.</p>
                     <a href="nous.php" class="btn body-btn btn-underline">Sur nous</a>
                 </div>
-                <div class="restaurant-info-img animate-right">
+                <div class="restaurant-info-img animate-left">
                     <img src="images/team-1.jpg" alt="">
                 </div>
             </div>
@@ -112,6 +112,7 @@ require_once "assets/session.php";
         require "assets/footer.php";
     ?>
 
-    <script type="module" src="js/script.js"></script>
+    <script src="js/script.js"></script>
+    <!-- <script src="https://unpkg.com/scrollreveal"></script> -->
 </body>
 </html>

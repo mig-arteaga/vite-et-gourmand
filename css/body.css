@@ -177,3 +177,8 @@ h4 {
 .between {
     height: 40rem;
 }
+
+/* Legal */
+.legal-container h3 {
+    margin-top: 5rem;
+}
