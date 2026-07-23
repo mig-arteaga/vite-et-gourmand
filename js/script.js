@@ -27,22 +27,69 @@ window.addEventListener('scroll', function () {
     }
 });
 
-// Toggle profile menu
-let toggleProfile = false;
-const profileButton = document.getElementById('profile-button');
+// Toggle nav menu
+// let toggleNav = false;
+// const profileButton = document.getElementById('toggle-menu');
 
-profileButton.addEventListener('click', () => {
-    const profileMenu = document.getElementById('profile-menu');
+// profileButton.addEventListener('click', () => {
+//     const navMenu = document.getElementById('nav-list');
 
-    if (toggleProfile === false) {
-        profileMenu.classList.add('profile-visible');
+//     if (toggleNav === false) {
+//         navMenu.classList.add('nav-visible');
 
-        toggleProfile = true;
-    } else {
-        profileMenu.classList.remove('profile-visible');
+//         toggleNav = true;
+//     } else {
+//         navMenu.classList.remove('nav-visible');
         
-        toggleProfile = false;
-    }
+//         toggleNav = false;
+//     }
+// });
+
+// Toggle profile menu
+// let toggleCheck = false;
+// const toggleMenu = document.getElementById('toggle-menu');
+// const toggleProfile = document.getElementById('profile-button');
+
+// toggleMenu.addEventListener('click', () => {
+//     const navMenu = document.getElementById('nav-list');
+
+//     if (toggleCheck === false) {
+//         navMenu.classList.add('nav-visible');
+
+//         toggleCheck = true;
+//     } else {
+//         navMenu.classList.remove('nav-visible');
+        
+//         toggleCheck = false;
+//     }
+// });
+
+// toggleProfile.addEventListener('click', () => {
+//     const profileMenu = document.getElementById('profile-menu');
+
+//     if (toggleCheck === false) {
+//         profileMenu.classList.add('nav-visible');
+
+//         toggleCheck = true;
+//     } else {
+//         profileMenu.classList.remove('nav-visible');
+        
+//         toggleCheck = false;
+//     }
+// });
+
+const toggleMenu = document.getElementById("toggle-menu");
+const toggleProfile = document.getElementById("profile-button");
+
+const navMenu = document.getElementById("nav-list");
+const profileMenu = document.getElementById("profile-menu");
+
+toggleMenu.addEventListener("click", () => {
+    navMenu.classList.toggle("nav-visible");
+});
+
+toggleProfile.addEventListener("click", () => {
+    profileMenu.classList.toggle("nav-visible");
 });
 
 //Duplicate URL array

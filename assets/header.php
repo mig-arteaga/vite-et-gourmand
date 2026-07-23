@@ -6,8 +6,8 @@ require_once "session.php";
 <header class="header-2">
     <div class="container">
         <nav class="nav">
-            <a href="index.php">
-                <img src="images/vg-logo-2.png" alt="" class="title-img">
+            <a href="index.php" class="logo-link">
+                <img src="images/vg-logo-1.png" alt="" class="title-img">
             </a>
             <ul class="nav-list" id="nav-list">
                 <li class="nav-item">
@@ -68,6 +68,9 @@ require_once "session.php";
                     </div>
                 </li>
             </ul>
+            <div class="toggle-menu" id="toggle-menu">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </div>
         </nav>
     </div>
 </header>

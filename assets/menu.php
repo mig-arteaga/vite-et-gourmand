@@ -66,7 +66,9 @@
             </ul>
             <a 
                 class="btn body-btn btn-underline menu-btn no-link-btn"
-                id="<?=  $menu['id_menu'] ?>">Voir plus</a>
+                id="<?=  $menu['id_menu'] ?>">
+                Voir plus
+            </a>
         </div>
     </div>
 </div>

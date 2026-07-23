@@ -19,7 +19,6 @@ require_once "assets/session.php";
     <!-- Header -->
     <?php
         require "assets/header.php";
-        echo '<script>console.log(\''.$_SESSION['role'].'\');</script>'
     ?>
 
     <!-- Main section -->

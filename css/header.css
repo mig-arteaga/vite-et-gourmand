@@ -17,31 +17,30 @@ header {
 }
 
 .nav {
+    position: relative;
     height: 7.2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
+.logo-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .nav-list {
     list-style: none;
-    position: initial;
-    width: initial;
-    height: initial;
-    background-color: transparent;
-    padding: 0;
     display: flex;
-    justify-content: initial;
     align-items: center;
-    flex-direction: row;
-    transform: initial;
-    transition: initial;
+    z-index: 600;
 }
 
 .nav-item {
     margin: 0 2.4rem;
-    border: none;
     position: relative;
+    transition: background-color 350ms;
 }
 
 .nav-link {
@@ -67,9 +66,7 @@ header {
     height: 1px;
     background-color: #FFF;
     left: 0;
-    /* bottom: -3px; */
     bottom: 0;
-    /* transform: translateX(-50%); */
     transition: width 200ms;
 }
 
@@ -81,7 +78,6 @@ header {
     width: 100%;
     left: 0;
     transform: initial;
-    /* bottom: -3px; */
     bottom: 0;
 }
 
@@ -117,13 +113,14 @@ header {
         transform 0.35s ease;
 }
 
-.profile-visible {
+.nav-visible {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
 }
 
 .profile-menu a {
+    position: relative;
     display: block;
     padding: 1rem 1.5rem;
     color: #FFF;
@@ -137,4 +134,32 @@ header {
 
 .profile-menu a:hover {
     background-color: var(--body-font-color);
+}
+
+.profile-menu a::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background-color: #FFF;
+    right: 0;
+    bottom: 0;
+    transition: width 200ms;
+}
+
+.profile-menu a:hover::before {
+    width: 100%;
+}
+
+.toggle-menu {
+    /* background-color: #FFF; */
+    width: 3.2rem;
+    height: 3.2rem;
+    cursor: pointer;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    font-size: 1.6rem;
+    font-weight: 900;
 }
