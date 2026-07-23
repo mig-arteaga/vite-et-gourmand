@@ -41,6 +41,17 @@ window.addEventListener('scroll', function () {
 // updateImage();
 // window.addEventListener("resize", updateImage);
 
+// Scroll header
+const header = document.querySelector("header");
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+        header.classList.add("header-dark");
+    } else {
+        header.classList.remove("header-dark");
+    }
+});
+
 // Toggle nav menu
 const toggleMenu = document.getElementById("toggle-menu");
 const toggleProfile = document.getElementById("profile-button");

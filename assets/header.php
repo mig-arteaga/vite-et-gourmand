@@ -3,7 +3,7 @@ require_once "session.php";
 ?>
 
 <!-- Header -->
-<header class="header-2">
+<header>
     <div class="container">
         <nav class="nav">
             <a href="index.php" class="logo-link">
