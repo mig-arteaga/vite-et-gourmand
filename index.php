@@ -55,7 +55,7 @@ require_once "assets/session.php";
                         <h1 class="headline animate-bottom">Équipe</h1>
                     </div>
                     <div class="asterisk"><i class="fas fa-asterisk"></i></div>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus suscipit repudiandae vel alias, eius incidunt quis. Facilis, commodi iste. Modi neque ipsa maiores eligendi porro quia, nulla facilis totam ab!</p>
+                    <p>Derrière Vite & Gourmand se trouve une équipe passionnée par la cuisine et le partage. Chaque membre contribue au savoir-faire du restaurant, de la préparation des plats à l'accueil des clients, afin de proposer une expérience conviviale et de qualité.</p>
                     <a href="nous.php" class="btn body-btn btn-underline">Sur nous</a>
                 </div>
                 <div class="restaurant-info-img animate-right">

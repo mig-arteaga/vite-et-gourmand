@@ -101,3 +101,8 @@ li {
 .color-5 {
     color: var(--color-5);
 }
+
+/* Legal */
+.legal-container h3 {
+    margin-top: 5rem;
+}

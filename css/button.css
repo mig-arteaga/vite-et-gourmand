@@ -4,7 +4,6 @@
     display: inline-block;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-right: -2px;
 }
 
 .main-btn {
@@ -51,4 +50,33 @@
 
 .no-link-btn {
     cursor: pointer;
+}
+
+.footer-btn {
+    font-size: 1.5rem;
+    color: #FFF;
+    position: relative;
+    /* text-transform: none; */
+    transition: color 500ms;
+}
+
+.footer-btn:hover,
+.footer-btn:focus {
+    color: var(--secondary-font-color);
+}
+
+.footer-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 1px;
+    width: 100%;
+    background-color: #FFF;
+    transition: background-color 500ms;
+}
+
+.footer-btn:hover::before,
+.footer-btn:focus::before {
+    background-color: var(--secondary-font-color);
 }

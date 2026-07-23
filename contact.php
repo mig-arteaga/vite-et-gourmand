@@ -28,7 +28,7 @@ require_once "assets/session.php";
                 <span class="first-letter">N</span>ous
             </h2>
             <h1 class="headline">Contacter</h1>
-            <p class="p-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit. Phasellus viverra leo nec turpis efficitur, et tincidunt nulla sodales. Curabitur dapibus eget ipsum ac rutrum.</p>
+            <p class="p-margin">Une question, une demande d'information ou une envie de réserver une table ? L'équipe de Vite & Gourmand reste disponible pour répondre à vos demandes. Retrouvez toutes nos informations pratiques ci-dessous et n'hésitez pas à nous contacter pour préparer votre prochaine visite.</p>
             <p class="p-margin"><strong>Téléphone : </strong>+33 1 23 45 67 89</p>
             <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d844.0219956220348!2d5.731085646359987!3d45.19234292374179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478af48a93b77c33%3A0x93bf5478697b83f5!2s3%20Place%20Notre%20Dame%2C%2038000%20Grenoble!5e0!3m2!1sfr!2sfr!4v1784583131775!5m2!1sfr!2sfr"
@@ -40,9 +40,6 @@ require_once "assets/session.php";
                 referrerpolicy="strict-origin-when-cross-origin"
                 class="map">
             </iframe>
-            <p class="p-margin">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit.
-            </p>
         </div>
     </section>
 
@@ -59,7 +56,7 @@ require_once "assets/session.php";
                         <span class="first-letter">D</span>ites-nous
                     </h2>
                     <h1 class="headline">Tout</h1>
-                    <p class="p-margin">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis elit in magna mattis suscipit. Phasellus viverra leo nec turpis efficitur, et tincidunt nulla sodales. Curabitur dapibus eget ipsum ac rutrum.</p>
+                    <p class="p-margin">Vous souhaitez nous laisser un message, partager une remarque ou obtenir des renseignements supplémentaires ? Utilisez notre formulaire de contact et notre équipe vous répondra dans les meilleurs délais.</p>
                 </div>
                 <div class="form-box">
                     <form class="contact-form" action="assets/contact-form.php" method="post">

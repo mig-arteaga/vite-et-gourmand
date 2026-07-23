@@ -102,3 +102,10 @@ footer {
     transform: translateY(-50%);
     margin-left: 7.5rem;
 }
+
+/* Legal */
+.p-legal {
+    display: flex ;
+    justify-content: center;
+    gap: 4rem;
+}

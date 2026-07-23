@@ -21,6 +21,10 @@
     margin-bottom: 4rem;
 }
 
+.contact-info p {
+    text-align: center;
+}
+
 .form-box {
     /* display: block; */
     width: 100%;

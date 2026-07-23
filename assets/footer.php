@@ -7,7 +7,15 @@
                     <img src="images/vg-logo-2.svg" alt="">
                 </a>
                 <div class="asterisk"><i class="fas fa-asterisk"></i></div>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis quam dignissimos quisquam officiis laborum rerum autem vitae assumenda, esse, amet iste architecto porro vero dicta aut dolorum distinctio labore ut.</p>
+                <p>Nous vous accueillons au cœur de Grenoble dans un cadre chaleureux, avec une cuisine préparée à partir de produits de qualité.</p>
+                <p>
+                    3 Place Notre Dame, 38000 Grenoble<br>
+                    Ouvert du lundi au dimanche de 11h30 à 22h30<br>
+                </p>
+                <p class="p-legal">
+                    <a href="legal.php" class="btn footer-btn">Mentions légales</a>
+                    <a href="cgv.php" class="btn footer-btn">CGV</a>
+                </p>
             </div>
             <div class="footer-content-divider">
                 <div class="social-media">

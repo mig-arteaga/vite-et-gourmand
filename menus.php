@@ -29,9 +29,9 @@ require_once "assets/session.php";
             </h2>
             <h1 class="headline">Menus</h1>
 
-            <div class="filters">
+            <!-- <div class="filters">
                 <h4>Filtres</h4>
-            </div>
+            </div> -->
 
             <!-- Gather menus -->
             <?php
