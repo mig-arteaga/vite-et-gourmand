@@ -201,9 +201,12 @@ detailButtons.forEach(button => {
 // Close detail menu
 const closeMenuButton = document.querySelector('.close-btn');
 
-closeMenuButton.addEventListener('click', () => {
-    detailBg.classList.remove("visible");
-});
+if(closeMenuButton) {
+    closeMenuButton.addEventListener('click', () => {
+        detailBg.classList.remove("visible");
+    });
+}
+
 
 // Scroll reveal
 window.sr = ScrollReveal();
