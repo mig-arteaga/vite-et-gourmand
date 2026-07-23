@@ -7,7 +7,7 @@ require_once "session.php";
     <div class="container">
         <nav class="nav">
             <a href="index.php" class="logo-link">
-                <img src="images/vg-logo-1.png" alt="" class="title-img">
+                <img src="images/vg-logo-1.svg" alt="" class="title-img">
             </a>
             <ul class="nav-list" id="nav-list">
                 <li class="nav-item">

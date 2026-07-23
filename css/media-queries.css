@@ -190,7 +190,7 @@
     .main-logo {
         width: 28.5rem;
         height: 2rem;
-        background: url(../images/vg-logo-2.png) center no-repeat;
+        background: url(../images/vg-logo-2.svg) center no-repeat;
     }
 
     /* Footer */
@@ -239,11 +239,15 @@
         max-width: 13rem;
     }
     
-    
     /* Detail menu */
     .detail-menu-plus {
         flex-direction: column;
         gap: 2rem;
+    }
+
+    /* Login */
+    .login-buttons {
+        flex-direction: column;
     }
 }
 

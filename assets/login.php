@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  <form class="login-form" method="POST" action="login.php">
                     <div class="login-head">
                         <a href="../index.php">
-                            <img src="../images/vg-logo-2.png" alt="">
+                            <img src="../images/vg-logo-2.svg" alt="">
                         </a>
                         <h4>Connexion</h4>
                     </div>

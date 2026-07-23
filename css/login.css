@@ -59,6 +59,7 @@
 .login-buttons {
     display: flex;
     justify-content: space-between;
+    gap: 4rem;
 }
 
 .login-content .btn {

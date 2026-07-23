@@ -28,7 +28,7 @@
     animation: scale 500ms forwards;
     width: 43.7rem;
     height: 3.1rem;
-    background: url(../images/vg-logo-3.png) center no-repeat;
+    background: url(../images/vg-logo-3.svg) center no-repeat;
 }
 
 .separator {

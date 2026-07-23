@@ -4,7 +4,7 @@
         <div class="footer-content">
             <div class="footer-content-about">
                 <a href="index.php">
-                    <img src="images/vg-logo-2.png" alt="">
+                    <img src="images/vg-logo-2.svg" alt="">
                 </a>
                 <div class="asterisk"><i class="fas fa-asterisk"></i></div>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Blanditiis quam dignissimos quisquam officiis laborum rerum autem vitae assumenda, esse, amet iste architecto porro vero dicta aut dolorum distinctio labore ut.</p>
