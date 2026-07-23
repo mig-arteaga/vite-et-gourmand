@@ -14,30 +14,17 @@ https://vite-et-gourmand-maao-64b0a66b9b27.herokuapp.com/
 
 ---
 
-# Technologies utilisées
-
-## Front-end
-* HTML5
-* CSS3
-* JavaScript
-
-## Back-end
-* PHP
-* PDO
-
-## Base de données
+## Technologies utilisées
+* HTML5, CSS3, JavaScript
+* PHP, PDO
 * MySQL
-
-## Déploiement
-* GitHub
-* Heroku
-* Railway MySQL
+* GitHub, Heroku, Railway MySQL
 
 ---
 
-# Installation en local
+## Installation en local
 
-## Prérequis
+### Prérequis
 Avant l'installation, il est nécessaire d'avoir :
 * PHP
 * MySQL
@@ -46,7 +33,7 @@ Avant l'installation, il est nécessaire d'avoir :
 
 ---
 
-# Cloner le projet
+### Cloner le projet
 Dans un terminal :
 ```bash
 git clone https://github.com/mig-arteaga/vite-et-gourmand.git
@@ -54,9 +41,7 @@ git clone https://github.com/mig-arteaga/vite-et-gourmand.git
 
 ---
 
-# Configuration de la base de données
-
-## Création de la base
+### Création de la base
 Importer le fichier SQL présent dans le dossier :
 ```
 /sql
@@ -70,7 +55,7 @@ Ce fichier contient :
 
 ---
 
-# Configuration de la connexion MySQL
+### Configuration de la connexion MySQL
 
 Ouvrir le fichier :
 ```
@@ -89,7 +74,7 @@ Adapter les valeurs selon votre installation MySQL.
 
 ---
 
-# Lancement de l'application en local
+### Lancement de l'application en local
 
 Depuis le dossier du projet :
 ```bash
@@ -103,11 +88,18 @@ http://localhost:8000
 
 ---
 
-# Comptes de démonstration
+## Comptes de démonstration
 
-## Administrateur
-Email : j.gourmand@mail.com
-Mot de passe : jose123
+### Administrateur
+Email :
+```
+j.gourmand@mail.com
+```
+
+Mot de passe :
+```
+jose123
+```
 
 Droits :
 * accès à l'espace employé
@@ -115,18 +107,31 @@ Droits :
 
 ---
 
-## Employé
-Email : j.vite@mail.com
-Mot de passe : julie123
+### Employé
+Email :
+```
+j.vite@mail.com
+```
+
+Mot de passe :
+```
+julie123
+```
 
 Droits :
 * accès à l'espace employé
 
 ---
 
-## Utilisateur
-Email : j.peck@mail.com
-Mot de passe : josh123
+### Utilisateur
+Email :
+```j.peck@mail.com
+```
+
+Mot de passe :
+```
+josh123
+```
 
 Droits :
 * consultation des menus
