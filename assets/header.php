@@ -60,7 +60,7 @@ require_once "session.php";
                                 <a href="assets/login.php">
                                     Se connecter
                                 </a>
-                                <a href="register.php">
+                                <a href="">
                                     Créer un compte
                                 </a>
                             <?php endif; ?>
