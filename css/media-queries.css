@@ -206,7 +206,7 @@
         align-items: center;
     }
 
-    /* Team */
+    /* Review */
     .review {
         width: 40rem;
         height: initial;
@@ -252,6 +252,22 @@
 }
 
 @media screen and (max-width: 500px) {
+    /* Review */
+    .review {
+        width: calc(100vw - 6rem);
+        border-radius: 7rem 0 0 0;
+        padding: 2rem;
+        min-height: 50rem;
+    }
+
+    .review-header {
+        gap: 1rem;
+    }
+
+    .review-stars {
+        font-size: 1.5rem;
+    }
+    
     /* Menu */
     .menu {
         padding-top: 34rem;
