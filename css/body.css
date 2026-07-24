@@ -95,6 +95,12 @@
     font-weight: 100;
     line-height: .4;
     letter-spacing: 2px;
+    /* opacity: 0;
+    animation: fadeUp 500ms forwards;
+    animation-delay: 500ms; */
+}
+
+.main-sub-headline {
     opacity: 0;
     animation: fadeUp 500ms forwards;
     animation-delay: 500ms;
@@ -114,7 +120,7 @@
     letter-spacing: .5rem;
     margin-right: -.5rem;
     margin-bottom: 5rem;
-    animation: scale 500ms forwards;
+    /* animation: scale 500ms forwards; */
 }
 
 h3 {

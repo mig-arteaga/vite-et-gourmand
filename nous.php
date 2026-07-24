@@ -24,10 +24,10 @@ require_once "assets/session.php";
     <!-- Nous section -->
     <section class="nous-section first-section">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">Q</span>ui
             </h2>
-            <h1 class="headline">Sommes-nous</h1>
+            <h1 class="headline title-up">Sommes-nous</h1>
 
             <div class="team-slide">
                 <img src="images/team-1.jpg" alt="" class="team-slide-image">

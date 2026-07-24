@@ -1,5 +1,5 @@
 <!-- Menu -->
-<div class="menu">
+<div class="menu animate-right">
     <img src="<?= htmlspecialchars($menu['photo']); ?>" alt="" class="menu-img">
     <div class="menu-grid">
         <div class="menu-info">

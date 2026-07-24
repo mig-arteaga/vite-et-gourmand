@@ -24,10 +24,10 @@ require_once "assets/session.php";
     <!-- Contact section -->
     <section class="contact-section first-section">
         <div class="container legal-container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">M</span>entions
             </h2>
-            <h1 class="headline">Légales</h1>
+            <h1 class="headline title-up">Légales</h1>
             <h3>Éditeur du site</h3>
                 <p>
                     Le site <strong>Vite & Gourmand</strong> est édité par l'établissement Vite & Gourmand.
