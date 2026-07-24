@@ -6,11 +6,11 @@ Application web de gestion et de commande de menus pour l'entreprise **Vite & Go
 
 ## Liens du projet
 
-### Dépôt GitHub
-https://github.com/mig-arteaga/vite-et-gourmand
-
 ### Application déployée
 https://vite-et-gourmand-maao-64b0a66b9b27.herokuapp.com/
+
+### Gestion de projet 
+https://miguel-arteaga.atlassian.net/jira/software/projects/VG/boards/2/timeline?atlOrigin=eyJpIjoiOWQ4MTJmMTEyZjM0NGJmNmExYmM1MzFiOTNlNzY0NTAiLCJwIjoiaiJ9
 
 ---
 

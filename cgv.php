@@ -24,10 +24,10 @@ require_once "assets/session.php";
     <!-- Contact section -->
     <section class="contact-section first-section">
         <div class="container legal-container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">C</span>onditions
             </h2>
-            <h1 class="headline">Générales de vente</h1>
+            <h1 class="headline title-up">Générales de vente</h1>
             <h3>Objet</h3>
             <p>
                 Les présentes Conditions Générales de Vente définissent les règles applicables

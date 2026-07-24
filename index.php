@@ -25,7 +25,7 @@ require_once "assets/session.php";
     <section class="main-section">
         <img src="images/hero.jpg" alt="" class="parallax">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline main-sub-headline">
                 <span class="first-letter">B</span>ienvenue
             </h2>
             <div class="main-logo"></div>
@@ -52,7 +52,7 @@ require_once "assets/session.php";
                         <h2 class="sub-headline">
                             <span class="first-letter">N</span>otre
                         </h2>
-                        <h1 class="headline animate-bottom">Équipe</h1>
+                        <h1 class="headline">Équipe</h1>
                     </div>
                     <div class="asterisk"><i class="fas fa-asterisk"></i></div>
                     <p>Derrière Vite & Gourmand se trouve une équipe passionnée par la cuisine et le partage. Chaque membre contribue au savoir-faire du restaurant, de la préparation des plats à l'accueil des clients, afin de proposer une expérience conviviale et de qualité.</p>
@@ -72,13 +72,13 @@ require_once "assets/session.php";
     <!-- Review section -->
     <section class="review-section">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline animate-bottom">
                 <span class="first-letter">A</span>vis
             </h2>
-            <h1 class="headline">Clients</h1>
+            <h1 class="headline animate-bottom">Clients</h1>
 
             <!-- Reviews -->
-            <div class="review-wrap">
+            <div class="review-wrap animate-top">
             
             <!-- Gather reviews -->
             <?php

@@ -238,3 +238,17 @@ sr.reveal('.animate-top', {
   distance: '25rem',
   delay: 600
 });
+
+sr.reveal('.title-down', {
+  origin: 'top',
+  duration: 1000,
+  distance: '1rem',
+  delay: 300
+});
+
+sr.reveal('.title-up', {
+  origin: 'bottom',
+  duration: 1000,
+  distance: '1rem',
+  delay: 300
+});

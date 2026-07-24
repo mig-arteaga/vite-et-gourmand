@@ -24,10 +24,10 @@ require_once "assets/session.php";
     <!-- Contact section -->
     <section class="contact-section first-section">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">N</span>ous
             </h2>
-            <h1 class="headline">Contacter</h1>
+            <h1 class="headline title-up">Contacter</h1>
             <p class="p-margin">Une question, une demande d'information ou une envie de réserver une table ? L'équipe de Vite & Gourmand reste disponible pour répondre à vos demandes. Retrouvez toutes nos informations pratiques ci-dessous et n'hésitez pas à nous contacter pour préparer votre prochaine visite.</p>
             <p class="p-margin"><strong>Téléphone : </strong>+33 1 23 45 67 89</p>
             <iframe 
@@ -38,7 +38,7 @@ require_once "assets/session.php";
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
-                class="map">
+                class="map animate-top">
             </iframe>
         </div>
     </section>
@@ -51,14 +51,14 @@ require_once "assets/session.php";
     <section class="contact">
         <div class="container">
             <div class="form-wrap">
-                <div class="contact-info">
+                <div class="contact-info animate-right">
                     <h2 class="sub-headline">
                         <span class="first-letter">D</span>ites-nous
                     </h2>
                     <h1 class="headline">Tout</h1>
                     <p class="p-margin">Vous souhaitez nous laisser un message, partager une remarque ou obtenir des renseignements supplémentaires ? Utilisez notre formulaire de contact et notre équipe vous répondra dans les meilleurs délais.</p>
                 </div>
-                <div class="form-box">
+                <div class="form-box animate-left">
                     <form class="contact-form" action="assets/contact-form.php" method="post">
                         <div class="form-content">
                             <h5 class="content-sub-title">Nom</h5>
