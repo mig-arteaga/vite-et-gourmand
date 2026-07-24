@@ -24,10 +24,10 @@ require_once "assets/session.php";
     <!-- Menu section -->
     <section class="menu-section first-section">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">T</span>ous les
             </h2>
-            <h1 class="headline">Menus</h1>
+            <h1 class="headline title-up">Menus</h1>
 
             <!-- <div class="filters">
                 <h4>Filtres</h4>

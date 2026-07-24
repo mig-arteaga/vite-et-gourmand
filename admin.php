@@ -26,10 +26,10 @@ requireRoles(["Administrateur"]);
     <!-- Nous section -->
     <section class="admin-section first-section">
         <div class="container">
-            <h2 class="sub-headline">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">E</span>space
             </h2>
-            <h1 class="headline">Administrateur</h1>
+            <h1 class="headline title-up">Administrateur</h1>
         </div>
     </section>
 

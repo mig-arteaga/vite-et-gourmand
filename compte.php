@@ -24,11 +24,12 @@ requireRoles(["Administrateur", "Employé", "Utilisateur"]);
     ?>
 
     <!-- Nous section -->
-    <section class="employe-section first-section">        <div class="container">
-            <h2 class="sub-headline">
+    <section class="employe-section first-section">
+        <div class="container">
+            <h2 class="sub-headline title-down">
                 <span class="first-letter">M</span>on
             </h2>
-            <h1 class="headline">Compte</h1>
+            <h1 class="headline title-up">Compte</h1>
         </div>
     </section>
 
