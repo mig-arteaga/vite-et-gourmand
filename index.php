@@ -112,7 +112,6 @@ require_once "assets/session.php";
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
-    <!-- <script src="https://unpkg.com/scrollreveal"></script> -->
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

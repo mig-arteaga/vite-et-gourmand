@@ -112,6 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </section>
 
-    <script type="module" src="../js/script.js"></script>
+    <script type="module" src="../js/main.js"></script>
 </body>
 </html>

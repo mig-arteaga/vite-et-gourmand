@@ -38,6 +38,6 @@ requireRoles(["Administrateur", "Employé", "Utilisateur"]);
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
