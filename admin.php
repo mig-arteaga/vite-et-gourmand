@@ -1,7 +1,6 @@
 <?php
-require "assets/auth.php";
-
-requireRoles(["Administrateur"]);
+    require "back-end/auth.php";
+    requireRoles(["Administrateur"]);
 ?>
 
 <!DOCTYPE html>

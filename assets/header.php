@@ -1,5 +1,5 @@
 <?php
-require_once "session.php";
+    require_once "back-end/session.php";
 ?>
 
 <!-- Header -->
@@ -53,11 +53,11 @@ require_once "session.php";
                                 <a href="compte.php">
                                     Mon compte
                                 </a>
-                                <a href="assets/logout.php">
+                                <a href="back-end/logout.php">
                                     Se déconnecter
                                 </a>
                             <?php else: ?>
-                                <a href="assets/login.php">
+                                <a href="login.php">
                                     Se connecter
                                 </a>
                                 <a href="">

@@ -27,15 +27,20 @@ export function initOpenDteailMenu () {
     
             formData.append('menu', menuId);
     
-            fetch('assets/detail-menu.php', {
+            // fetch('assets/detail-menu.php', {
+            //     method: 'POST',
+            //     body: formData
+            // })
+
+            fetch('back-end/load-detail-menu.php', {
                 method: 'POST',
                 body: formData
             })
     
             .then(response => response.json())
             .then(data => {
-                // console.log("PHP response:");
-                // console.log(data);
+                console.log("PHP response:");
+                console.log(data);
     
                 const title = document.getElementById('detail-title');
                 const description = document.getElementById('detail-description');

@@ -1,5 +1,5 @@
 <?php
-require_once "assets/session.php";
+    require_once "back-end/session.php";
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +59,7 @@ require_once "assets/session.php";
                     <p class="p-margin">Vous souhaitez nous laisser un message, partager une remarque ou obtenir des renseignements supplémentaires ? Utilisez notre formulaire de contact et notre équipe vous répondra dans les meilleurs délais.</p>
                 </div>
                 <div class="form-box animate-left">
-                    <form class="contact-form" action="assets/contact-form.php" method="post">
+                    <form class="contact-form" action="back-end/contact-form.php" method="post">
                         <div class="form-content">
                             <h5 class="content-sub-title">Nom</h5>
                                 <input type="text" name="name" class="nom" autocomplete="name">
