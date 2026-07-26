@@ -4,6 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $maxPrice = (int)$_POST['maxPrice'];
     $theme = $_POST['theme'];
     $diet = $_POST['diet'];
+    $people = (int)$_POST['people'];
 
     try {
         require_once "../config/database.php";
@@ -19,6 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if (!empty($diet)) {
             $filters[':diet'] = $diet;
+        }
+        if (!empty($people)) {
+            $filters[':people'] = $people;
         }
 
         $stmt = getMenus($pdo, $filters);

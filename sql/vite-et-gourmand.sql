@@ -142,7 +142,7 @@ INSERT INTO themes (libelle) VALUES
 ('Brunch'),
 ('Cocktail party'),
 ('Picnic'),
-('Elégant');
+('Élégant');
 
 INSERT INTO regimes (libelle) VALUES
 ('Sans régime'),

@@ -34,20 +34,31 @@
                 <div class="filters">
                     <div class="filter">
                         <label for="max-price">Prix max. :</label>
-                        <input type="text" name="max-price" id="max-price">
+                        <input type="range" class="slider" id="max-price">
+                        <span id="max-price-output"></span>
                     </div>
                     <div class="filter">
                         <label for="theme">Thème :</label>
-                        <input type="text" name="theme" id="theme">
+                        <select name="theme" id="theme"></select>
                     </div>
                     <div class="filter">
-                        <label for="max-price">Régime :</label>
-                        <input type="text" name="diet" id="diet">
+                        <label for="diet">Régime :</label>
+                        <select name="diet" id="diet"></select>
+                    </div>
+                    <div class="filter">
+                        <label for="people">Min. personnes :</label>
+                        <input type="range" class="slider" id="people">
+                        <span id="people-output"></span>
                     </div>
                     <a 
                         class="btn body-btn btn-underline no-link-btn"
                         id="filter-btn">
                         Filter
+                    </a>
+                    <a 
+                        class="btn body-btn btn-underline no-link-btn"
+                        id="reset-filter-btn">
+                        Reset filters
                     </a>
                 </div>
             </div>

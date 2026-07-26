@@ -34,6 +34,9 @@ function getMenus($pdo, $filters = []) {
     if (!empty($filters[':diet'])) {
         $sql .= " AND r.libelle = :diet";
     }
+    if (!empty($filters[':people'])) {
+        $sql .= " AND min_personnes <= :people";
+    }
 
     $sql .= " GROUP BY m.id_menu";
 
