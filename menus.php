@@ -29,14 +29,35 @@
             </h2>
             <h1 class="headline title-up">Menus</h1>
 
-            <!-- <div class="filters">
+            <div class="filter-wrap">
                 <h4>Filtres</h4>
-            </div> -->
+                <div class="filters">
+                    <div class="filter">
+                        <label for="max-price">Prix max. :</label>
+                        <input type="text" name="max-price" id="max-price">
+                    </div>
+                    <div class="filter">
+                        <label for="theme">Thème :</label>
+                        <input type="text" name="theme" id="theme">
+                    </div>
+                    <div class="filter">
+                        <label for="max-price">Régime :</label>
+                        <input type="text" name="diet" id="diet">
+                    </div>
+                    <a 
+                        class="btn body-btn btn-underline no-link-btn"
+                        id="filter-btn">
+                        Filter
+                    </a>
+                </div>
+            </div>
 
-            <!-- Loads menus -->
-            <?php
-                require "back-end/load-menus.php"
-            ?>
+            <div class="menu-wrap" id="menu-wrap">
+                <!-- Loads menus -->
+                <?php
+                    require "back-end/load-menus.php"
+                ?>
+            </div>
 
             <!-- Detailed menu -->
             <?php

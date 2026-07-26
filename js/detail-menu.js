@@ -10,38 +10,32 @@ function duplicateArray(arraySimple) {
 // Open detail menu
 const detailBg = document.getElementById('detail-bg');
 
-export function initOpenDteailMenu () {
-    const detailButtons = document.querySelectorAll('.menu-btn');
+export function initOpenDetailMenu () {
+    // const detailButtons = document.querySelectorAll('.menu-btn');
+    const menuWrap = document.getElementById('menu-wrap');
     
-    if (!detailButtons.length || !detailBg) return;
-    
-    detailButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const menuId = button.id;
-    
-            //console.log("Sending menu ID:", menuId);
-    
-            detailBg.classList.add('visible');
-    
-            const formData = new FormData();
-    
-            formData.append('menu', menuId);
-    
-            // fetch('assets/detail-menu.php', {
-            //     method: 'POST',
-            //     body: formData
-            // })
+    if (!menuWrap) return;
 
+    menuWrap.addEventListener('click', (event) => {
+        if (event.target.classList.contains('menu-btn')) {
+            const menuId = event.target.id;
+        
+            //console.log("Sending menu ID:", menuId);
+        
+            const formData = new FormData();
+        
+            formData.append('menu', menuId);
+        
             fetch('back-end/load-detail-menu.php', {
                 method: 'POST',
                 body: formData
             })
-    
+        
             .then(response => response.json())
             .then(data => {
-                console.log("PHP response:");
-                console.log(data);
-    
+                // console.log("PHP response:");
+                // console.log(data);
+        
                 const title = document.getElementById('detail-title');
                 const description = document.getElementById('detail-description');
                 const theme = document.getElementById('detail-theme');
@@ -50,7 +44,7 @@ export function initOpenDteailMenu () {
                 const delay = document.getElementById('detail-delay');
                 const stock = document.getElementById('detail-stock');
                 const unitPrice = document.getElementById('detail-unit-price');
-    
+        
                 title.textContent = data.menu.title;
                 description.textContent = data.menu.description;
                 theme.textContent = data.menu.theme;
@@ -58,9 +52,9 @@ export function initOpenDteailMenu () {
                 minPeole.textContent = data.menu.min_people;
                 delay.textContent = data.menu.delay;
                 stock.textContent = data.menu.stock;
-    
+        
                 const priceValue = data.menu.unit_price;
-    
+        
                 //console.log(priceValue);
                 
                 if (priceValue % parseInt(priceValue) == 0) {
@@ -68,16 +62,16 @@ export function initOpenDteailMenu () {
                 } else {
                     unitPrice.textContent = priceValue;
                 }
-    
-    
+        
+        
                 // Photos
                 let photos = [];
                 data.photos.forEach(photo => {
                     photos.push(photo.path);
                 });
-    
+        
                 photos = duplicateArray(photos);
-    
+        
                 const gallery = document.getElementById('menu-slide');
                 gallery.innerHTML = "";
                 
@@ -87,19 +81,19 @@ export function initOpenDteailMenu () {
                     img.classList.add('menu-slide-image');
                     gallery.appendChild(img);
                 });
-    
+        
                 //Dishes
                 const appetizer = document.getElementById('detail-appetizer');
                 const mainCourse = document.getElementById('detail-main-course');
                 const dessert = document.getElementById('detail-dessert');
                 const composition = document.getElementById('detail-composition');
-    
+        
                 const hidden = document.querySelectorAll('.hidden')
-    
+        
                 hidden.forEach(hidden => {
                     hidden.classList.remove('hidden');
                 });
-    
+        
                 if (data.dishes.length == 3) {
                     composition.textContent = "Entrée + plat + dessert";
                     appetizer.textContent = data.dishes[0].title;
@@ -110,17 +104,17 @@ export function initOpenDteailMenu () {
                     appetizer.textContent = data.dishes[0].title;
                     mainCourse.textContent = data.dishes[1].title;
                     dessert.textContent = "Pas de dessert";
-    
+        
                     dessert.parentElement.classList.add('hidden');
                 } else {
                     composition.textContent = "Plat + dessert"
                     appetizer.textContent = "Pas d'entrée";
                     mainCourse.textContent = data.dishes[0].title;
                     dessert.textContent = data.dishes[1].title;
-    
+        
                     appetizer.parentElement.classList.add('hidden');
                 };
-    
+        
                 // Allergenics
                 const allergenicList = document.getElementById('allergenic-list');
                 allergenicList.innerHTML = "";
@@ -132,12 +126,14 @@ export function initOpenDteailMenu () {
                     allergenicList.appendChild(li);
                 });
             });
-        });
+        
+            detailBg.classList.add('visible');
+        };
     });
 };
 
 // Close detail menu
-export function initCloseDteailMenu () {
+export function initCloseDetailMenu () {
     const closeMenuButton = document.querySelector('.close-btn');
     
     if(!closeMenuButton) return;

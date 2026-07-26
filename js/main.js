@@ -1,13 +1,15 @@
 // Initialisation des fonctions
 import { initHeaderBehaviour } from "./header.js";
-import { initOpenDteailMenu, initCloseDteailMenu } from "./detail-menu.js";
 import { initScrollReveal } from "./scroll-reveal.js";
+import { initOpenDetailMenu, initCloseDetailMenu } from "./detail-menu.js";
+import { initFilterMenus } from "./filter-menus.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initHeaderBehaviour();
-    initOpenDteailMenu();
-    initCloseDteailMenu();
     initScrollReveal();
+    initOpenDetailMenu();
+    initCloseDetailMenu();
+    initFilterMenus();
 })
 
 // Paralax effect

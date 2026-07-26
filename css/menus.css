@@ -1,6 +1,6 @@
 /* Filters */
 
-.filters {
+.filter-wrap {
     width: 100%;
     height: 6rem;
     border-radius: 3rem;
@@ -12,6 +12,6 @@
     padding: 3rem;
 }
 
-.filters h4 {
+.filter-wrap h4 {
     margin-bottom: 0;
 }
