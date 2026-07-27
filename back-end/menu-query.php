@@ -25,8 +25,11 @@ function getMenus($pdo, $filters = []) {
         WHERE 1=1
     ";
 
-    if (!empty($filters[':price'])) {
-        $sql .= " AND prix_personne <= :price";
+    if (!empty($filters[':minPrice'])) {
+        $sql .= " AND prix_personne >= :minPrice";
+    }
+    if (!empty($filters[':maxPrice'])) {
+        $sql .= " AND prix_personne <= :maxPrice";
     }
     if (!empty($filters[':theme'])) {
         $sql .= " AND t.libelle = :theme";

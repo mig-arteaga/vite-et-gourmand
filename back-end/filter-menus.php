@@ -1,6 +1,7 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $minPrice = (int)$_POST['minPrice'];
     $maxPrice = (int)$_POST['maxPrice'];
     $theme = $_POST['theme'];
     $diet = $_POST['diet'];
@@ -12,8 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $filters = [];
 
+        if (!empty($minPrice)) {
+            $filters[':minPrice'] = $minPrice;
+        }
         if (!empty($maxPrice)) {
-            $filters[':price'] = $maxPrice;
+            $filters[':maxPrice'] = $maxPrice;
         }
         if (!empty($theme)) {
             $filters[':theme'] = $theme;

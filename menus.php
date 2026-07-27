@@ -33,6 +33,11 @@
                 <h4>Filtres</h4>
                 <div class="filters">
                     <div class="filter">
+                        <label for="min-price">Prix min. :</label>
+                        <input type="range" class="slider" id="min-price">
+                        <span id="min-price-output"></span>
+                    </div>
+                    <div class="filter">
                         <label for="max-price">Prix max. :</label>
                         <input type="range" class="slider" id="max-price">
                         <span id="max-price-output"></span>

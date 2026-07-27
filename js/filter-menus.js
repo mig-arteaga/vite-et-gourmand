@@ -1,19 +1,25 @@
 // Filter menus
 const filterButton = document.getElementById('filter-btn');
 const resetFilterButton = document.getElementById('reset-filter-btn');
+const filterMinPrice = document.getElementById('min-price');
 const filterMaxPrice = document.getElementById('max-price');
 const filterTheme = document.getElementById('theme');
 const filterDiet = document.getElementById('diet');
 const filterPeople = document.getElementById('people');
-const priceOutput = document.getElementById("max-price-output");
+const minPriceOutput = document.getElementById("min-price-output");
+const maxPriceOutput = document.getElementById("max-price-output");
 const peopleOutput = document.getElementById("people-output");
 
+const priceGap = 1;
+
+let minPriceDefault;
 let maxPriceDefault;
 let peopleDefault;
 
-function postFilterData(maxPrice, theme, diet, people) {
+function postFilterData(minPrice, maxPrice, theme, diet, people) {
     const formData = new FormData();
 
+    formData.append('minPrice', minPrice);
     formData.append('maxPrice', maxPrice);
     formData.append('theme', theme);
     formData.append('diet', diet);
@@ -35,42 +41,70 @@ function postFilterData(maxPrice, theme, diet, people) {
     });
 };
 
-export function initFilterMenus () {
+function applyFilters() {
+    const minPrice = parseInt(filterMinPrice.value);
+    const maxPrice = parseInt(filterMaxPrice.value);
+    const theme = filterTheme.value;
+    const diet = filterDiet.value;
+    const people = parseInt(filterPeople.value);
     
-    if (!filterButton || !resetFilterButton) return;
-    
-    filterButton.addEventListener('click', () => {
-        const maxPrice = parseInt(filterMaxPrice.value);
-        const theme = filterTheme.value;
-        const diet = filterDiet.value;
-        const people = parseInt(filterPeople.value);
-        
-        postFilterData(maxPrice, theme, diet, people);
-    });
+    postFilterData(minPrice, maxPrice, theme, diet, people);
+}
 
+export function initApplyFilters() {
+    if (
+        !filterMinPrice || 
+        !filterMaxPrice || 
+        !filterTheme || 
+        !filterDiet || 
+        !filterPeople ) return;
+    
+    filterMinPrice.addEventListener("change", applyFilters);
+    filterMaxPrice.addEventListener("change", applyFilters);
+    filterTheme.addEventListener("change", applyFilters);
+    filterDiet.addEventListener("change", applyFilters);
+    filterPeople.addEventListener("input", applyFilters);
+};
+
+export function initResetFilters() {
+    if (!resetFilterButton) return;
+    
     resetFilterButton.addEventListener('click', () => {
+        filterMinPrice.value = minPriceDefault;
         filterMaxPrice.value = maxPriceDefault;
         filterTheme.value = "";
         filterDiet.value = "";
         filterPeople.value = peopleDefault;
 
-        priceOutput.innerHTML = filterMaxPrice.value + " €";
+        minPriceOutput.innerHTML = filterMinPrice.value + " €";
+        maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
         peopleOutput.innerHTML = filterPeople.value + " personnes";
         
-        postFilterData("", "", "", "");
+        postFilterData("", "", "", "", "");
     });
 };
 
 // Update filter visuals
 export function initSliders() {
-    if (!filterMaxPrice || !filterPeople) return;
+    if (!filterMinPrice || !filterMaxPrice || !filterPeople) return;
 
-    // filterMaxPrice.value
-    priceOutput.innerHTML = filterMaxPrice.value;
+    minPriceOutput.innerHTML = filterMinPrice.value;
+    maxPriceOutput.innerHTML = filterMaxPrice.value;
     peopleOutput.innerHTML = filterPeople.value;
 
+    filterMinPrice.addEventListener("input", () => {
+        if (parseInt(filterMaxPrice.value) - parseInt(filterMinPrice.value) <= priceGap) {
+            filterMinPrice.value = parseInt(filterMaxPrice.value) - priceGap
+        };
+
+        minPriceOutput.innerHTML = filterMinPrice.value + " €";
+    });
     filterMaxPrice.addEventListener("input", () => {
-        priceOutput.innerHTML = filterMaxPrice.value + " €";
+        if (parseInt(filterMaxPrice.value) - parseInt(filterMinPrice.value) <= priceGap) {
+            filterMaxPrice.value = parseInt(filterMinPrice.value) + priceGap
+        };
+
+        maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
     });
     filterPeople.addEventListener("input", () => {
         peopleOutput.innerHTML = filterPeople.value + " personnes";
@@ -84,14 +118,23 @@ export async function initFilterValues() {
 
     console.log(data);
 
+    // Default prices
+    minPriceDefault = parseInt(data.prices.minPrice);
+    maxPriceDefault = Math.ceil(data.prices.maxPrice);
+
+    // Min price
+    filterMinPrice.min = minPriceDefault;
+    filterMinPrice.max = maxPriceDefault;
+    filterMinPrice.value = minPriceDefault;
+
+    minPriceOutput.innerHTML = filterMinPrice.value + " €";
+
     // Max price
-    maxPriceDefault = data.prices.maxPrice;
+    filterMaxPrice.min = minPriceDefault;
+    filterMaxPrice.max = maxPriceDefault;
+    filterMaxPrice.value = maxPriceDefault;
 
-    filterMaxPrice.min = data.prices.minPrice;
-    filterMaxPrice.max = data.prices.maxPrice;
-    filterMaxPrice.value = data.prices.maxPrice;
-
-    priceOutput.innerHTML = filterMaxPrice.value + " €";
+    maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
 
     // Theme
     const emptyTheme = document.createElement('option');
