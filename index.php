@@ -1,5 +1,5 @@
 <?php
-require_once "assets/session.php";
+    require_once "back-end/session.php";
 ?>
 
 <!DOCTYPE html>
@@ -80,28 +80,9 @@ require_once "assets/session.php";
             <!-- Reviews -->
             <div class="review-wrap animate-top">
             
-            <!-- Gather reviews -->
+            <!-- Load reviews -->
             <?php
-                try {
-                    require_once "config/database.php";
-                    
-                    $sql = "SELECT 
-                        a.date_avis as review_date,
-                        a.note as score,
-                        a.message,
-                        u.nom as surname,
-                        u.prenom as name,
-                        u.photo
-                    FROM avis a
-                    INNER JOIN utilisateurs u ON a.utilisateur = u.id_utilisateur
-                    WHERE a.statut = 'Validé';";
-                    
-                    foreach ($pdo->query($sql, PDO::FETCH_ASSOC) as $review) {
-                        include "assets/review.php";
-                    }
-                } catch (PDOException $e) {
-                    echo 'Erreur : ' . $e->getMessage();
-                }
+                require "back-end/load-reviews.php"
             ?>
              </div>
         </div>
@@ -112,7 +93,6 @@ require_once "assets/session.php";
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
-    <!-- <script src="https://unpkg.com/scrollreveal"></script> -->
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

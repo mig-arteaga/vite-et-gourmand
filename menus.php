@@ -1,5 +1,5 @@
 <?php
-require_once "assets/session.php";
+    require_once "back-end/session.php";
 ?>
 
 <!DOCTYPE html>
@@ -29,48 +29,60 @@ require_once "assets/session.php";
             </h2>
             <h1 class="headline title-up">Menus</h1>
 
-            <!-- <div class="filters">
+            <div class="filter-container">
                 <h4>Filtres</h4>
-            </div> -->
+                <div class="filter-wrap">
+                    <div class="filter">
+                        <label for="min-price">Prix :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-price">
+                                <input type="range" class="slider" id="min-price">
+                                <input type="range" class="slider" id="max-price">
+                            </div>
+                        </div>
+                        <span>
+                            <span id="min-price-output"></span> - 
+                            <span id="max-price-output"></span>
+                        </span>
+                    </div>
+                    <div class="filter">
+                        <label for="people">Min. personnes :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-people">
+                                <input type="range" class="slider" id="people">
+                            </div>
+                        </div>
+                        <span id="people-output"></span>
+                    </div>
+                    <div class="filter">
+                        <label for="theme">Thème :</label>
+                        <select name="theme" id="theme"></select>
+                    </div>
+                    <div class="filter">
+                        <label for="diet">Régime :</label>
+                        <select name="diet" id="diet"></select>
+                    </div>
+                </div>
+                <div>
+                    <a 
+                        class="btn body-btn no-link-btn filter-btn"
+                        id="reset-filter-btn"
+                        title="Réinitialiser">
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
+                    </a>
+                </div>
+            </div>
 
-            <!-- Gather menus -->
-            <?php
-                try {
-                    require "config/database.php";
-                    
-                    $sql = "SELECT 
-                        m.id_menu,
-                        m.titre as title,
-                        m.description,
-                        m.min_personnes as min_people,
-                        m.prix_personne as unit_price,
-                        t.libelle as theme,
-                        r.libelle as diet,
-                        MAX(pm.chemin) as photo,
-                        COUNT(DISTINCT IF(p.type = 'Entrée', p.id_plat, NULL)) as appetizer,
-                        COUNT(DISTINCT IF(p.type = 'Plat', p.id_plat, NULL)) as main_course,
-                        COUNT(DISTINCT IF(p.type = 'Dessert', p.id_plat, NULL)) as dessert,
-                        COUNT(DISTINCT pa.allergene) as allergenic
-                    FROM menus m
-                    INNER JOIN themes t ON m.theme = t.id_theme
-                    INNER JOIN regimes r ON m.regime = r.id_regime
-                    INNER JOIN photos_menu pm ON m.id_menu = pm.menu AND pm.ordre = 1
-                    INNER JOIN menus_plats mp ON m.id_menu = mp.menu
-                    INNER JOIN plats p ON mp.plat = p.id_plat
-                    INNER JOIN plats_allergenes pa ON p.id_plat = pa.plat
-                    GROUP BY m.id_menu;";
-                    
-                    foreach ($pdo->query($sql, PDO::FETCH_ASSOC) as $menu) {
-                        include "assets/menu.php";
-                    }
-                } catch (PDOException $e) {
-                    echo 'Erreur : ' . $e->getMessage();
-                }
-            ?>
+            <div class="menu-wrap" id="menu-wrap">
+                <!-- Loads menus -->
+                <?php
+                    require "back-end/load-menus.php"
+                ?>
+            </div>
 
             <!-- Detailed menu -->
             <?php
-                include "assets/detail-menu.php";
+                include "back-end/load-detail-menu.php";
             ?>
         </div>
     </section>
@@ -80,6 +92,6 @@ require_once "assets/session.php";
         require "assets/footer.php";
     ?>
     
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
