@@ -79,6 +79,10 @@
   border-radius: 50%;
 }
 
+.slider-track input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 0.4rem #C59D5F60;
+}
+
 .filter select {
     width: 100%;
     padding: 0.4rem;
@@ -86,6 +90,7 @@
     font-family: var(--body-font);
     color: var(--body-font-color);
     border: solid 1px var(--body-font-color-light);
+    
 }
 
 .filter select:hover {
@@ -95,7 +100,7 @@
 .filter select:focus {
     outline: none;
     border-color: var(--secondary-font-color);
-    box-shadow: 0 0 0 0.4rem #C59D5F40;
+    box-shadow: 0 0 0 0.4rem #C59D5F60;
 }
 
 /* No results */
