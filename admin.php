@@ -1,7 +1,6 @@
 <?php
-require "assets/auth.php";
-
-requireRoles(["Administrateur"]);
+    require "back-end/auth.php";
+    requireRoles(["Administrateur"]);
 ?>
 
 <!DOCTYPE html>
@@ -38,6 +37,6 @@ requireRoles(["Administrateur"]);
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

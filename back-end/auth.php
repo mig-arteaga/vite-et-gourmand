@@ -1,9 +1,9 @@
 <?php
 
-require_once "session.php";
+require_once "back-end/session.php";
 
 if (!isLoggedIn()) {
-    header("Location: assets/login.php");
+    header("Location: login.php");
     exit;
 }
 

@@ -1,5 +1,5 @@
 <?php
-require_once "assets/session.php";
+    require_once "back-end/session.php";
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +56,6 @@ require_once "assets/session.php";
         require "assets/footer.php";
     ?>
 
-    <script src="js/script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

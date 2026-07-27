@@ -1,17 +1,126 @@
 /* Filters */
 
-.filters {
+.filter-container {
     width: 100%;
-    height: 6rem;
-    border-radius: 3rem;
-    background-color: #FFFFFF;
+    border-radius: 4rem 0 0 0;
+    background-color: #EDEDED;
     margin-bottom: 4rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3rem;
+    gap: 2rem;
+    padding: 2rem;
 }
 
-.filters h4 {
+.filter-container h4 {
     margin-bottom: 0;
+}
+
+.filter label {
+    font-size: 1.4rem;
+}
+
+.filter span {
+    font-size: 1.6rem;
+    margin-top: 0.2rem;
+}
+
+.filter-wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 18rem;
+}
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 2rem;
+}
+
+.slider-track {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--body-font-color-light);;
+    height: 0.8rem;
+    border-radius: 0.4rem;
+}
+
+.slider-track input[type="range"] {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    outline: none;
+    background-color: transparent;
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.slider-track input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 1.2em;
+  width: 1.2em;
+  background-color: var(--secondary-font-color);
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+}
+
+.slider-track input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 0.4rem #C59D5F60;
+}
+
+.filter select {
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 1.6rem;
+    font-family: var(--body-font);
+    color: var(--body-font-color);
+    border: solid 1px var(--body-font-color-light);
+    
+}
+
+.filter select:hover {
+    border-color: var(--secondary-font-color);
+}
+
+.filter select:focus {
+    outline: none;
+    border-color: var(--secondary-font-color);
+    box-shadow: 0 0 0 0.4rem #C59D5F60;
+}
+
+/* No results */
+.no-results {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+}
+
+.no-results img {
+    width: 20rem;
+    opacity: 0.2;
+}
+
+.no-results h3 {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    color: var(--body-font-color);
 }

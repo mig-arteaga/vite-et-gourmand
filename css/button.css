@@ -80,3 +80,7 @@
 .footer-btn:focus::before {
     background-color: var(--secondary-font-color);
 }
+
+.filter-btn {
+    font-size: 2.4rem;
+}
