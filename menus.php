@@ -29,18 +29,30 @@
             </h2>
             <h1 class="headline title-up">Menus</h1>
 
-            <div class="filter-wrap">
+            <div class="filter-container">
                 <h4>Filtres</h4>
-                <div class="filters">
+                <div class="filter-wrap">
                     <div class="filter">
-                        <label for="min-price">Prix min. :</label>
-                        <input type="range" class="slider" id="min-price">
-                        <span id="min-price-output"></span>
+                        <label for="min-price">Prix :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-price">
+                                <input type="range" class="slider" id="min-price">
+                                <input type="range" class="slider" id="max-price">
+                            </div>
+                        </div>
+                        <span>
+                            <span id="min-price-output"></span> - 
+                            <span id="max-price-output"></span>
+                        </span>
                     </div>
                     <div class="filter">
-                        <label for="max-price">Prix max. :</label>
-                        <input type="range" class="slider" id="max-price">
-                        <span id="max-price-output"></span>
+                        <label for="people">Min. personnes :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-people">
+                                <input type="range" class="slider" id="people">
+                            </div>
+                        </div>
+                        <span id="people-output"></span>
                     </div>
                     <div class="filter">
                         <label for="theme">Thème :</label>
@@ -50,20 +62,13 @@
                         <label for="diet">Régime :</label>
                         <select name="diet" id="diet"></select>
                     </div>
-                    <div class="filter">
-                        <label for="people">Min. personnes :</label>
-                        <input type="range" class="slider" id="people">
-                        <span id="people-output"></span>
-                    </div>
+                </div>
+                <div>
                     <a 
-                        class="btn body-btn btn-underline no-link-btn"
-                        id="filter-btn">
-                        Filter
-                    </a>
-                    <a 
-                        class="btn body-btn btn-underline no-link-btn"
-                        id="reset-filter-btn">
-                        Reset filters
+                        class="btn body-btn no-link-btn filter-btn"
+                        id="reset-filter-btn"
+                        title="Réinitialiser">
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
                     </a>
                 </div>
             </div>

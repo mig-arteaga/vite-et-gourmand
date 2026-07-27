@@ -1,5 +1,4 @@
 // Filter menus
-const filterButton = document.getElementById('filter-btn');
 const resetFilterButton = document.getElementById('reset-filter-btn');
 const filterMinPrice = document.getElementById('min-price');
 const filterMaxPrice = document.getElementById('max-price');
@@ -15,6 +14,7 @@ const priceGap = 1;
 let minPriceDefault;
 let maxPriceDefault;
 let peopleDefault;
+let minPeople;
 
 function postFilterData(minPrice, maxPrice, theme, diet, people) {
     const formData = new FormData();
@@ -63,7 +63,7 @@ export function initApplyFilters() {
     filterMaxPrice.addEventListener("change", applyFilters);
     filterTheme.addEventListener("change", applyFilters);
     filterDiet.addEventListener("change", applyFilters);
-    filterPeople.addEventListener("input", applyFilters);
+    filterPeople.addEventListener("change", applyFilters);
 };
 
 export function initResetFilters() {
@@ -81,6 +81,8 @@ export function initResetFilters() {
         peopleOutput.innerHTML = filterPeople.value + " personnes";
         
         postFilterData("", "", "", "", "");
+
+        fillColor();
     });
 };
 
@@ -98,6 +100,7 @@ export function initSliders() {
         };
 
         minPriceOutput.innerHTML = filterMinPrice.value + " €";
+        fillColor();
     });
     filterMaxPrice.addEventListener("input", () => {
         if (parseInt(filterMaxPrice.value) - parseInt(filterMinPrice.value) <= priceGap) {
@@ -105,18 +108,46 @@ export function initSliders() {
         };
 
         maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
+        fillColor();
     });
     filterPeople.addEventListener("input", () => {
         peopleOutput.innerHTML = filterPeople.value + " personnes";
+        fillColor();
     });
+};
+
+// Background color of sliders
+function fillColor() {
+    const sliderTrackPrice = document.getElementById('slider-track-price');
+    const sliderTrackPeople = document.getElementById('slider-track-people');
+    
+    let percent1 = ((filterMinPrice.value - minPriceDefault) / (maxPriceDefault - minPriceDefault)) * 100;
+    let percent2 = ((filterMaxPrice.value - minPriceDefault) / (maxPriceDefault - minPriceDefault)) * 100;
+    let percent3 = ((filterPeople.value - minPeople) / (peopleDefault - minPeople)) * 100;
+
+    sliderTrackPrice.style.background = `linear-gradient(
+        to right, 
+        #D9D9D9 ${percent1}% , 
+        #C59D5F ${percent1}% , 
+        #C59D5F ${percent2}%, 
+        #D9D9D9 ${percent2}%
+    )`;
+    
+    sliderTrackPeople.style.background = `linear-gradient(
+        to right, 
+        #C59D5F ${percent3}% , 
+        #D9D9D9 ${percent3}%
+    )`;
 };
 
 // Load filter values
 export async function initFilterValues() {
+    if (!resetFilterButton) return;
+
     const response = await fetch('back-end/get-filter-values.php');
     const data = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
     // Default prices
     minPriceDefault = parseInt(data.prices.minPrice);
@@ -171,11 +202,14 @@ export async function initFilterValues() {
     });
 
     // People
-    peopleDefault = data.prices.maxPrice;
+    peopleDefault = data.people.maxPeople;
+    minPeople = data.people.minPeople;
 
     filterPeople.min = data.people.minPeople;
     filterPeople.max = data.people.maxPeople;
     filterPeople.value = data.people.maxPeople;
 
     peopleOutput.innerHTML = filterPeople.value + " personnes";
+
+    fillColor();
 };

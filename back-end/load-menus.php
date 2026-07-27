@@ -8,6 +8,11 @@
 
         $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        if (count($menus) === 0) {
+            include "assets/no-results.php";
+            exit;
+        }
+        
         foreach ($menus as $menu) {
             include "assets/menu.php";
         }
