@@ -16,10 +16,13 @@ export function initHeaderBehaviour() {
     window.addEventListener('load', () => {
         const windowName = location.pathname.split('/').pop();
         const index = pages.indexOf(windowName);
-        const navList = document.getElementById('nav-list');
-        const navItem = navList.children[index];
         
-        navItem.classList.add("active");
+        if(!index === -1) {
+            const navList = document.getElementById('nav-list');
+            const navItem = navList.children[index];
+            
+            navItem.classList.add("active");
+        };
     });
     
     

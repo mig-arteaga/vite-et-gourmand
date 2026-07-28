@@ -12,7 +12,8 @@ if (getenv("MYSQLHOST")) {
 } else {
 
     // Local XAMPP
-    $host = "localhost";
+    // $host = "localhost";
+    $host = "127.0.0.1";
     $dbname = "vite_et_gourmand";
     $username = "root";
     $password = "";

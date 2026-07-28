@@ -1,0 +1,19 @@
+/* Order */
+.order-sub-section {
+    width: 100%;
+    background-color: #FFFFFF;
+    margin-bottom: 2rem;
+    padding: 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+}
+
+.order-dataset {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.order-field {
+    margin-bottom: 1rem;
+}

@@ -82,7 +82,7 @@
 
             <!-- Detailed menu -->
             <?php
-                include "back-end/load-detail-menu.php";
+                require "back-end/load-detail-menu.php";
             ?>
         </div>
     </section>
