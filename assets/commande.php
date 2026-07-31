@@ -5,15 +5,31 @@
             <h4>Informations du client</h4>
             <div class="order-field">
                 <label for="name" class="form-label">Nom complet :</label>
-                <input type="text" name="name" class="input-element" id="name" disabled>
+                <input type="text" 
+                    name="name" 
+                    class="input-element" 
+                    id="name" 
+                    value="<?= htmlspecialchars($user['full_name']) ?>" 
+                    disabled>
             </div>
             <div class="order-field">
                 <label for="email" class="form-label">Email :</label>
-                <input type="text" name="email" class="input-element" id="email" disabled>
+                <input 
+                    type="text" 
+                    name="email" 
+                    class="input-element" 
+                    id="email" 
+                    value="<?= htmlspecialchars($user['email']) ?>" 
+                    disabled>
             </div>
             <div class="order-field">
                 <label for="phone" class="form-label">Téléphone :</label>
-                <input type="tel" name="phone" class="input-element" id="phone" disabled>
+                <input type="tel" 
+                    name="phone" 
+                    class="input-element" 
+                    id="phone" 
+                    value="<?= htmlspecialchars($user['telephone']) ?>" 
+                    disabled>
             </div>
         </div>
         <div class="order-dataset">
@@ -53,30 +69,97 @@
             <div class="order-field">
                 <label for="menu" class="form-label">Menu :</label>
                 <select name="menu" class="input-element" id="menu-list">
-                    <option value="">Choisir un menu</option>
+                    <?php foreach ($menuList as $menu): ?>
+                        <option 
+                            value="<?= $menu['id_menu'] ?>"
+                            <?= $menu['id_menu'] == $menuId ? 'selected' : '' ?>
+                            >
+                            <?= $menu['title'] ?>
+                            </option>
+                    <?php endforeach; ?>
                 </select>
             </div>
             <div class="order-field menu-preview">
                 <img src="images/menu-1-1.jpg" alt="" class="order-menu-img">
                 <div>
                     <h3>Nom menu</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa vel accusantium deleniti unde incidunt explicabo.</p>
+                    <ul class="menu-list">
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-bread-slice color-1"></i>
+                            <span id="detail-appetizer">Entrée</span>
+                        </li>
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-bowl-food color-2"></i>
+                            <span id="detail-main-course">Plat</span>
+                        </li>
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-cookie-bite color-5"></i>
+                            <span id="detail-dessert">Dessert</span>
+                        </li>
+                    </ul>
                 </div>
                 <div class="menu-separator"></div>
-                <div>
-                    Hi
+                <div class="menu-preview-plus">
+                    <ul class="menu-list">
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-people-group color-3"></i>
+                            <span id="detail-min-people"></span> personnes min.
+                        </li>
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-euro-sign color-5"></i>
+                            <span id="detail-unit-price"></span>€ / personne
+                        </li>
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-calendar color-2"></i>
+                            <span id="detail-delay"></span> jours de délai min.
+                        </li>
+                        <li class="menu-list-item">
+                            <i class="fa-solid fa-warehouse color-4"></i>
+                            <span id="detail-stock"></span> menus disponibles
+                        </li>
+                    </ul>
                 </div>
             </div>
+            <div class="order-field people-field">
+                <label for="people" class="form-label">Nb personnes : <span class="required">*</span></label>
+                <input 
+                    type="number" 
+                    name="people" 
+                    class="input-element" 
+                    id="people"
+                    min="5"
+                    max="10"
+                    value="5"
+                >
+            </div>
         </div>
-        Menu (déjà choisi + liste déroulante) <br>
-        Infos du menu : prix, nb. personnes, jours min., stock <br>
-        Nb. personnes (input)
     </div>
     <div class="order-sub-section order-recap">
-        Prix menu x Nb. personnes (si + 5 pers. au délà du min. 10% réduction) <br>
-        Prix de livraison (+ majoration) <br>
-        Prix total
-
-        Commander
+        <div class="order-dataset">
+            <h4>Récapitulatif de la commande</h4>
+            <div class="sub-dataset">
+                <div class="order-field order-right">
+                    <span class="form-label">Prix des menus :</span>
+                    <p>150€</p>
+                </div>
+                <div class="order-field order-right">
+                    <span class="form-label">Réduction grand groupe (-10%) :</span>
+                    <p>-15€</p>
+                </div>
+                <div class="order-field order-right">
+                    <span class="form-label">Frais de livraison :</span>
+                    <p>5€</p>
+                </div>
+                <div class="order-field order-right">
+                    <span class="form-label">Frais kilométriques :</span>
+                    <p>15.20€</p>
+                </div>
+            </div>
+            <div class="order-field order-right">
+                <span class="form-label"><strong>Prix total :</strong></span>
+                <p><strong>155.20€</strong></p>
+            </div>
+            <a class="btn body-btn btn-underline no-link-btn">Commander</a>
+        </div>
     </div>
  </div>

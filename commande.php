@@ -32,7 +32,7 @@
 
             <div class="order-container">
                 <?php 
-                    require "assets/commande.php"
+                    require "back-end/load-commande.php"
                 ?>
             </div>
     </section>

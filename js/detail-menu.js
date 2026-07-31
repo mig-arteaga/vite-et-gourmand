@@ -125,6 +125,11 @@ export function initOpenDetailMenu () {
                     li.classList.add('sub-list-item');
                     allergenicList.appendChild(li);
                 });
+
+                //Order button
+                const orderButton = document.getElementById('order-btn');
+
+                orderButton.href = "commande.php?menu=" + menuId
             });
         
             detailBg.classList.add('visible');

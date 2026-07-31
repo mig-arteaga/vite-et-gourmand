@@ -1,9 +1,16 @@
 /* Order */
+.order{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
 .order-sub-section {
     width: 100%;
     background-color: #FFFFFF;
-    margin-bottom: 2rem;
     padding: 3rem;
+    border-radius: 3rem 0 0 0;
 }
 
 .order-info {
@@ -24,7 +31,6 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* margin-bottom: 1rem; */
 }
 
 .date-hour {
@@ -48,9 +54,8 @@
     box-shadow: 5px 5px 8px #00000020;
     border-radius: 4rem 0 0 0;
     display: grid;
-    grid-template-columns: 1fr 0.1rem 20rem;
+    grid-template-columns: 1fr 0.1rem 27rem;
     gap: 2rem;
-    /* height: 100%; */
     position: relative;
     padding: 2rem;
     padding-left: 20rem;
@@ -64,4 +69,39 @@
     height: 100%;
     object-fit: cover;
     border-radius: 4rem 0 0 0;
+}
+
+.menu-preview-plus {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.people-field {
+    width: 29rem;
+    align-self: flex-end;
+}
+
+.sub-dataset{
+width: 100%;
+}
+
+.order-recap {
+    width: 35rem;
+    align-self: flex-end;
+}
+
+.order-right {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-recap a {
+    align-self: flex-end;
+}
+
+.required {
+    font-weight: 900;
+    color: red;
 }

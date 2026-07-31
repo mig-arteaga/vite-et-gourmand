@@ -75,7 +75,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <a href="commande.php" class="btn body-btn btn-underline no-link-btn">Commander</a>
+                        <a href="commande.php" class="btn body-btn btn-underline" id="order-btn">Commander</a>
                     </div>
                 </div>
             </div>
