@@ -9,6 +9,12 @@
     padding-left: 34rem;
     margin-bottom: 2rem;
     overflow-y: hidden;
+    transition: all 300ms ease;
+}
+
+.menu:hover {
+    scale: 1.01;
+    box-shadow: 0.5rem 0.5rem 0.8rem #00000020;
 }
 
 .menu-img {
@@ -30,6 +36,7 @@
 
 .menu-separator {
     background-color: #B3B3B3;
+    height: 100%;
 }
 
 .menu-plus {

@@ -33,7 +33,7 @@
                 <h4>Filtres</h4>
                 <div class="filter-wrap">
                     <div class="filter">
-                        <label for="min-price">Prix :</label>
+                        <label for="min-price" class="form-label">Prix :</label>
                         <div class="slider-container">
                             <div class="slider-track" id="slider-track-price">
                                 <input type="range" class="slider" id="min-price">
@@ -46,7 +46,7 @@
                         </span>
                     </div>
                     <div class="filter">
-                        <label for="people">Min. personnes :</label>
+                        <label for="people" class="form-label">Min. personnes :</label>
                         <div class="slider-container">
                             <div class="slider-track" id="slider-track-people">
                                 <input type="range" class="slider" id="people">
@@ -55,12 +55,12 @@
                         <span id="people-output"></span>
                     </div>
                     <div class="filter">
-                        <label for="theme">Thème :</label>
-                        <select name="theme" id="theme"></select>
+                        <label for="theme" class="form-label">Thème :</label>
+                        <select name="theme" class="input-element" id="theme"></select>
                     </div>
                     <div class="filter">
-                        <label for="diet">Régime :</label>
-                        <select name="diet" id="diet"></select>
+                        <label for="diet" class="form-label">Régime :</label>
+                        <select name="diet" class="input-element" id="diet"></select>
                     </div>
                 </div>
                 <div>
