@@ -107,3 +107,8 @@ li {
 .color-6 {
     color: var(--color-6);
 }
+
+::selection {
+    background-color: var(--secondary-font-color);
+    color: #FFF;
+}
