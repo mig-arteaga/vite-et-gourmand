@@ -40,7 +40,14 @@
             </div>
             <div class="order-field date-hour">
                 <div class="order-field">
-                    <label for="city" class="form-label">Ville :</label>
+                    <label for="city" class="form-label">
+                        Ville :
+                        <i class="fa-solid fa-circle-info color-2 info-city">
+                            <span class="info-city-text">
+                                Des frais kilométriques seront appliqués si la livraison est en dehors de Grenoble. (0.59€/km)
+                            </span>
+                        </i>
+                    </label>
                     <input type="text" name="city" class="input-element" id="city">
                 </div>
                 <div class="order-field">
@@ -69,33 +76,50 @@
             <div class="order-field">
                 <label for="menu" class="form-label">Menu :</label>
                 <select name="menu" class="input-element" id="menu-list">
-                    <?php foreach ($menuList as $menu): ?>
+                    <?php foreach ($menuList as $menuListItem): ?>
                         <option 
-                            value="<?= $menu['id_menu'] ?>"
-                            <?= $menu['id_menu'] == $menuId ? 'selected' : '' ?>
+                            value="<?= $menuListItem['id_menu'] ?>"
+                            <?= $menuListItem['id_menu'] == $menuId ? 'selected' : '' ?>
                             >
-                            <?= $menu['title'] ?>
+                            <?= $menuListItem['title'] ?>
                             </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="order-field menu-preview">
-                <img src="images/menu-1-1.jpg" alt="" class="order-menu-img">
+                <img 
+                    src="<?= $menu['photo'] ?>" 
+                    alt="" 
+                    class="order-menu-img"
+                >
                 <div>
-                    <h3>Nom menu</h3>
+                    <h3><?= $menu['title'] ?></h3>
+                    <?php
+                        $dishesByType = [];
+
+                        foreach ($dishes as $dish) {
+                            $dishesByType[$dish['type']] = $dish['title'];
+                        }
+                    ?>
                     <ul class="menu-list">
+                        <?php if (isset($dishesByType['Entrée'])): ?>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-bread-slice color-1"></i>
-                            <span id="detail-appetizer">Entrée</span>
+                            <span id="detail-appetizer"><?= htmlspecialchars($dishesByType['Entrée']) ?></span>
                         </li>
+                        <?php endif; ?>
+                        <?php if (isset($dishesByType['Plat'])): ?>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-bowl-food color-2"></i>
-                            <span id="detail-main-course">Plat</span>
+                            <span id="detail-main-course"><?= htmlspecialchars($dishesByType['Plat']) ?></span>
                         </li>
+                        <?php endif; ?>
+                        <?php if (isset($dishesByType['Dessert'])): ?>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-cookie-bite color-5"></i>
-                            <span id="detail-dessert">Dessert</span>
+                            <span id="detail-dessert"><?= htmlspecialchars($dishesByType['Dessert']) ?></span>
                         </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="menu-separator"></div>
@@ -103,33 +127,58 @@
                     <ul class="menu-list">
                         <li class="menu-list-item">
                             <i class="fa-solid fa-people-group color-3"></i>
-                            <span id="detail-min-people"></span> personnes min.
+                            <span id="detail-min-people">
+                                <?= $menu['min_people'] ?>
+                            </span> personnes min.
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-euro-sign color-5"></i>
-                            <span id="detail-unit-price"></span>€ / personne
+                            <span id="detail-unit-price">
+                                <?php 
+                                    $price = htmlspecialchars($menu['unit_price']);
+                                    if (($price - (int)$price) == 0) {
+                                        echo (int)$price;
+                                    }
+                                    else {
+                                        echo $price;
+                                    };
+
+                                    echo '€ / personne';
+                                ?>
+                            </span>
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-calendar color-2"></i>
-                            <span id="detail-delay"></span> jours de délai min.
+                            <span id="detail-delay">
+                                <?= $menu['delay'] ?>
+                            </span> jours de délai min.
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-warehouse color-4"></i>
-                            <span id="detail-stock"></span> menus disponibles
+                            <span id="detail-stock">
+                                <?= $menu['stock'] ?>
+                            </span> menus disponibles
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="order-field people-field">
-                <label for="people" class="form-label">Nb personnes : <span class="required">*</span></label>
+                <label for="people" class="form-label">
+                    Nb personnes : 
+                    <i class="fa-solid fa-circle-info color-2 info-people">
+                        <span class="info-people-text">
+                            -10% si au moins 5 personnes au dessus de la quantité minimum indiquée dans le menu.
+                        </span>
+                    </i>
+                </label>
                 <input 
                     type="number" 
                     name="people" 
                     class="input-element" 
                     id="people"
-                    min="5"
-                    max="10"
-                    value="5"
+                    min="<?= $menu['min_people'] ?>"
+                    max="<?= $menu['stock'] ?>"
+                    value="<?= $menu['min_people'] ?>"
                 >
             </div>
         </div>
@@ -140,24 +189,36 @@
             <div class="sub-dataset">
                 <div class="order-field order-right">
                     <span class="form-label">Prix des menus :</span>
-                    <p>150€</p>
+                    <p>
+                        <?php 
+                            $menuPrice = $menu['unit_price'] * $menu['min_people'];
+
+                            echo $menuPrice;
+                            echo '€';
+                        ?>
+                    </p>
                 </div>
                 <div class="order-field order-right">
                     <span class="form-label">Réduction grand groupe (-10%) :</span>
-                    <p>-15€</p>
+                    <p>-0€</p>
                 </div>
                 <div class="order-field order-right">
                     <span class="form-label">Frais de livraison :</span>
                     <p>5€</p>
                 </div>
                 <div class="order-field order-right">
-                    <span class="form-label">Frais kilométriques :</span>
-                    <p>15.20€</p>
+                    <span class="form-label"> Frais kilométriques :</span>
+                    <p>0€</p>
                 </div>
             </div>
             <div class="order-field order-right">
                 <span class="form-label"><strong>Prix total :</strong></span>
-                <p><strong>155.20€</strong></p>
+                <p><strong>
+                    <?php 
+                        echo $menuPrice + 5;
+                        echo '€';
+                    ?>
+                </strong></p>
             </div>
             <a class="btn body-btn btn-underline no-link-btn">Commander</a>
         </div>

@@ -22,6 +22,7 @@
     --color-3 : #9D5BDB;
     --color-4 : #485BD8;
     --color-5 : #59C28A;
+    --color-6 : #00B050;
 }
 
 html {
@@ -101,4 +102,8 @@ li {
 
 .color-5 {
     color: var(--color-5);
+}
+
+.color-6 {
+    color: var(--color-6);
 }

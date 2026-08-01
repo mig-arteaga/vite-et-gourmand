@@ -74,7 +74,7 @@ try {
         "menuList" => $menuList
     ];
 
-    echo json_encode($detail);
+    // echo json_encode($detail);
 } catch (PDOException $e) {
     echo "SQL Error: ";
     echo $e->getMessage();

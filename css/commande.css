@@ -79,7 +79,7 @@
 
 .people-field {
     width: 29rem;
-    align-self: flex-end;
+    /* align-self: flex-end; */
 }
 
 .sub-dataset{
@@ -95,13 +95,35 @@ width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    transition: display 300ms ease;
 }
 
 .order-recap a {
     align-self: flex-end;
 }
 
-.required {
-    font-weight: 900;
-    color: red;
+.info-city, .info-people {
+    position: relative;
+}
+
+.info-city-text, .info-people-text {
+    position: absolute;
+    transform: translateX(0.5rem);
+    width: 22rem;
+    padding: 1rem;
+    background: var(--body-font-color);
+    font-family: var(--body-font);
+    font-weight: 100;
+    text-align: left;
+    line-height: 1.5;
+    color: #FFFFFF;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 200ms;
+}
+
+.info-city:hover .info-city-text,
+.info-people:hover .info-people-text {
+    opacity: 1;
+    visibility: visible;
 }
