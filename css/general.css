@@ -84,6 +84,10 @@ li {
     text-align: left;
 }
 
+.strong {
+    font-weight: 900;
+}
+
 .color-1 {
     color: var(--color-1);
 }

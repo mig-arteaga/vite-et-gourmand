@@ -61,6 +61,10 @@
     padding-left: 20rem;
 }
 
+.menu-preview h3 {
+    margin-bottom: 2rem;
+}
+
 .order-menu-img {
     position: absolute;
     top: 0;

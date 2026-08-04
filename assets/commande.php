@@ -61,11 +61,33 @@
             <div class="order-field date-hour">
                 <div class="order-field">
                     <label for="date" class="form-label">Date :</label>
-                    <input type="date" name="date" class="input-element" id="date">
+                    <?php
+                        $today = New DateTime();
+                        $minDate = New DateTime();
+                        $maxDate = New DateTime();
+                        $minDate->modify('+5 days');
+                        $maxDate->modify('+6 months');
+                    ?>
+                    <input 
+                        type="date" 
+                        name="date" 
+                        class="input-element" 
+                        id="date" 
+                        min="<?= $minDate->format('Y-m-d') ?>" 
+                        max="<?= $maxDate->format('Y-m-d') ?>"
+                    >
                 </div>
                 <div class="order-field">
                     <label for="hour" class="form-label">Heure :</label>
-                    <input type="time" name="hour" class="input-element" id="hour">
+                    <input 
+                        type="time" 
+                        name="hour" 
+                        class="input-element" 
+                        id="hour" 
+                        min="08:30" 
+                        max="22:30" 
+                        step="900"
+                    >
                 </div>
             </div>
         </div>
@@ -91,9 +113,10 @@
                     src="<?= $menu['photo'] ?>" 
                     alt="" 
                     class="order-menu-img"
+                    id="order-menu-img"
                 >
                 <div>
-                    <h3><?= $menu['title'] ?></h3>
+                    <h3 id="menu-title"><?= $menu['title'] ?></h3>
                     <?php
                         $dishesByType = [];
 
@@ -102,24 +125,24 @@
                         }
                     ?>
                     <ul class="menu-list">
-                        <?php if (isset($dishesByType['Entrée'])): ?>
-                        <li class="menu-list-item">
+                        <li class="menu-list-item dish-list-item">
                             <i class="fa-solid fa-bread-slice color-1"></i>
-                            <span id="detail-appetizer"><?= htmlspecialchars($dishesByType['Entrée']) ?></span>
+                            <span id="detail-appetizer">
+                                <?= isset($dishesByType['Entrée']) ? htmlspecialchars($dishesByType['Entrée']) : '' ?>
+                            </span>
                         </li>
-                        <?php endif; ?>
-                        <?php if (isset($dishesByType['Plat'])): ?>
-                        <li class="menu-list-item">
+                        <li class="menu-list-item dish-list-item">
                             <i class="fa-solid fa-bowl-food color-2"></i>
-                            <span id="detail-main-course"><?= htmlspecialchars($dishesByType['Plat']) ?></span>
+                            <span id="detail-main-course">
+                                <?= isset($dishesByType['Plat']) ? htmlspecialchars($dishesByType['Plat']) : '' ?>
+                            </span>
                         </li>
-                        <?php endif; ?>
-                        <?php if (isset($dishesByType['Dessert'])): ?>
-                        <li class="menu-list-item">
+                        <li class="menu-list-item dish-list-item">
                             <i class="fa-solid fa-cookie-bite color-5"></i>
-                            <span id="detail-dessert"><?= htmlspecialchars($dishesByType['Dessert']) ?></span>
+                            <span id="detail-dessert">
+                                <?= isset($dishesByType['Dessert']) ? htmlspecialchars($dishesByType['Dessert']) : '' ?>
+                            </span>
                         </li>
-                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="menu-separator"></div>
@@ -143,9 +166,9 @@
                                         echo $price;
                                     };
 
-                                    echo '€ / personne';
+                                    // echo '€ / personne';
                                 ?>
-                            </span>
+                            </span>€ / personne
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-calendar color-2"></i>
@@ -190,35 +213,54 @@
                 <div class="order-field order-right">
                     <span class="form-label">Prix des menus :</span>
                     <p>
-                        <?php 
-                            $menuPrice = $menu['unit_price'] * $menu['min_people'];
+                        <span id="menu-price">
+                            <?php 
+                                $menuPrice = $menu['unit_price'] * $menu['min_people'];
 
-                            echo $menuPrice;
-                            echo '€';
-                        ?>
+                                echo $menuPrice;
+                            ?>
+                        </span>
+                        <span>€</span>
                     </p>
                 </div>
                 <div class="order-field order-right">
                     <span class="form-label">Réduction grand groupe (-10%) :</span>
-                    <p>-0€</p>
+                    <p>
+                        <span id="group-offer">
+                            -0
+                        </span>
+                        <span>€</span>
+                    </p>
                 </div>
                 <div class="order-field order-right">
                     <span class="form-label">Frais de livraison :</span>
-                    <p>5€</p>
+                    <p>
+                        <span id="delivery-fee">
+                            5
+                        </span>
+                        <span>€</span>
+                    </p>
                 </div>
                 <div class="order-field order-right">
                     <span class="form-label"> Frais kilométriques :</span>
-                    <p>0€</p>
+                    <p>
+                        <span id="distance-fee">
+                            0
+                        </span>
+                        <span>€</span>
+                    </p>
                 </div>
             </div>
             <div class="order-field order-right">
                 <span class="form-label"><strong>Prix total :</strong></span>
-                <p><strong>
-                    <?php 
-                        echo $menuPrice + 5;
-                        echo '€';
-                    ?>
-                </strong></p>
+                <p class="strong">
+                    <span id="total-price">                        
+                        <?php 
+                            echo $menuPrice + 5;
+                        ?>
+                    </span>
+                    <span>€</span>
+                </p>
             </div>
             <a class="btn body-btn btn-underline no-link-btn">Commander</a>
         </div>
