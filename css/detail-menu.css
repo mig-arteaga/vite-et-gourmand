@@ -1,6 +1,7 @@
 /* Detail menu */
 
-.detail-bg {
+.detail-bg, 
+.confirmation-bg {
     position: fixed;
     inset: 0;
     height: 100%;
@@ -12,7 +13,8 @@
     z-index: 1000;
 }
 
-.detail-bg.visible {
+.detail-bg.visible,
+.confirmation-bg.visible {
     display: flex;
 }
 

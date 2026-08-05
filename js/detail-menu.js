@@ -139,7 +139,7 @@ export function initOpenDetailMenu () {
 
 // Close detail menu
 export function initCloseDetailMenu () {
-    const closeMenuButton = document.querySelector('.close-btn');
+    const closeMenuButton = document.getElementById('close-btn');
     
     if(!closeMenuButton) return;
     

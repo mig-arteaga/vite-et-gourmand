@@ -1,7 +1,7 @@
 <div class="detail-bg" id="detail-bg">
     <div class="container">
         <div class="detail-menu" id="detail-menu">
-            <div class="close-btn">
+            <div class="close-btn" id="close-btn">
                 <i class="fa-solid fa-xmark"></i>
             </div>
             <div class="menu-slide" id="menu-slide">

@@ -208,7 +208,7 @@
     </div>
     <div class="order-sub-section order-recap">
         <div class="order-dataset">
-            <h4>Récapitulatif de la commande</h4>
+            <!-- <h4>Récapitulatif de la commande</h4> -->
             <div class="sub-dataset">
                 <div class="order-field order-right">
                     <span class="form-label">Prix des menus :</span>
@@ -227,7 +227,7 @@
                     <span class="form-label">Réduction grand groupe (-10%) :</span>
                     <p>
                         <span id="group-offer">
-                            -0
+                            0
                         </span>
                         <span>€</span>
                     </p>
@@ -251,8 +251,8 @@
                     </p>
                 </div>
             </div>
-            <div class="order-field order-right">
-                <span class="form-label"><strong>Prix total :</strong></span>
+            <div class="order-field order-right total-line">
+                <span class="form-label strong">Prix total :</span>
                 <p class="strong">
                     <span id="total-price">                        
                         <?php 
@@ -262,7 +262,9 @@
                     <span>€</span>
                 </p>
             </div>
-            <a class="btn body-btn btn-underline no-link-btn">Commander</a>
+            <div class="order-btn-wrap">
+                <a class="btn body-btn btn-underline no-link-btn" id="recap-btn">Commander</a>
+            </div>
         </div>
     </div>
  </div>
