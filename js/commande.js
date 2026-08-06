@@ -27,13 +27,21 @@ const totalPrice = document.getElementById('total-price');
 const deliveryFeeValue = 5;
 const groupOfferPercentage = 0.1;
 const distanceFeePerKm = 0.59;
-let unitPriceValue = Number(unitPrice.innerHTML);
-let peopleValue = Number(people.value);
-let minPeopleValue = Number(people.min);
 let groupOfferValue = 0;
 let distanceValue = 0;
 let distanceFeeValue = 0;
-let totalPriceValue = Number(totalPrice.innerHTML);
+
+let unitPriceValue = 0;
+let peopleValue = 0;
+let minPeopleValue = 0;
+let totalPriceValue = 0;
+
+if (unitPrice && people && totalPrice) {
+    unitPriceValue = Number(unitPrice.innerHTML);
+    peopleValue = Number(people.value);
+    minPeopleValue = Number(people.min);
+    totalPriceValue = Number(totalPrice.innerHTML);
+};
 
 async function postOrderData(menuId) {
     const formData = new FormData();
@@ -182,8 +190,8 @@ async function getDistance() {
         const distanceMeters = data.routes[0].distanceMeters;
         const distanceKm = distanceMeters / 1000;
 
-        console.log(distanceKm);
-        distanceValue = distanceKm;
+        // console.log(distanceKm);
+        distanceValue = Math.ceil(distanceKm);
 
     } catch (error) {
         console.error(error.message);
@@ -205,7 +213,6 @@ export function initOrderChanges() {
 
 
 // Open order confirmation
-
 function displayRecapData(recapData) {
     const recapAddress = document.getElementById('recap-address');
     const recapDatetime = document.getElementById('recap-datetime');
@@ -213,8 +220,15 @@ function displayRecapData(recapData) {
     const recapPeople = document.getElementById('recap-people');
     const recapTotal = document.getElementById('recap-total');
 
+    const dateValue = new Date(recapData.date);
+    const formattedDate = dateValue.toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    });
+
     recapAddress.innerHTML = recapData.address;
-    recapDatetime.innerHTML = recapData.date;
+    recapDatetime.innerHTML = formattedDate + ' à ' + recapData.hour;
     recapMenu.innerHTML = recapData.menu;
     recapPeople.innerHTML = recapData.people;
     recapTotal.innerHTML = recapData.total;
@@ -228,6 +242,8 @@ export function initOpenConfirmationMenu () {
     if (!recapButton) return;
 
     recapButton.addEventListener('click', () => {
+        if (!validateOrderForm()) return;
+        
         const recapData = {
             address: address.value,
             city: city.value,
@@ -259,4 +275,101 @@ export function initCloseConfirmationMenu () {
     returnButton.addEventListener('click', () => {
         confirmationBg.classList.remove("visible");
     });
+};
+
+// Show error
+function showError(input, message) {
+    input.parentElement.classList.add('input-error');
+
+    const error = document.createElement('p');
+    error.classList.add('error-message');
+    error.textContent = message;
+
+    input.parentElement.appendChild(error);
+};
+
+// Clear errors
+function clearErrors() {
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.remove();
+    });
+
+    document.querySelectorAll('.input-error').forEach(input => {
+        input.classList.remove('input-error');
+    });
+}
+
+// Validate Order Form
+function validateOrderForm() {
+    let isValid = true;
+
+    clearErrors();
+
+    // Check people
+    if(people.value < Number(minPeople.textContent)) {
+        showError(
+            people,
+            `Minimum ${minPeople.textContent} personnes`
+        );
+        isValid = false;
+    };
+
+    // Check date
+    if (!date.value) {
+        showError(
+            date,
+            `Veuillez renseigner une date`
+        );
+        isValid = false;
+    };
+    
+    const selectedDate = new Date(date.value);
+    const minDate = new Date(date.min);
+    const maxDate = new Date(date.max);
+
+    if (selectedDate < minDate || selectedDate > maxDate) {
+        showError(
+            date,
+            `Veuillez renseigner une date correcte`
+        );
+        isValid = false;
+    };
+
+    // Check time
+    const selectedTime = hour.value;
+    const minTime = hour.min;
+    const maxTime = hour.max;
+
+    if (!selectedTime) {
+        showError(
+            hour,
+            `Veuillez renseigner une heure`
+        );
+        isValid = false;
+    }
+    else if (selectedTime < minTime || selectedTime > maxTime) {
+        showError(
+            hour,
+            `L\'heure doit être comprise entre ${minTime} et ${maxTime}`
+        );
+        isValid = false;
+    };
+
+    //Check address
+    if (!address.value.trim()) {
+        showError(
+            address,
+            `Veuillez renseigner une adresse`
+        )
+    };
+
+    //Check city
+    if (!city.value.trim()) {
+        showError(
+            city,
+            `Veuillez renseigner une ville`
+        )
+    };
+
+    return isValid;
 };

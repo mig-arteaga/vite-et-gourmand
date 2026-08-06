@@ -1,6 +1,6 @@
 <!-- Order -->
  <div class="order">
-    <div class="order-sub-section order-info">
+    <!-- <div class="order-sub-section order-info">
         <div class="order-dataset">
             <h4>Informations du client</h4>
             <div class="order-field">
@@ -55,9 +55,6 @@
                     <input type="text" name="zipcode" class="input-element" id="zipcode">
                 </div>
             </div>
-            <div class="order-field" id="address-alert">
-                Votre adresse est en dehhors de Grenoble, une majoration de 59 cent. / km sera appliquée.
-            </div>
             <div class="order-field date-hour">
                 <div class="order-field">
                     <label for="date" class="form-label">Date :</label>
@@ -85,13 +82,128 @@
                         class="input-element" 
                         id="hour" 
                         min="08:30" 
-                        max="22:30" 
-                        step="900"
+                        max="22:30"
+                    >
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+
+
+    <div class="order-sub-section user-info">
+        <div class="order-dataset">
+            <h4>Informations du client</h4>
+            <div class="sub-dataset-grid">
+                <div class="order-field">
+                    <label for="name" class="form-label">Nom complet :</label>
+                    <input type="text" 
+                        name="name" 
+                        class="input-element" 
+                        id="name" 
+                        value="<?= htmlspecialchars($user['full_name']) ?>" 
+                        disabled>
+                </div>
+                <div class="order-field">
+                    <label for="email" class="form-label">Email :</label>
+                    <input 
+                        type="text" 
+                        name="email" 
+                        class="input-element" 
+                        id="email" 
+                        value="<?= htmlspecialchars($user['email']) ?>" 
+                        disabled>
+                </div>
+                <div class="order-field">
+                    <label for="phone" class="form-label">Téléphone :</label>
+                    <input type="tel" 
+                        name="phone" 
+                        class="input-element" 
+                        id="phone" 
+                        value="<?= htmlspecialchars($user['telephone']) ?>" 
+                        disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-sub-section order-info">
+        <div class="order-dataset">
+            <h4>Informations de la prestation</h4>
+            <div class="sub-dataset-grid">
+                <div class="order-field">
+                    <label for="address" class="form-label">Adresse :</label>
+                    <input type="text" name="address" class="input-element" id="address">
+                </div>
+                <div class="order-field">
+                    <label for="city" class="form-label">
+                        Ville :
+                        <i class="fa-solid fa-circle-info color-2 info-city">
+                            <span class="info-city-text">
+                                Des frais kilométriques seront appliqués si la livraison est en dehors de Grenoble. (0.59€/km)
+                            </span>
+                        </i>
+                    </label>
+                    <input type="text" name="city" class="input-element" id="city">
+                </div>
+                <div class="order-field">
+                    <label for="zipcode" class="form-label">Code postal :</label>
+                    <input type="text" name="zipcode" class="input-element" id="zipcode">
+                </div>
+                <div class="order-field">
+                    <label for="date" class="form-label">Date :</label>
+                    <?php
+                        $today = New DateTime();
+                        $minDate = New DateTime();
+                        $maxDate = New DateTime();
+                        $minDate->modify('+5 days');
+                        $maxDate->modify('+6 months');
+                    ?>
+                    <input 
+                        type="date" 
+                        name="date" 
+                        class="input-element" 
+                        id="date" 
+                        min="<?= $minDate->format('Y-m-d') ?>" 
+                        max="<?= $maxDate->format('Y-m-d') ?>"
+                    >
+                </div>
+                <div class="order-field">
+                    <label for="hour" class="form-label">Heure :</label>
+                    <input 
+                        type="time" 
+                        name="hour" 
+                        class="input-element" 
+                        id="hour" 
+                        min="08:30" 
+                        max="22:30"
+                    >
+                </div>
+                <div class="order-field people-field">
+                    <label for="people" class="form-label">
+                        Nb personnes : 
+                        <i class="fa-solid fa-circle-info color-2 info-people">
+                            <span class="info-people-text">
+                                -10% si au moins 5 personnes au dessus de la quantité minimum indiquée dans le menu.
+                            </span>
+                        </i>
+                    </label>
+                    <input 
+                        type="number" 
+                        name="people" 
+                        class="input-element" 
+                        id="people"
+                        min="<?= $menu['min_people'] ?>"
+                        max="<?= $menu['stock'] ?>"
+                        value="<?= $menu['min_people'] ?>"
                     >
                 </div>
             </div>
         </div>
     </div>
+
+
+
     <div class="order-sub-section menu-info">
         <div class="order-dataset">
             <h4>Informations du menu</h4>
@@ -185,7 +297,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="order-field people-field">
+            <!-- <div class="order-field people-field">
                 <label for="people" class="form-label">
                     Nb personnes : 
                     <i class="fa-solid fa-circle-info color-2 info-people">
@@ -203,7 +315,7 @@
                     max="<?= $menu['stock'] ?>"
                     value="<?= $menu['min_people'] ?>"
                 >
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="order-sub-section order-recap">
