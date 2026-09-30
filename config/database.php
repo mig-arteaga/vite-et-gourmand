@@ -12,8 +12,8 @@ if (getenv("MYSQLHOST")) {
 } else {
 
     // Local XAMPP
-    // $host = "localhost";
-    $host = "127.0.0.1";
+    $host = "localhost";
+    // $host = "127.0.0.1";
     $dbname = "vite_et_gourmand";
     $username = "root";
     $password = "";
@@ -23,7 +23,7 @@ if (getenv("MYSQLHOST")) {
 
 try {
     $pdo = new PDO(
-        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
         $username,
         $password
     );
