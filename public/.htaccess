@@ -1,0 +1,10 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Servir directement les fichiers et dossiers existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Envoyer les autres requêtes vers le routeur MVC
+RewriteRule ^ index.php [QSA,L]

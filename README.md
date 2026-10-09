@@ -41,17 +41,29 @@ git clone https://github.com/mig-arteaga/vite-et-gourmand.git
 
 ---
 
-### Création de la base
-Importer le fichier SQL :
-```
-/sql/vite-et-gourmand.sql
-```
+### Création de la base de données
+
+La base de données MySQL est initialisée automatiquement
+lors du premier démarrage de Docker Compose.
+
+Le fichier utilisé est :
+
+`docker/mysql/01-init.sql`
 
 Ce fichier contient :
-* création de la base de données
-* création des tables
-* relations entre les tables
-* données nécessaires au fonctionnement de l'application
+- La création des tables
+- Les relations entre les tables
+- Les données initiales nécessaires au fonctionnement de l'application
+
+**Remarque :** le script d'initialisation s'exécute uniquement
+lorsque le volume de données MySQL est vide.
+
+Lors de la première initialisation de la base de données, Docker exécute automatiquement les scripts du dossier `docker/mysql/` dans l'ordre :
+
+1. `01-init.sql` : crée les tables et insère les données initiales.
+2. `02-permissions.sh` : limite les privilèges de l'utilisateur MySQL applicatif aux opérations `SELECT`, `INSERT`, `UPDATE` et `DELETE`.
+
+Ces scripts ne sont exécutés automatiquement que lorsque le volume MySQL est vide.
 
 ---
 

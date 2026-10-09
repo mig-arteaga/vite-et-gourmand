@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menus - Vite & Gourmand</title>
+    <!--Font awesome CDN-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
+    <!--Scroll reveal CDN-->
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <?php
+        require __DIR__ . '/../layouts/header.php';
+    ?>
+
+    <!-- Menu section -->
+    <section class="menu-section first-section">
+        <div class="container">
+            <h2 class="sub-headline title-down">
+                <span class="first-letter">T</span>ous les
+            </h2>
+            <h1 class="headline title-up">Menus</h1>
+
+            <div class="filter-container">
+                <h4>Filtres</h4>
+                <div class="filter-wrap">
+                    <div class="filter">
+                        <label for="min-price" class="form-label">Prix :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-price">
+                                <input type="range" class="slider" id="min-price">
+                                <input type="range" class="slider" id="max-price">
+                            </div>
+                        </div>
+                        <span>
+                            <span id="min-price-output"></span> - 
+                            <span id="max-price-output"></span>
+                        </span>
+                    </div>
+                    <div class="filter">
+                        <label for="people" class="form-label">Min. personnes :</label>
+                        <div class="slider-container">
+                            <div class="slider-track" id="slider-track-people">
+                                <input type="range" class="slider" id="people">
+                            </div>
+                        </div>
+                        <span id="people-output"></span>
+                    </div>
+                    <div class="filter">
+                        <label for="theme" class="form-label">Thème :</label>
+                        <select name="theme" class="input-element" id="theme"></select>
+                    </div>
+                    <div class="filter">
+                        <label for="diet" class="form-label">Régime :</label>
+                        <select name="diet" class="input-element" id="diet"></select>
+                    </div>
+                </div>
+                <div>
+                    <a 
+                        class="btn body-btn no-link-btn filter-btn"
+                        id="reset-filter-btn"
+                        title="Réinitialiser">
+                        <i class="fa-solid fa-filter-circle-xmark"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-wrap" id="menu-wrap">
+                <!-- Loads menus -->
+                <?php
+                    foreach ($menus as $menu) {
+                        require __DIR__ . '/../menus/menu.php';
+                    }
+                ?>
+            </div>
+
+            <!-- Detailed menu -->
+            <?php
+                require __DIR__ . '/../menus/detail-menu.php';
+            ?>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <?php
+        require __DIR__ . '/../layouts/footer.php';
+    ?>
+    
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
