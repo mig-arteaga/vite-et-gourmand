@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Contact - Vite & Gourmand</title>
     <!--Font awesome CDN-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
@@ -56,6 +57,11 @@
                 </div>
                 <div class="form-box animate-left">
                     <form class="contact-form" action="/contact" method="post">
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="<?= htmlspecialchars(\App\Core\Csrf::generate(), ENT_QUOTES, 'UTF-8') ?>"
+                        >
                         <div class="form-content">
                             <h5 class="content-sub-title">Nom</h5>
                                 <input type="text" name="name" class="nom" autocomplete="name">

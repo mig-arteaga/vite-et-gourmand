@@ -29,7 +29,10 @@ class CommandeService {
 
         if ($distanceKm > 0) {
             $roundedDistanceKm = ceil($distanceKm);
-            $distanceFee = $roundedDistanceKm * self::DISTANCE_FEE_PER_KM;
+            $distanceFee = round(
+                $roundedDistanceKm * self::DISTANCE_FEE_PER_KM,
+                2
+            );
         }
 
         $totalPrice =

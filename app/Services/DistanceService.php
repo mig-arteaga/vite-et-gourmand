@@ -10,7 +10,25 @@ class DistanceService {
         string $city,
         string $zipcode
     ): float {
-        if (mb_strtolower(trim($city)) === 'grenoble') {
+
+    $address = trim($address);
+    $city = trim($city);
+    $zipcode = trim($zipcode);
+
+    if (
+        $address === '' ||
+        $city === '' ||
+        // $zipcode === '' ||
+        mb_strlen($address) > 200 ||
+        mb_strlen($city) > 100 ||
+        mb_strlen($zipcode) > 20
+    ) {
+        throw new \InvalidArgumentException(
+            'Adresse de livraison invalide'
+        );
+    }
+
+    if (mb_strtolower($city) === 'grenoble') {
             return 0.0;
         }
 
@@ -49,6 +67,8 @@ class DistanceService {
             CURLOPT_POSTFIELDS => json_encode($data),
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSL_VERIFYHOST => 2
         ]);

@@ -20,8 +20,6 @@ export function initOpenDetailMenu () {
         if (event.target.classList.contains('menu-btn')) {
             const menuId = event.target.id;
         
-            //console.log("Sending menu ID:", menuId);
-        
             const formData = new FormData();
         
             formData.append('menu', menuId);
@@ -33,9 +31,6 @@ export function initOpenDetailMenu () {
         
             .then(response => response.json())
             .then(data => {
-                // console.log("PHP response:");
-                // console.log(data);
-        
                 const title = document.getElementById('detail-title');
                 const description = document.getElementById('detail-description');
                 const theme = document.getElementById('detail-theme');
@@ -54,8 +49,6 @@ export function initOpenDetailMenu () {
                 stock.textContent = data.menu.stock;
         
                 const priceValue = data.menu.unit_price;
-        
-                //console.log(priceValue);
                 
                 if (priceValue % parseInt(priceValue) == 0) {
                     unitPrice.textContent = parseInt(priceValue);
@@ -67,7 +60,9 @@ export function initOpenDetailMenu () {
                 // Photos
                 let photos = [];
                 data.photos.forEach(photo => {
-                    photos.push(photo.path);
+                    if (/^images\/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|webp)$/i.test(photo.path)) {
+                        photos.push(photo.path);
+                    }
                 });
         
                 photos = duplicateArray(photos);

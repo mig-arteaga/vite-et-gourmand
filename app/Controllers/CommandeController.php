@@ -80,6 +80,13 @@ class CommandeController {
         int $people,
         float $distanceKm
     ): array {
+        if (!is_finite($distanceKm) || $distanceKm < 0) {
+            return [
+                'status' => 422,
+                'error' => 'Distance invalide'
+            ];
+        }
+
         $menu = $this->menuRepository->findById($menuId);
 
         if ($menu === null) {

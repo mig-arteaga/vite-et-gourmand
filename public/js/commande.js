@@ -114,18 +114,16 @@ async function updatePrices() {
         return;
     }
 
-    // console.log('Prix calculés par PHP :', prices);
-
     const menuPriceValue = prices.menuPrice;
     const groupOfferValue = -prices.groupDiscount;
     const deliveryFeeValue = prices.deliveryFee;
     const distanceFeeValue = prices.distanceFee;
 
-    menuPrice.innerHTML = formatPrice(menuPriceValue);
-    groupOffer.innerHTML = formatPrice(groupOfferValue);
-    deliveryFee.innerHTML = formatPrice(deliveryFeeValue);
-    distanceFee.innerHTML = formatPrice(distanceFeeValue);
-    totalPrice.innerHTML = formatPrice(prices.totalPrice);
+    menuPrice.textContent = formatPrice(menuPriceValue);
+    groupOffer.textContent = formatPrice(groupOfferValue);
+    deliveryFee.textContent = formatPrice(deliveryFeeValue);
+    distanceFee.textContent = formatPrice(distanceFeeValue);
+    totalPrice.textContent = formatPrice(prices.totalPrice);
 };
 
 async function loadOrderChange() {
@@ -133,22 +131,22 @@ async function loadOrderChange() {
     const data = await postOrderData(menuId);
 
     photo.src = data.menu.photo;
-    menuTitle.innerHTML = data.menu.title
-    menuTitle.innerHTML = data.menu.title
+    menuTitle.textContent = data.menu.title
+    menuTitle.textContent = data.menu.title
 
     updateDishes(data.dishes);
 
-    minPeople.innerHTML = data.menu.min_people;
-    delay.innerHTML = data.menu.delay;
-    stock.innerHTML = data.menu.stock;
+    minPeople.textContent = data.menu.min_people;
+    delay.textContent = data.menu.delay;
+    stock.textContent = data.menu.stock;
 
     const unitPriceValue = Number(data.menu.unit_price);
 
     if (unitPriceValue % parseInt(unitPriceValue) === 0) {
-        unitPrice.innerHTML = parseInt(unitPriceValue);
+        unitPrice.textContent = parseInt(unitPriceValue);
     }
     else {
-        unitPrice.innerHTML = unitPriceValue;
+        unitPrice.textContent = unitPriceValue;
     };
 
     // Dates
@@ -186,6 +184,10 @@ async function getDistance() {
     formData.append("address", address.value);
     formData.append("city", city.value);
     formData.append("zipcode", zipcode.value);
+    formData.append(
+        "csrf_token",
+        document.getElementById("csrf_token").value
+    );
 
     try {
         const response = await fetch("/commande/distance", {
@@ -235,11 +237,11 @@ function displayRecapData(recapData) {
         year: "numeric"
     });
 
-    recapAddress.innerHTML = recapData.address;
-    recapDatetime.innerHTML = formattedDate + ' à ' + recapData.hour;
-    recapMenu.innerHTML = recapData.menu;
-    recapPeople.innerHTML = recapData.people;
-    recapTotal.innerHTML = recapData.total;
+    recapAddress.textContent = recapData.address;
+    recapDatetime.textContent = formattedDate + ' à ' + recapData.hour;
+    recapMenu.textContent = recapData.menu;
+    recapPeople.textContent = recapData.people;
+    recapTotal.textContent = recapData.total;
 };
 
 const confirmationBg = document.getElementById('confirmation-bg');

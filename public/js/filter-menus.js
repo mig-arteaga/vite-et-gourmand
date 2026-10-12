@@ -32,9 +32,6 @@ function postFilterData(minPrice, maxPrice, theme, diet, people) {
 
     .then(response => response.text())
     .then(html => {
-        // console.log("PHP response:");
-        // console.log(html);
-        
         const menuWrap = document.getElementById('menu-wrap');
 
         menuWrap.innerHTML = html;
@@ -76,9 +73,9 @@ export function initResetFilters() {
         filterDiet.value = "";
         filterPeople.value = peopleDefault;
 
-        minPriceOutput.innerHTML = filterMinPrice.value + " €";
-        maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
-        peopleOutput.innerHTML = filterPeople.value + " personnes";
+        minPriceOutput.textContent = filterMinPrice.value + " €";
+        maxPriceOutput.textContent = filterMaxPrice.value + " €";
+        peopleOutput.textContent = filterPeople.value + " personnes";
         
         postFilterData("", "", "", "", "");
 
@@ -90,16 +87,16 @@ export function initResetFilters() {
 export function initSliders() {
     if (!filterMinPrice || !filterMaxPrice || !filterPeople) return;
 
-    minPriceOutput.innerHTML = filterMinPrice.value;
-    maxPriceOutput.innerHTML = filterMaxPrice.value;
-    peopleOutput.innerHTML = filterPeople.value;
+    minPriceOutput.textContent = filterMinPrice.value;
+    maxPriceOutput.textContent = filterMaxPrice.value;
+    peopleOutput.textContent = filterPeople.value;
 
     filterMinPrice.addEventListener("input", () => {
         if (parseInt(filterMaxPrice.value) - parseInt(filterMinPrice.value) <= priceGap) {
             filterMinPrice.value = parseInt(filterMaxPrice.value) - priceGap
         };
 
-        minPriceOutput.innerHTML = filterMinPrice.value + " €";
+        minPriceOutput.textContent = filterMinPrice.value + " €";
         fillColor();
     });
     filterMaxPrice.addEventListener("input", () => {
@@ -107,11 +104,11 @@ export function initSliders() {
             filterMaxPrice.value = parseInt(filterMinPrice.value) + priceGap
         };
 
-        maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
+        maxPriceOutput.textContent = filterMaxPrice.value + " €";
         fillColor();
     });
     filterPeople.addEventListener("input", () => {
-        peopleOutput.innerHTML = filterPeople.value + " personnes";
+        peopleOutput.textContent = filterPeople.value + " personnes";
         fillColor();
     });
 };
@@ -147,8 +144,6 @@ export async function initFilterValues() {
     const response = await fetch('/menus/filter-values');
     const data = await response.json();
 
-    // console.log(data);
-
     // Default prices
     minPriceDefault = parseInt(data.prices.minPrice);
     maxPriceDefault = Math.ceil(data.prices.maxPrice);
@@ -158,20 +153,20 @@ export async function initFilterValues() {
     filterMinPrice.max = maxPriceDefault;
     filterMinPrice.value = minPriceDefault;
 
-    minPriceOutput.innerHTML = filterMinPrice.value + " €";
+    minPriceOutput.textContent = filterMinPrice.value + " €";
 
     // Max price
     filterMaxPrice.min = minPriceDefault;
     filterMaxPrice.max = maxPriceDefault;
     filterMaxPrice.value = maxPriceDefault;
 
-    maxPriceOutput.innerHTML = filterMaxPrice.value + " €";
+    maxPriceOutput.textContent = filterMaxPrice.value + " €";
 
     // Theme
     const emptyTheme = document.createElement('option');
 
     emptyTheme.value = ""
-    emptyTheme.innerHTML = "Choisir un thème"
+    emptyTheme.textContent = "Choisir un thème"
 
     filterTheme.appendChild(emptyTheme);
 
@@ -179,7 +174,7 @@ export async function initFilterValues() {
         const option = document.createElement('option');
 
         option.value = theme.theme
-        option.innerHTML = theme.theme
+        option.textContent = theme.theme
 
         filterTheme.appendChild(option);
     });
@@ -188,7 +183,7 @@ export async function initFilterValues() {
     const emptyDiet = document.createElement('option');
 
     emptyDiet.value = ""
-    emptyDiet.innerHTML = "Choisir un régime"
+    emptyDiet.textContent = "Choisir un régime"
 
     filterDiet.appendChild(emptyDiet);
 
@@ -196,7 +191,7 @@ export async function initFilterValues() {
         const option = document.createElement('option');
 
         option.value = diet.diet
-        option.innerHTML = diet.diet
+        option.textContent = diet.diet
 
         filterDiet.appendChild(option);
     });
@@ -209,7 +204,7 @@ export async function initFilterValues() {
     filterPeople.max = data.people.maxPeople;
     filterPeople.value = data.people.maxPeople;
 
-    peopleOutput.innerHTML = filterPeople.value + " personnes";
+    peopleOutput.textContent = filterPeople.value + " personnes";
 
     fillColor();
 };

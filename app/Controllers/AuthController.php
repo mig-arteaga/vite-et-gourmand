@@ -20,6 +20,8 @@ class AuthController {
             return null;
         }
 
+        session_regenerate_id(true);
+
         $_SESSION['user_id'] = $user->getId();
         $_SESSION['firstname'] = $user->getFirstName();
         $_SESSION['role'] = $user->getRole()->getLabel();
@@ -36,6 +38,17 @@ class AuthController {
         $_SESSION = [];
 
         if (session_status() === PHP_SESSION_ACTIVE) {
+            $params = session_get_cookie_params();
+
+            setcookie(session_name(), '', [
+                'expires' => time() - 3600,
+                'path' => $params['path'],
+                'domain' => $params['domain'],
+                'secure' => $params['secure'],
+                'httponly' => $params['httponly'],
+                'samesite' => $params['samesite']
+            ]);
+
             session_destroy();
         }
 

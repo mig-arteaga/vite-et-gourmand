@@ -162,8 +162,29 @@ $router->get('/legal', function () {
     require __DIR__ . '/../views/pages/legal.php';
 });
 
+$router->get('/menus/filter-values', function () {
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo)
+    );
+
+    $result = $menuController->getFilterValues();
+
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($result);
+});
+
 $router->post('/login', function () {
     \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
 
     $pdo = \App\Core\Database::connect();
 
@@ -184,20 +205,6 @@ $router->post('/login', function () {
     }
 
     echo "Mail ou mot de passe incorrect";
-});
-
-$router->get('/menus/filter-values', function () {
-    $pdo = Database::connect();
-
-    $menuController = new MenuController(
-        new MenuRepository($pdo),
-        new ThemeRepository($pdo),
-        new RegimeRepository($pdo)
-    );
-
-    $result = $menuController->getFilterValues();
-
-    echo json_encode($result);
 });
 
 $router->post('/menus/filter', function () {
@@ -244,6 +251,8 @@ $router->post('/menus/detail', function () {
 
     $detail = $menuController->getDetailData($menuId);
 
+    header('Content-Type: application/json; charset=utf-8');
+
     if ($detail === null) {
         http_response_code(404);
         echo json_encode([
@@ -268,6 +277,8 @@ $router->post('/commande/change-menu', function () {
 
     $detail = $commandeController->getChangeMenuData($menuId);
 
+    header('Content-Type: application/json; charset=utf-8');
+
     if ($detail === null) {
         http_response_code(404);
         echo json_encode([
@@ -280,9 +291,49 @@ $router->post('/commande/change-menu', function () {
 });
 
 $router->post('/commande/distance', function () {
-    $address = trim($_POST['address'] ?? '');
-    $city = trim($_POST['city'] ?? '');
-    $zipcode = trim($_POST['zipcode'] ?? '');
+    \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'error' => 'Requête invalide (CSRF)'
+        ]);
+
+        return;
+    }
+
+    $now = time();
+
+    $_SESSION['distance_requests'] = array_filter(
+        $_SESSION['distance_requests'] ?? [],
+        fn($timestamp) => $timestamp > $now - 60
+    );
+
+    if (count($_SESSION['distance_requests']) >= 10) {
+        http_response_code(429);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'error' => 'Trop de demandes. Veuillez patienter une minute.'
+        ]);
+        return;
+    }
+
+    $_SESSION['distance_requests'][] = $now;
+
+    $address = is_string($_POST['address'] ?? null)
+        ? trim($_POST['address'])
+        : '';
+
+    $city = is_string($_POST['city'] ?? null)
+        ? trim($_POST['city'])
+        : '';
+
+    $zipcode = is_string($_POST['zipcode'] ?? null)
+        ? trim($_POST['zipcode'])
+        : '';
 
     $distanceController = new DistanceController(
         new DistanceService()
@@ -298,6 +349,12 @@ $router->post('/commande/distance', function () {
         );
 
         echo json_encode($result);
+    } catch (\InvalidArgumentException $e) {
+        http_response_code(400);
+
+        echo json_encode([
+            'error' => $e->getMessage()
+        ]);
     } catch (\RuntimeException $e) {
         http_response_code(502);
 
@@ -308,9 +365,61 @@ $router->post('/commande/distance', function () {
 });
 
 $router->post('/commande/calculate-price', function () {
-    $menuId = (int) ($_POST['menuId'] ?? 0);
-    $people = (int) ($_POST['people'] ?? 0);
-    $distanceKm = (float) ($_POST['distanceKm'] ?? 0);
+    $rawMenuId = $_POST['menuId'] ?? null;
+
+    $menuId = filter_var(
+        $rawMenuId,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    if ($menuId === false) {
+        http_response_code(422);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'error' => 'Identifiant du menu invalide'
+        ]);
+
+        return;
+    }
+
+    $rawPeople = $_POST['people'] ?? null;
+
+    if (
+        !is_string($rawPeople) ||
+        !ctype_digit($rawPeople) ||
+        filter_var($rawPeople, FILTER_VALIDATE_INT) === false
+    ) {
+        http_response_code(422);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'error' => 'Nombre de personnes invalide'
+        ]);
+
+        return;
+    }
+
+    $people = (int) $rawPeople;
+
+    $rawDistanceKm = $_POST['distanceKm'] ?? null;
+
+    if (
+        !is_scalar($rawDistanceKm) ||
+        !is_numeric($rawDistanceKm)
+    ) {
+        http_response_code(422);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'error' => 'Distance invalide'
+        ]);
+
+        return;
+    }
+
+    $distanceKm = (float) $rawDistanceKm;
 
     $pdo = Database::connect();
 
@@ -340,6 +449,14 @@ $router->post('/commande/calculate-price', function () {
 });
 
 $router->post('/contact', function () {
+    \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
     $contactController = new ContactController();
 
     $isSent = $contactController->send(
@@ -350,9 +467,6 @@ $router->post('/contact', function () {
     );
 
     header('Location: /contact');
-    exit;
-
-    header('Location: /');
     exit;
 });
 

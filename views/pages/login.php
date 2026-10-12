@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Connexion - Vite & Gourmand</title>
     <!--Font awesome CDN-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css">
@@ -18,7 +19,12 @@
         <div class="container">
             <!-- Login form -->
              <div class="login-box">
-                 <form class="login-form" method="POST" action="login">
+                <form class="login-form" method="POST" action="/login">
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="<?= htmlspecialchars(\App\Core\Csrf::generate(), ENT_QUOTES, 'UTF-8') ?>"
+                    >
                     <div class="login-head">
                         <a href="/">
                             <img src="images/vg-logo-2.svg" alt="">

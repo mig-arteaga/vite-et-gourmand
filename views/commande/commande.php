@@ -1,5 +1,10 @@
 <!-- Order -->
  <div class="order">
+    <input
+        type="hidden"
+        id="csrf_token"
+        value="<?= htmlspecialchars(\App\Core\Csrf::generate(), ENT_QUOTES, 'UTF-8') ?>"
+    >
     <div class="order-sub-section user-info">
         <div class="order-dataset">
             <h4>Informations du client</h4>
@@ -102,9 +107,9 @@
                         name="people"
                         class="input-element"
                         id="people"
-                        min="<?= $menu->getMinPeople() ?>"
-                        max="<?= $menu->getStock() ?>"
-                        value="<?= $menu->getMinPeople() ?>"
+                        min="<?= (int) $menu->getMinPeople() ?>"
+                        max="<?= (int) $menu->getStock() ?>"
+                        value="<?= (int) $menu->getMinPeople() ?>"
                     >
                 </div>
             </div>
@@ -121,10 +126,10 @@
                 <select name="menu" class="input-element" id="menu-list">
                     <?php foreach ($menuList as $menuListItem): ?>
                         <option
-                            value="<?= $menuListItem->getId() ?>"
+                            value="<?= (int) $menuListItem->getId() ?>"
                             <?= $menuListItem->getId() == $menuId ? 'selected' : '' ?>
                             >
-                            <?= $menuListItem->getTitle() ?>
+                            <?= htmlspecialchars($menuListItem->getTitle(), ENT_QUOTES, 'UTF-8') ?>
                             </option>
                     <?php endforeach; ?>
                 </select>
@@ -147,7 +152,7 @@
                     id="order-menu-img"
                 >
                 <div>
-                    <h3 id="menu-title"><?= $menu->getTitle() ?></h3>
+                    <h3 id="menu-title"><?= htmlspecialchars($menu->getTitle(), ENT_QUOTES, 'UTF-8') ?></h3>
                     <?php
                         $dishesByType = [];
 
@@ -182,14 +187,14 @@
                         <li class="menu-list-item">
                             <i class="fa-solid fa-people-group color-3"></i>
                             <span id="detail-min-people">
-                                <?= $menu->getMinPeople() ?>
+                                <?= (int) $menu->getMinPeople() ?>
                             </span> personnes min.
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-euro-sign color-5"></i>
                             <span id="detail-unit-price">
                                 <?php
-                                    $price = htmlspecialchars($menu->getUnitPrice());
+                                    $price = (float) $menu->getUnitPrice();
                                     if (($price - (int)$price) == 0) {
                                         echo (int)$price;
                                     }
@@ -204,13 +209,13 @@
                         <li class="menu-list-item">
                             <i class="fa-solid fa-calendar color-2"></i>
                             <span id="detail-delay">
-                                <?= $menu->getDaysBefore() ?>
+                                <?= (int) $menu->getDaysBefore() ?>
                             </span> jours de délai min.
                         </li>
                         <li class="menu-list-item">
                             <i class="fa-solid fa-warehouse color-4"></i>
                             <span id="detail-stock">
-                                <?= $menu->getStock() ?>
+                                <?= (int) $menu->getStock() ?>
                             </span> menus disponibles
                         </li>
                     </ul>
@@ -227,7 +232,7 @@
                     <p>
                         <span id="menu-price">
                             <?php
-                                $menuPrice = $menu->getUnitPrice() * $menu->getMinPeople();
+                                $menuPrice = (float) $menu->getUnitPrice() * (int) $menu->getMinPeople();
 
                                 echo $menuPrice;
                             ?>

@@ -27,16 +27,16 @@
                 </li>
                 <li class="menu-list-item">
                     <i class="fa-solid fa-shrimp color-4"></i>
-                    <?php echo $menuService->getAllergenCount($menu) . ' allergènes'; ?>
+                    <?php echo (int) $menuService->getAllergenCount($menu) . ' allergènes'; ?>
                 </li>
                 <li class="menu-list-item">
                     <i class="fa-solid fa-people-group color-5"></i>
-                    <?php echo $menu->getMinPeople() . ' personnes min.'; ?>
+                    <?php echo (int) $menu->getMinPeople() . ' personnes min.'; ?>
                 </li>
                 <li class="menu-list-item">
                     <i class="fa-solid fa-euro-sign color-2"></i>
                     <?php
-                        $price = $menu->getUnitPrice();
+                        $price = (float) $menu->getUnitPrice();
 
                         if ($price === (float) (int) $price) {
                             echo (int) $price;
@@ -51,7 +51,7 @@
             </ul>
             <a
                 class="btn body-btn btn-underline menu-btn no-link-btn"
-                id="<?= $menu->getId() ?>">
+                id="<?= (int) $menu->getId() ?>">
                 Voir plus
             </a>
         </div>
