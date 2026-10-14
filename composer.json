@@ -5,7 +5,8 @@
     "license": "proprietary",
     "require": {
         "php": "^8.2",
-        "ext-pdo_mysql": "*"
+        "ext-pdo_mysql": "*",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "heroku/heroku-buildpack-php": "^293"
