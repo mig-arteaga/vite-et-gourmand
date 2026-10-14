@@ -1,6 +1,17 @@
 {
-    "require": {},
+    "name": "mig-arteaga/vite-et-gourmand",
+    "description": "Application web de gestion de menus et commandes pour Vite & Gourmand",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2"
+    },
     "require-dev": {
         "heroku/heroku-buildpack-php": "^293"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
     }
 }

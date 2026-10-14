@@ -1,0 +1,33 @@
+services:
+
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      MYSQLHOST: db
+      MYSQLDATABASE: vite_et_gourmand
+      MYSQLUSER: ${MYSQL_APP_USER}
+      MYSQLPASSWORD: ${MYSQL_APP_PASSWORD}
+      MYSQLPORT: 3306
+      GOOGLE_ROUTES_API_KEY: ${GOOGLE_ROUTES_API_KEY}
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: vite_et_gourmand
+      MYSQL_USER: ${MYSQL_APP_USER}
+      MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  db_data:
