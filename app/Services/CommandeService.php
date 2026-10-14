@@ -17,12 +17,15 @@ class CommandeService {
         int $minPeople,
         float $distanceKm
     ): array {
-        $menuPrice = $unitPrice * $people;
+        $menuPrice = round($unitPrice * $people, 2);
 
         $groupDiscount = 0.0;
 
         if ($people >= ($minPeople + 5)) {
-            $groupDiscount = $menuPrice * self::GROUP_DISCOUNT_PERCENTAGE;
+            $groupDiscount = round(
+                $menuPrice * self::GROUP_DISCOUNT_PERCENTAGE,
+                2
+            );
         }
 
         $distanceFee = 0.0;
@@ -35,11 +38,13 @@ class CommandeService {
             );
         }
 
-        $totalPrice =
+        $totalPrice = round(
             $menuPrice
             - $groupDiscount
             + self::DELIVERY_FEE
-            + $distanceFee;
+            + $distanceFee,
+            2
+        );
 
         return [
             'menuPrice' => $menuPrice,

@@ -1,9 +1,16 @@
 <!-- Order -->
- <div class="order">
+ <form class="order" id="order">
     <input
         type="hidden"
+        name="csrf_token"
         id="csrf_token"
         value="<?= htmlspecialchars(\App\Core\Csrf::generate(), ENT_QUOTES, 'UTF-8') ?>"
+    >
+    <input
+        type="hidden"
+        name="order_token"
+        id="order_token"
+        value="<?= htmlspecialchars(bin2hex(random_bytes(16)), ENT_QUOTES, 'UTF-8') ?>"
     >
     <div class="order-sub-section user-info">
         <div class="order-dataset">
@@ -115,9 +122,6 @@
             </div>
         </div>
     </div>
-
-
-
     <div class="order-sub-section menu-info">
         <div class="order-dataset">
             <h4>Informations du menu</h4>
@@ -201,8 +205,6 @@
                                     else {
                                         echo $price;
                                     };
-
-                                    // echo '€ / personne';
                                 ?>
                             </span>€ / personne
                         </li>
@@ -220,6 +222,20 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="order-field equipment-field">
+                <label for="equipment-loan" class="form-label">
+                    Prêt de matériel :
+                </label>
+                <label for="equipment-loan" class="checkbox-element">
+                    <input
+                        type="checkbox"
+                        name="equipmentLoan"
+                        id="equipment-loan"
+                        value="1"
+                    >
+                    Je souhaite emprunter du matériel
+                </label>
             </div>
         </div>
     </div>
@@ -284,4 +300,4 @@
             </div>
         </div>
     </div>
- </div>
+ </form>

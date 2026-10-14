@@ -6,6 +6,8 @@ const zipcode = document.getElementById('zipcode');
 const date = document.getElementById('date');
 const hour = document.getElementById('hour');
 
+const equipmentLoan = document.getElementById('equipment-loan');
+
 const menuList = document.getElementById('menu-list');
 const photo = document.getElementById('order-menu-img');
 const menuTitle = document.getElementById('menu-title');
@@ -28,6 +30,9 @@ const deliveryFeeValue = 5;
 let groupOfferValue = 0;
 let distanceValue = 0;
 let distanceFeeValue = 0;
+
+let isAddressValid = false;
+let addressVersion = 0;
 
 async function postOrderData(menuId) {
     const formData = new FormData();
@@ -172,9 +177,12 @@ async function loadOrderChange() {
 };
 
 async function getDistance() {
-    distanceValue = 0;
+    const currentVersion = ++addressVersion;
 
-    if (!address.value || !city.value || city.value.trim().toLowerCase() === "grenoble") {
+    distanceValue = 0;
+    isAddressValid = false;
+
+    if (!address.value.trim() || !city.value.trim()) {
         await updatePrices();
         return;
     }
@@ -197,13 +205,18 @@ async function getDistance() {
 
         const data = await response.json();
 
+        if (currentVersion !== addressVersion) return;
+
         if (!response.ok || data.error) {
             throw new Error(data.error || "Erreur du calcul de la distance");
         }
 
         distanceValue = data.distanceKm;
+        isAddressValid = true;
 
     } catch (error) {
+        if (currentVersion !== addressVersion) return;
+
         console.error(error.message);
     }
 
@@ -218,6 +231,15 @@ export function initOrderChanges() {
     address.addEventListener('change', getDistance);
     city.addEventListener('change', getDistance);
     zipcode.addEventListener('change', getDistance);
+
+    const invalidateAddress = () => {
+        isAddressValid = false;
+        addressVersion++;
+    };
+
+    address.addEventListener('input', invalidateAddress);
+    city.addEventListener('input', invalidateAddress);
+    zipcode.addEventListener('input', invalidateAddress);
 };
 
 
@@ -228,6 +250,7 @@ function displayRecapData(recapData) {
     const recapDatetime = document.getElementById('recap-datetime');
     const recapMenu = document.getElementById('recap-menu');
     const recapPeople = document.getElementById('recap-people');
+    const recapEquipmentLoan = document.getElementById('recap-equipment-loan');
     const recapTotal = document.getElementById('recap-total');
 
     const dateValue = new Date(recapData.date);
@@ -237,10 +260,12 @@ function displayRecapData(recapData) {
         year: "numeric"
     });
 
-    recapAddress.textContent = recapData.address;
+    recapAddress.textContent =
+    `${recapData.address}, ${recapData.zipcode ? recapData.zipcode + ' ' : ''}${recapData.city}`;
     recapDatetime.textContent = formattedDate + ' à ' + recapData.hour;
     recapMenu.textContent = recapData.menu;
     recapPeople.textContent = recapData.people;
+    recapEquipmentLoan.textContent = recapData.equipmentLoan ? 'Oui' : 'Non';
     recapTotal.textContent = recapData.total;
 };
 
@@ -262,6 +287,7 @@ export function initOpenConfirmationMenu () {
             hour: hour.value,
             menu: menuTitle.textContent,
             people: people.value,
+            equipmentLoan: equipmentLoan.checked,
             total: totalPrice.textContent
         };
 
@@ -372,6 +398,13 @@ function validateOrderForm() {
             `Veuillez renseigner une adresse`
         )
     };
+    if (!isAddressValid) {
+        showError(
+            address,
+            "Veuillez renseigner une adresse valide."
+        );
+        return;
+    }
 
     //Check city
     if (!city.value.trim()) {
@@ -381,5 +414,70 @@ function validateOrderForm() {
         )
     };
 
+    //Check zipcode
+    // if (!zipcode.value.trim()) {
+    //     showError(
+    //         zipcode,
+    //         `Veuillez renseigner un code postal`
+    //     )
+    // };
+
     return isValid;
 };
+
+export function initConfirmOrder() {
+    const confirmButton = document.getElementById('order-confirm-btn');
+    const form = document.getElementById('order');
+    const confirmBox = document.getElementById('confirmation-box');
+    const successBox = document.getElementById('order-success');
+    const successId = document.getElementById('order-success-id');
+    const submitError = document.getElementById('order-submit-error');
+
+    if (!confirmButton || !form || !confirmBox || !successBox || !successId || !submitError) return;
+
+    let isSubmitting = false;
+
+    confirmButton.addEventListener('click', async () => {
+        if (isSubmitting) return;
+
+        isSubmitting = true;
+
+        submitError.textContent = '';
+        submitError.hidden = true;
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('/commande/create', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || data.error) {
+                throw new Error(data.error || 'Erreur de commande');
+            }
+
+            // Afficher le numéro de commande
+            successId.textContent = data.commandeId;
+
+            // Masquer la fenêtre de confirmation pour empêcher une nouvelle soumission
+            confirmBox.hidden = true
+
+            // Afficher le message de confirmation
+            successBox.hidden = false;
+
+        } catch (error) {
+            console.error(error);
+
+            submitError.textContent = error instanceof TypeError
+                ? 'Impossible de contacter le serveur. Vérifiez votre connexion.'
+                : (error.message || 'Une erreur est survenue lors de la commande.');
+
+            submitError.hidden = false;
+
+            isSubmitting = false;
+        }
+    });
+}

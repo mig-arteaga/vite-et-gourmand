@@ -103,6 +103,14 @@
     box-shadow: 0 0 0 0.4rem #C59D5F60;
 }
 
+.checkbox-element {
+    height: 3.2rem;
+    padding: 0.4rem;
+    font-size: 1.6rem;
+    font-family: var(--body-font);
+    color: var(--body-font-color);
+}
+
 /* No results */
 .no-results {
     height: 50vh;

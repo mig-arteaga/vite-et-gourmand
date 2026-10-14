@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\Repositories\MenuRepository;
 use App\Repositories\UtilisateurRepository;
+use App\Repositories\CommandeRepository;
 use App\Services\CommandeService;
 use App\Models\Menu;
 use DateTimeImmutable;
@@ -13,15 +14,18 @@ use DateTimeImmutable;
 class CommandeController {
     private MenuRepository $menuRepository;
     private UtilisateurRepository $utilisateurRepository;
+    private CommandeRepository $commandeRepository;
     private CommandeService $commandeService;
 
     public function __construct(
         MenuRepository $menuRepository,
         UtilisateurRepository $utilisateurRepository,
+        CommandeRepository $commandeRepository,
         CommandeService $commandeService
     ) {
         $this->menuRepository = $menuRepository;
         $this->utilisateurRepository = $utilisateurRepository;
+        $this->commandeRepository = $commandeRepository;
         $this->commandeService = $commandeService;
     }
 

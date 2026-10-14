@@ -220,4 +220,22 @@ class MenuRepository {
             'maxPeople' => (int) $data['maxPeople']
         ];
     }
+
+    public function reserveStock(int $menuId, int $people): bool {
+        $sql = '
+            UPDATE menus
+            SET stock = stock - :people
+            WHERE id_menu = :menuId
+            AND stock >= :people
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->execute([
+            'menuId' => $menuId,
+            'people' => $people
+        ]);
+
+        return $statement->rowCount() === 1;
+    }
 }

@@ -7,24 +7,25 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Core\Router;
 use App\Core\Database;
 use App\Controllers\MenuController;
-use App\Controllers\CommandeController;
 use App\Controllers\AuthController;
 use App\Controllers\ContactController;
+use App\Controllers\CommandeController;
 use App\Controllers\DistanceController;
 use App\Repositories\MenuRepository;
-use App\Repositories\RegimeRepository;
 use App\Repositories\ThemeRepository;
+use App\Repositories\RegimeRepository;
+use App\Repositories\CommandeRepository;
 use App\Repositories\UtilisateurRepository;
-use App\Services\CommandeService;
 use App\Services\AuthService;
 use App\Services\DistanceService;
+use App\Services\CommandeService;
 
 $router = new Router();
 
 $router->get('/', function () {
     \App\Core\Session::start();
 
-    $pdo = \App\Core\Database::connect();
+    $pdo = Database::connect();
 
     $avisController = new \App\Controllers\AvisController(
         new \App\Repositories\AvisRepository($pdo)
@@ -38,7 +39,7 @@ $router->get('/', function () {
 $router->get('/menus', function () {
     \App\Core\Session::start();
 
-    $pdo = \App\Core\Database::connect();
+    $pdo = Database::connect();
 
     $menuController = new \App\Controllers\MenuController(
         new \App\Repositories\MenuRepository($pdo),
@@ -105,12 +106,13 @@ $router->get('/commande', function () {
 
     $userId = $_SESSION['user_id'];
 
-    $pdo = \App\Core\Database::connect();
+    $pdo = Database::connect();
 
-    $commandeController = new \App\Controllers\CommandeController(
-        new \App\Repositories\MenuRepository($pdo),
-        new \App\Repositories\UtilisateurRepository($pdo),
-        new \App\Services\CommandeService()
+    $commandeController = new CommandeController(
+        new MenuRepository($pdo),
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new CommandeService()
     );
 
     $detail = $commandeController->getOrderData(
@@ -186,7 +188,7 @@ $router->post('/login', function () {
         return;
     }
 
-    $pdo = \App\Core\Database::connect();
+    $pdo = Database::connect();
 
     $authController = new \App\Controllers\AuthController(
         new \App\Services\AuthService(
@@ -272,6 +274,7 @@ $router->post('/commande/change-menu', function () {
     $commandeController = new CommandeController(
         new MenuRepository($pdo),
         new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
         new CommandeService()
     );
 
@@ -364,6 +367,345 @@ $router->post('/commande/distance', function () {
     }
 });
 
+$router->post('/commande/create', function () {
+    \App\Core\Session::start();
+
+    header('Content-Type: application/json; charset=utf-8');
+
+    // Vérification CSRF
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+
+        echo json_encode([
+            'error' => 'Requête invalide (CSRF)'
+        ]);
+
+        return;
+    }
+
+    // Validation du jeton de commande
+    $orderToken = $_POST['order_token'] ?? '';
+
+    if (!is_string($orderToken) || !preg_match('/\A[a-f0-9]{32}\z/', $orderToken)) {
+        http_response_code(422);
+        echo json_encode(['error' => 'Jeton de commande invalide']);
+        return;
+    }
+
+    // Vérification de la connexion
+    $userId = $_SESSION['user_id'] ?? null;
+
+    if (!$userId) {
+        http_response_code(401);
+
+        echo json_encode([
+            'error' => 'Utilisateur non connecté'
+        ]);
+
+        return;
+    }
+
+    // Vérification du jeton de commande dans la base de données
+    $pdo = \App\Core\Database::connect();
+    $commandeRepository = new CommandeRepository($pdo);
+
+    $existingOrderId = $commandeRepository->findIdByOrderToken(
+        $orderToken,
+        (int) $userId
+    );
+
+    if ($existingOrderId !== null) {
+        echo json_encode([
+            'success' => true,
+            'message' => 'Commande déjà enregistrée',
+            'commandeId' => $existingOrderId
+        ]);
+        return;
+    }
+
+    // Champs attendus
+    $requiredFields = [
+        'address',
+        'city',
+        'date',
+        'hour',
+        'people',
+        'menu'
+    ];
+
+    foreach ($requiredFields as $field) {
+        if (
+            !isset($_POST[$field]) ||
+            !is_string($_POST[$field]) ||
+            trim($_POST[$field]) === ''
+        ) {
+            http_response_code(422);
+
+            echo json_encode([
+                'error' => "Champ obligatoire invalide : $field"
+            ]);
+
+            return;
+        }
+    }
+
+    // Validation du menu
+    $menuId = filter_var(
+        $_POST['menu'],
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    // Validation du nombre de personnes
+    $people = filter_var(
+        $_POST['people'],
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    if ($menuId === false || $people === false) {
+        http_response_code(422);
+
+        echo json_encode([
+            'error' => 'Menu ou nombre de personnes invalide'
+        ]);
+
+        return;
+    }
+
+    // Récupérer le menu depuis la base de données
+    $menuRepository = new MenuRepository($pdo);
+    $menu = $menuRepository->findById($menuId);
+
+    if ($menu === null) {
+        http_response_code(404);
+
+        echo json_encode([
+            'error' => 'Menu introuvable'
+        ]);
+
+        return;
+    }
+
+    // Vérifier le nombre de personnes
+    $commandeService = new CommandeService();
+
+    if (!$commandeService->isPeopleCountValid(
+        $people,
+        $menu->getMinPeople(),
+        $menu->getStock()
+    )) {
+        http_response_code(422);
+
+        echo json_encode([
+            'error' => 'Nombre de personnes invalide ou stock insuffisant'
+        ]);
+
+        return;
+    }
+
+    // Validation du format de la date
+    $date = DateTimeImmutable::createFromFormat(
+        '!Y-m-d',
+        $_POST['date']
+    );
+
+    if (
+        $date === false ||
+        $date->format('Y-m-d') !== $_POST['date']
+    ) {
+        http_response_code(422);
+        echo json_encode([
+            'error' => 'Format de date invalide'
+        ]);
+        return;
+    }
+
+    // Validation du délai de livraison
+    if (!$commandeService->isDeliveryDateValid(
+        $date,
+        $menu->getDaysBefore()
+    )) {
+        http_response_code(422);
+        echo json_encode([
+            'error' => 'Date de livraison non autorisée pour ce menu'
+        ]);
+        return;
+    }
+
+    // Validation du format de l'heure
+    $time = $_POST['hour'];
+
+    if (
+        !preg_match('/^([01][0-9]|2[0-3]):[0-5][0-9]$/', $time) ||
+        !$commandeService->isDeliveryTimeValid($time)
+    ) {
+        http_response_code(422);
+
+        echo json_encode([
+            'error' => 'Heure de livraison invalide (08:30 - 22:30)'
+        ]);
+
+        return;
+    }
+
+    // Récupération des informations de livraison
+    $address = trim($_POST['address']);
+    $city = trim($_POST['city']);
+    $zipcode = trim($_POST['zipcode'] ?? '');
+
+    // Validation de l'adresse et calcul de la distance
+    try {
+        $distanceService = new DistanceService();
+
+        $distanceKm = $distanceService->getDistanceKm(
+            $address,
+            $city,
+            $zipcode
+        );
+
+    } catch (\InvalidArgumentException $e) {
+        http_response_code(422);
+
+        echo json_encode([
+            'error' => $e->getMessage()
+        ]);
+
+        return;
+
+    } catch (\RuntimeException $e) {
+        error_log($e->getMessage());
+
+        http_response_code(502);
+
+        echo json_encode([
+            'error' => 'Impossible de vérifier l’adresse de livraison'
+        ]);
+
+        return;
+    }
+
+    // Calcul du prix définitif côté serveur
+    $prices = $commandeService->calculatePrice(
+        $menu->getUnitPrice(),
+        $people,
+        $menu->getMinPeople(),
+        $distanceKm
+    );
+
+    // Récupération de l'utilisateur connecté
+    $utilisateurRepository = new UtilisateurRepository($pdo);
+
+    $user = $utilisateurRepository->findById((int) $userId);
+
+    if ($user === null) {
+        http_response_code(404);
+
+        echo json_encode([
+            'error' => 'Utilisateur introuvable'
+        ]);
+
+        return;
+    }
+
+    // Informations complémentaires de la commande
+    $equipmentLoan = isset($_POST['equipmentLoan'])
+        && $_POST['equipmentLoan'] === '1';
+
+    $returned = false;
+
+    $status = 'En attente';
+
+    $createdAt = new \DateTimeImmutable();
+
+    // Création de l'objet Commande
+    $commande = new \App\Models\Commande(
+        0,                              // ID attribué par MySQL
+        $orderToken,                    // Jeton de commande
+        $user,                          // Utilisateur connecté
+        $menu,                          // Menu sélectionné
+        $createdAt,                     // Date de création
+        $date,                          // Date de livraison
+        $time,                          // Heure de livraison
+        $address,                       // Adresse
+        $city,                          // Ville
+        $zipcode,                       // Code postal (facultatif)
+        $people,                        // Nombre de personnes
+        $prices['menuPrice'],           // Prix des menus
+        $prices['deliveryFee'],         // Frais de livraison
+        $prices['groupDiscount'],       // Réduction de groupe
+        $prices['distanceFee'],         // Frais kilométriques
+        $prices['totalPrice'],          // Prix total
+        $equipmentLoan,                 // Prêt de matériel
+        $returned,                      // Matériel restitué
+        $status                         // Statut initial
+    );
+
+    try {
+        // Début de la transaction
+        $pdo->beginTransaction();
+
+        // Réservation du stock
+        if (!$menuRepository->reserveStock($menuId, $people)) {
+            $pdo->rollBack();
+
+            http_response_code(409);
+            echo json_encode([
+                'error' => 'Stock insuffisant pour ce menu'
+            ]);
+            return;
+        }
+
+        // Enregistrement de la commande
+        $commandeRepository = new CommandeRepository($pdo);
+        $commandeId = $commandeRepository->create($commande);
+
+        // Validation de la transaction
+        $pdo->commit();
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Commande enregistrée avec succès',
+            'commandeId' => $commandeId
+        ]);
+
+    } catch (\Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        // Une autre requête a peut-être enregistré
+        // cette commande avec le même token.
+        if (
+            $e instanceof \PDOException
+            && $e->getCode() === '23000'
+            && isset($e->errorInfo[1])
+            && (int) $e->errorInfo[1] === 1062
+        ) {
+            $existingOrderId = $commandeRepository->findIdByOrderToken(
+                $orderToken,
+                (int) $userId
+            );
+
+            if ($existingOrderId !== null) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Commande déjà enregistrée',
+                    'commandeId' => $existingOrderId
+                ]);
+                return;
+            }
+        }
+
+        error_log($e->getMessage());
+
+        http_response_code(500);
+        echo json_encode([
+            'error' => 'Erreur lors de l’enregistrement de la commande'
+        ]);
+    }
+});
+
 $router->post('/commande/calculate-price', function () {
     $rawMenuId = $_POST['menuId'] ?? null;
 
@@ -426,6 +768,7 @@ $router->post('/commande/calculate-price', function () {
     $commandeController = new CommandeController(
         new MenuRepository($pdo),
         new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
         new CommandeService()
     );
 

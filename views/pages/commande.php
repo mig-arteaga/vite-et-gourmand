@@ -34,7 +34,7 @@
         </div>
         <div class="confirmation-bg" id="confirmation-bg">
             <div class="container">
-                <div class="confirmation-box">
+                <div class="confirmation-box" id="confirmation-box">
                     <div class="close-btn" id="close-recap-btn">
                         <i class="fa-solid fa-xmark"></i>
                     </div>
@@ -43,44 +43,49 @@
                         <div class="sub-dataset">
                             <div class="order-field order-right">
                                 <span class="form-label">Addresse :</span>
-                                <p><span id="recap-address">Test</span></p>
+                                <p><span id="recap-address"></span></p>
                             </div>
-                            <!-- <div class="order-field order-right">
-                                <span class="form-label">Ville :</span>
-                                <p><span id="menu-price">Test</span></p>
-                            </div>
-                            <div class="order-field order-right">
-                                <span class="form-label">Code postal :</span>
-                                <p><span id="menu-price">Test</span></p>
-                            </div> -->
                             <div class="order-field order-right">
                                 <span class="form-label">Date et heure :</span>
-                                <p><span id="recap-datetime">Test</span></p>
+                                <p><span id="recap-datetime"></span></p>
                             </div>
-                            <!-- <div class="order-field order-right">
-                                <span class="form-label">Heure :</span>
-                                <p><span id="menu-price">Test</span></p>
-                            </div> -->
                             <div class="order-field order-right">
                                 <span class="form-label">Menu :</span>
-                                <p><span id="recap-menu">Test</span></p>
+                                <p><span id="recap-menu"></span></p>
                             </div>
                             <div class="order-field order-right">
                                 <span class="form-label">Nb. personnes :</span>
-                                <p><span id="recap-people">Test</span></p>
+                                <p><span id="recap-people"></span></p>
+                            </div>
+                            <div class="order-field order-right">
+                                <span class="form-label">Prêt de matériel :</span>
+                                <p><span id="recap-equipment-loan"></span></p>
                             </div>
                         </div>
                         <div class="order-field order-right total-line">
                             <span class="form-label strong">Prix total :</span>
                             <p class="strong">
-                                <span id="recap-total">Test</span>
+                                <span id="recap-total"></span>
                                 <span>€</span>
                             </p>
                         </div>
+                        <p id="order-submit-error" class="order-submit-error" role="alert" hidden></p>
                         <div class="order-field order-right order-btn-wrap">
                             <a class="btn body-btn btn-underline no-link-btn" id="return-btn">Retour</a>
                             <a class="btn body-btn btn-underline no-link-btn" id="order-confirm-btn">Commander</a>
                         </div>
+                    </div>
+                </div>
+                <div id="order-success" class="order-success" hidden>
+                    <h3>Commande confirmée !</h3>
+                    <p>Votre commande a bien été enregistrée.</p>
+                    <p>
+                        <span>Numéro de commande :</span>
+                        <strong id="order-success-id"></strong>
+                    </p>
+                    <div class="order-field order-right order-btn-wrap">
+                        <a href="/" class="btn body-btn btn-underline" id="order-home-btn">Accueil</a>
+                        <a href="/compte" class="btn body-btn btn-underline" id="order-account-btn">Commandes</a>
                     </div>
                 </div>
             </div>

@@ -88,19 +88,33 @@ CREATE TABLE menus_plats (
 );
 
 CREATE TABLE commandes (
-	id_commande INT PRIMARY KEY AUTO_INCREMENT,
-	utilisateur INT NOT NULL,
-	menu INT NOT NULL,
-	date_create DATE NOT NULL DEFAULT (CURRENT_DATE),
-	date_livraison DATE NOT NULL,
-	qte_personnes INT NOT NULL,
-	prix_menus DECIMAL(10,2) NOT NULL,
-	prix_livraison DECIMAL(10,2) NOT NULL,
-	pret_materiel INT NOT NULL DEFAULT 0,
-	restitution INT NOT NULL DEFAULT 0,
-	statut VARCHAR(50) NOT NULL DEFAULT "En attente",
-	FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
-	FOREIGN KEY (menu) REFERENCES menus(id_menu)
+    id_commande INT PRIMARY KEY AUTO_INCREMENT,
+	order_token CHAR(32) NOT NULL UNIQUE,
+    utilisateur INT NOT NULL,
+    menu INT NOT NULL,
+    date_create DATE NOT NULL DEFAULT (CURRENT_DATE),
+    date_livraison DATE NOT NULL,
+    heure_livraison TIME NOT NULL,
+    adresse_livraison VARCHAR(255) NOT NULL,
+    ville_livraison VARCHAR(100) NOT NULL,
+    code_postal_livraison VARCHAR(20) NOT NULL,
+    qte_personnes INT NOT NULL,
+    prix_menus DECIMAL(10,2) NOT NULL,
+    prix_livraison DECIMAL(10,2) NOT NULL,
+	reduction_groupe DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+	frais_kilometriques DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+	prix_total DECIMAL(10,2) NOT NULL,
+    pret_materiel BOOLEAN NOT NULL DEFAULT FALSE,
+    restitution BOOLEAN NOT NULL DEFAULT FALSE,
+    statut VARCHAR(50) NOT NULL DEFAULT 'En attente',
+    CONSTRAINT chk_pret_materiel
+        CHECK (pret_materiel IN (0, 1)),
+    CONSTRAINT chk_restitution
+        CHECK (restitution IN (0, 1)),
+    CONSTRAINT chk_restitution_coherente
+        CHECK (restitution = FALSE OR pret_materiel = TRUE),
+    FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
+    FOREIGN KEY (menu) REFERENCES menus(id_menu)
 );
 
 CREATE TABLE photos_menu (
@@ -257,17 +271,36 @@ INSERT INTO menus_plats (menu, plat) VALUES
 (10, 6),
 (10, 12);
 
-INSERT INTO commandes (utilisateur, menu, date_create, date_livraison, qte_personnes, prix_menus, prix_livraison, pret_materiel, restitution, statut) VALUES
-(5, 2, '2026-01-02', '2026-01-20', 6, 270.00, 20.00, 1, 1, 'Livré'),
-(4, 1, '2026-01-15', '2026-02-05', 8, 280.00, 18.00, 1, 1, 'Livré'),
-(6, 3, '2026-02-10', '2026-02-18', 10, 280.00, 15.00, 1, 1, 'Livré'),
-(7, 4, '2026-02-18', '2026-02-26', 5, 150.00, 10.00, 1, 1, 'Livré'),
-(8, 5, '2026-03-22', '2026-04-05', 10, 400.00, 30.00, 1, 1, 'Livré'),
-(4, 6, '2026-04-05', '2026-04-30', 8, 256.00, 14.00, 1, 1, 'Livré'),
-(5, 7, '2026-03-12', '2026-04-05', 6, 174.00, 12.00, 1, 1, 'Livré'),
-(6, 8, '2026-05-20', '2026-05-15', 10, 380.00, 25.00, 1, 1, 'Livré'),
-(7, 9, '2026-05-01', '2026-05-20', 5, 180.00, 9.00, 1, 1, 'Livré'),
-(8, 10, '2026-07-10', '2026-08-01', 7, 238.00, 16.00, 1, 1, 'En cours');
+INSERT INTO commandes (
+    order_token,
+    utilisateur,
+    menu,
+    date_create,
+    date_livraison,
+    heure_livraison,
+    adresse_livraison,
+    ville_livraison,
+    code_postal_livraison,
+    qte_personnes,
+    prix_menus,
+    prix_livraison,
+    reduction_groupe,
+    frais_kilometriques,
+    prix_total,
+    pret_materiel,
+    restitution,
+    statut
+) VALUES
+(REPLACE(UUID(), '-', ''), 5, 2, '2026-01-02', '2026-01-20', '10:15:00', 'Adresse 5', 'Grenoble', '38000', 12, 540.00, 5.00, 54.00, 0.00, 491.00, TRUE, TRUE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 4, 1, '2026-01-15', '2026-02-05', '11:30:00', 'Adresse 4', 'Grenoble', '38000', 8, 280.00, 5.00, 0.00, 0.00, 285.00, FALSE, FALSE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 6, 3, '2026-02-10', '2026-02-18', '14:00:00', 'Adresse 6', 'Grenoble', '38000', 16, 448.00, 5.00, 44.80, 0.00, 408.20, TRUE, TRUE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 7, 4, '2026-02-18', '2026-02-26', '12:45:00', 'Adresse 7', 'Grenoble', '38000', 5, 150.00, 5.00, 0.00, 0.00, 155.00, FALSE, FALSE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 8, 5, '2026-03-22', '2026-04-05', '15:30:00', 'Adresse 8', 'Grenoble', '38000', 15, 600.00, 5.00, 60.00, 0.00, 545.00, TRUE, TRUE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 4, 6, '2026-04-05', '2026-04-30', '10:45:00', 'Adresse 4', 'Grenoble', '38000', 8, 256.00, 5.00, 0.00, 0.00, 261.00, FALSE, FALSE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 5, 7, '2026-03-12', '2026-04-05', '13:15:00', 'Adresse 5', 'Grenoble', '38000', 6, 174.00, 5.00, 0.00, 0.00, 179.00, TRUE, TRUE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 6, 8, '2026-05-10', '2026-05-15', '11:00:00', 'Adresse 6', 'Grenoble', '38000', 10, 380.00, 5.00, 0.00, 0.00, 385.00, FALSE, FALSE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 7, 9, '2026-05-01', '2026-05-20', '14:30:00', 'Adresse 7', 'Grenoble', '38000', 11, 396.00, 5.00, 39.60, 0.00, 361.40, TRUE, TRUE, 'Clôturé'),
+(REPLACE(UUID(), '-', ''), 8, 10, '2026-07-10', '2026-08-01', '15:45:00', 'Adresse 8', 'Grenoble', '38000', 7, 238.00, 5.00, 0.00, 0.00, 243.00, TRUE, FALSE, 'En cours');
 
 INSERT INTO photos_menu (menu, chemin, ordre) VALUES
 (1,'images/menu-1-1.jpg',1),
