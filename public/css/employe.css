@@ -24,7 +24,7 @@
     color: var(--body-font-color);
     background-color: #EDEDED;
     border: 2px solid transparent;
-    border-radius: 2rem 0 0 0;
+    border-radius: 2rem 0 2rem 0;
     cursor: pointer;
     transition:
         background-color 300ms ease,
@@ -106,6 +106,191 @@
     font-style: italic;
 }
 
+/* Barre de filtres interne */
+.employe-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.employe-filter-chip {
+    padding: 0.8rem 1.6rem;
+    font-family: var(--body-font);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--body-font-color);
+    background-color: #FFF;
+    border: 1px solid var(--body-font-color-light);
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition:
+        background-color 250ms ease,
+        color 250ms ease,
+        border-color 250ms ease;
+}
+
+.employe-filter-chip:hover,
+.employe-filter-chip:focus-visible {
+    border-color: var(--secondary-font-color);
+    color: var(--main-font-color-dark);
+    outline: none;
+}
+
+.employe-filter-chip.active {
+    background-color: var(--secondary-font-color);
+    color: #FFF;
+    border-color: var(--secondary-font-color);
+}
+
+/* Liste et cartes d'avis */
+.employe-avis-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.employe-avis-item {
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    padding: 2.4rem 2.8rem;
+    border-left: 4px solid var(--secondary-font-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.employe-avis-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.employe-avis-author {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.employe-avis-avatar {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.employe-avis-name {
+    font-family: var(--main-font);
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--main-font-color-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+}
+
+.employe-avis-meta {
+    font-size: 1.3rem;
+    color: var(--body-font-color);
+}
+
+.employe-avis-badges {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.employe-avis-stars {
+    display: inline-flex;
+    gap: 0.3rem;
+    font-size: 1.4rem;
+}
+
+.employe-avis-stars .star-filled {
+    color: var(--secondary-font-color);
+}
+
+.employe-avis-stars .star-empty {
+    color: var(--body-font-color-light);
+}
+
+.employe-status-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    border-radius: 0.4rem;
+}
+
+.badge-attente {
+    background-color: #FDF3E6;
+    color: var(--color-2);
+    border: 1px solid var(--color-2);
+}
+
+.badge-valide {
+    background-color: #E8F7EF;
+    color: var(--color-6);
+    border: 1px solid var(--color-5);
+}
+
+.badge-refuse {
+    background-color: #FCEBF2;
+    color: var(--color-1);
+    border: 1px solid var(--color-1);
+}
+
+.employe-avis-message {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: var(--body-font-color);
+    margin: 0;
+}
+
+.employe-avis-actions {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #EDEDED;
+    padding-top: 1.4rem;
+}
+
+.employe-inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.employe-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.6rem;
+    font-family: var(--body-font);
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 0.4rem;
+    border: none;
+    cursor: pointer;
+    transition: opacity 250ms ease, transform 150ms ease;
+}
+
+.employe-action-btn:hover {
+    opacity: 0.88;
+}
+
+.btn-approve {
+    background-color: var(--color-5);
+    color: #FFF;
+}
+
+.btn-reject {
+    background-color: var(--color-1);
+    color: #FFF;
+}
+
 @media screen and (max-width: 768px) {
     .employe-tabs {
         display: grid;
@@ -121,5 +306,14 @@
 
     .employe-card {
         padding: 2.5rem 2rem;
+    }
+
+    .employe-avis-item {
+        padding: 2rem;
+    }
+
+    .employe-avis-top {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

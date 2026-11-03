@@ -112,7 +112,111 @@
                         <p class="employe-card-subtitle">Validez ou refusez les avis déposés par les clients avant leur publication sur l'accueil.</p>
                     </div>
                     <div class="employe-card-body">
-                        <p class="employe-placeholder">Module de modération des avis prêt à être connecté (Étape 12.2.3).</p>
+                        <!-- Filtres par statut d'avis -->
+                        <div class="employe-filter-bar" role="group" aria-label="Filtrer les avis par statut">
+                            <button type="button" class="employe-filter-chip active" data-avis-filter="all">
+                                Tous (<?= count($reviews) ?>)
+                            </button>
+                            <button type="button" class="employe-filter-chip" data-avis-filter="En attente">
+                                En attente
+                            </button>
+                            <button type="button" class="employe-filter-chip" data-avis-filter="Validé">
+                                Validés
+                            </button>
+                            <button type="button" class="employe-filter-chip" data-avis-filter="Refusé">
+                                Refusés
+                            </button>
+                        </div>
+
+                        <?php if (empty($reviews)): ?>
+                            <p class="employe-placeholder">Aucun avis client enregistré pour le moment.</p>
+                        <?php else: ?>
+                            <div class="employe-avis-list" id="employe-avis-list">
+                                <?php foreach ($reviews as $review): ?>
+                                    <?php
+                                        $statusClass = match ($review->getStatus()) {
+                                            'Validé' => 'badge-valide',
+                                            'Refusé' => 'badge-refuse',
+                                            default => 'badge-attente'
+                                        };
+                                    ?>
+                                    <article
+                                        class="employe-avis-item"
+                                        data-avis-status="<?= htmlspecialchars($review->getStatus(), ENT_QUOTES, 'UTF-8') ?>"
+                                    >
+                                        <div class="employe-avis-top">
+                                            <div class="employe-avis-author">
+                                                <img
+                                                    src="<?= htmlspecialchars($review->getUser()->getPhoto() ?: 'images/profile-0.jpg', ENT_QUOTES, 'UTF-8') ?>"
+                                                    alt="Photo de <?= htmlspecialchars($review->getUser()->getFirstName(), ENT_QUOTES, 'UTF-8') ?>"
+                                                    class="employe-avis-avatar"
+                                                >
+                                                <div>
+                                                    <h4 class="employe-avis-name">
+                                                        <?= htmlspecialchars($review->getUser()->getFirstName() . ' ' . $review->getUser()->getLastName(), ENT_QUOTES, 'UTF-8') ?>
+                                                    </h4>
+                                                    <span class="employe-avis-meta">
+                                                        <?= htmlspecialchars($review->getUser()->getEmail(), ENT_QUOTES, 'UTF-8') ?>
+                                                        • <?= htmlspecialchars($review->getDate()->format('d/m/Y'), ENT_QUOTES, 'UTF-8') ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="employe-avis-badges">
+                                                <div class="employe-avis-stars" aria-label="Note de <?= (int) $review->getRating() ?> sur 5">
+                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <i class="fa-solid fa-star <?= $i <= $review->getRating() ? 'star-filled' : 'star-empty' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </div>
+                                                <span class="employe-status-badge <?= $statusClass ?>">
+                                                    <?= htmlspecialchars($review->getStatus(), ENT_QUOTES, 'UTF-8') ?>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <p class="employe-avis-message">
+                                            <?= nl2br(htmlspecialchars($review->getMessage(), ENT_QUOTES, 'UTF-8')) ?>
+                                        </p>
+
+                                        <div class="employe-avis-actions">
+                                            <form method="post" action="/employe/avis/statut" class="employe-inline-form">
+                                                <input
+                                                    type="hidden"
+                                                    name="csrf_token"
+                                                    value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>"
+                                                >
+                                                <input
+                                                    type="hidden"
+                                                    name="id_avis"
+                                                    value="<?= (int) $review->getId() ?>"
+                                                >
+                                                <?php if ($review->getStatus() !== 'Validé'): ?>
+                                                    <button
+                                                        type="submit"
+                                                        name="statut"
+                                                        value="Validé"
+                                                        class="employe-action-btn btn-approve"
+                                                    >
+                                                        <i class="fa-solid fa-check"></i> Valider
+                                                    </button>
+                                                <?php endif; ?>
+
+                                                <?php if ($review->getStatus() !== 'Refusé'): ?>
+                                                    <button
+                                                        type="submit"
+                                                        name="statut"
+                                                        value="Refusé"
+                                                        class="employe-action-btn btn-reject"
+                                                    >
+                                                        <i class="fa-solid fa-xmark"></i> Refuser
+                                                    </button>
+                                                <?php endif; ?>
+                                            </form>
+                                        </div>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

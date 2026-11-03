@@ -37,6 +37,50 @@ class AvisRepository {
             'status' => $status
         ]);
 
+        return $this->hydrateAll($statement);
+    }
+
+    public function findAll(): array {
+        $sql = '
+            SELECT
+                id_avis,
+                utilisateur,
+                date_avis,
+                note,
+                message,
+                statut
+            FROM avis
+            ORDER BY
+                CASE
+                    WHEN statut = \'En attente\' THEN 0
+                    WHEN statut = \'Validé\' THEN 1
+                    ELSE 2
+                END,
+                date_avis DESC,
+                id_avis DESC
+        ';
+
+        $statement = $this->pdo->query($sql);
+
+        return $this->hydrateAll($statement);
+    }
+
+    public function updateStatus(int $id, string $status): bool {
+        $sql = '
+            UPDATE avis
+            SET statut = :status
+            WHERE id_avis = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'status' => $status,
+            'id' => $id
+        ]);
+    }
+
+    private function hydrateAll(\PDOStatement $statement): array {
         $reviews = [];
 
         while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {

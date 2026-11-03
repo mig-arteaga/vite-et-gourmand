@@ -150,6 +150,15 @@ $router->get('/employe', function () {
         $activeTab = 'commandes';
     }
 
+    $pdo = Database::connect();
+
+    $avisController = new \App\Controllers\AvisController(
+        new \App\Repositories\AvisRepository($pdo)
+    );
+
+    $reviews = $avisController->getAllReviews();
+    $csrfToken = \App\Core\Csrf::generate();
+
     require __DIR__ . '/../views/pages/employe.php';
 });
 
@@ -817,6 +826,42 @@ $router->post('/contact', function () {
     );
 
     header('Location: /contact');
+    exit;
+});
+
+$router->post('/employe/avis/statut', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $reviewId = filter_var(
+        $_POST['id_avis'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    $status = is_string($_POST['statut'] ?? null)
+        ? trim($_POST['statut'])
+        : '';
+
+    if ($reviewId !== false) {
+        $pdo = Database::connect();
+
+        $avisController = new \App\Controllers\AvisController(
+            new \App\Repositories\AvisRepository($pdo)
+        );
+
+        $avisController->moderateReview((int) $reviewId, $status);
+    }
+
+    header('Location: /employe?tab=avis');
     exit;
 });
 

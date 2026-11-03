@@ -1,4 +1,4 @@
-// Gestion des onglets de l'espace employé
+// Gestion des onglets et filtres de l'espace employé
 export function initEmployeTabs() {
     const tabButtons = document.querySelectorAll(".employe-tab-btn");
     const tabPanels = document.querySelectorAll(".employe-panel");
@@ -36,3 +36,28 @@ export function initEmployeTabs() {
     });
 }
 
+export function initEmployeAvisFilter() {
+    const filterButtons = document.querySelectorAll("[data-avis-filter]");
+    const avisItems = document.querySelectorAll(".employe-avis-item");
+
+    if (filterButtons.length === 0 || avisItems.length === 0) {
+        return;
+    }
+
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const selectedStatus = button.dataset.avisFilter;
+
+            filterButtons.forEach((btn) => {
+                btn.classList.toggle("active", btn === button);
+            });
+
+            avisItems.forEach((item) => {
+                const itemStatus = item.dataset.avisStatus;
+                const shouldShow =
+                    selectedStatus === "all" || itemStatus === selectedStatus;
+                item.style.display = shouldShow ? "flex" : "none";
+            });
+        });
+    });
+}
