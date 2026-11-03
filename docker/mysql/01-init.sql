@@ -1,5 +1,5 @@
--- Create database
-
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
 
 USE vite_et_gourmand;
 
