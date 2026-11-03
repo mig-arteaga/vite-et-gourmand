@@ -107,6 +107,8 @@ CREATE TABLE commandes (
     pret_materiel BOOLEAN NOT NULL DEFAULT FALSE,
     restitution BOOLEAN NOT NULL DEFAULT FALSE,
     statut VARCHAR(50) NOT NULL DEFAULT 'En attente',
+    mode_contact VARCHAR(50) NULL,
+    motif_annulation TEXT NULL,
     CONSTRAINT chk_pret_materiel
         CHECK (pret_materiel IN (0, 1)),
     CONSTRAINT chk_restitution
@@ -115,6 +117,24 @@ CREATE TABLE commandes (
         CHECK (restitution = FALSE OR pret_materiel = TRUE),
     FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
     FOREIGN KEY (menu) REFERENCES menus(id_menu)
+);
+
+CREATE TABLE commande_suivi (
+    id_suivi INT PRIMARY KEY AUTO_INCREMENT,
+    commande INT NOT NULL,
+    statut VARCHAR(50) NOT NULL,
+    date_modification DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (commande) REFERENCES commandes(id_commande) ON DELETE CASCADE
+);
+
+CREATE TABLE horaires (
+    id_horaire INT PRIMARY KEY AUTO_INCREMENT,
+    jour VARCHAR(20) NOT NULL,
+    heure_ouverture TIME NULL,
+    heure_fermeture TIME NULL,
+    ferme BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT chk_horaires_ferme
+        CHECK (ferme IN (0, 1))
 );
 
 CREATE TABLE photos_menu (
@@ -291,16 +311,89 @@ INSERT INTO commandes (
     restitution,
     statut
 ) VALUES
-(REPLACE(UUID(), '-', ''), 5, 2, '2026-01-02', '2026-01-20', '10:15:00', 'Adresse 5', 'Grenoble', '38000', 12, 540.00, 5.00, 54.00, 0.00, 491.00, TRUE, TRUE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 4, 1, '2026-01-15', '2026-02-05', '11:30:00', 'Adresse 4', 'Grenoble', '38000', 8, 280.00, 5.00, 0.00, 0.00, 285.00, FALSE, FALSE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 6, 3, '2026-02-10', '2026-02-18', '14:00:00', 'Adresse 6', 'Grenoble', '38000', 16, 448.00, 5.00, 44.80, 0.00, 408.20, TRUE, TRUE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 7, 4, '2026-02-18', '2026-02-26', '12:45:00', 'Adresse 7', 'Grenoble', '38000', 5, 150.00, 5.00, 0.00, 0.00, 155.00, FALSE, FALSE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 8, 5, '2026-03-22', '2026-04-05', '15:30:00', 'Adresse 8', 'Grenoble', '38000', 15, 600.00, 5.00, 60.00, 0.00, 545.00, TRUE, TRUE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 4, 6, '2026-04-05', '2026-04-30', '10:45:00', 'Adresse 4', 'Grenoble', '38000', 8, 256.00, 5.00, 0.00, 0.00, 261.00, FALSE, FALSE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 5, 7, '2026-03-12', '2026-04-05', '13:15:00', 'Adresse 5', 'Grenoble', '38000', 6, 174.00, 5.00, 0.00, 0.00, 179.00, TRUE, TRUE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 6, 8, '2026-05-10', '2026-05-15', '11:00:00', 'Adresse 6', 'Grenoble', '38000', 10, 380.00, 5.00, 0.00, 0.00, 385.00, FALSE, FALSE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 7, 9, '2026-05-01', '2026-05-20', '14:30:00', 'Adresse 7', 'Grenoble', '38000', 11, 396.00, 5.00, 39.60, 0.00, 361.40, TRUE, TRUE, 'Clôturé'),
-(REPLACE(UUID(), '-', ''), 8, 10, '2026-07-10', '2026-08-01', '15:45:00', 'Adresse 8', 'Grenoble', '38000', 7, 238.00, 5.00, 0.00, 0.00, 243.00, TRUE, FALSE, 'En cours');
+(REPLACE(UUID(), '-', ''), 5, 2, '2026-01-02', '2026-01-20', '10:15:00', 'Adresse 5', 'Grenoble', '38000', 12, 540.00, 5.00, 54.00, 0.00, 491.00, TRUE, TRUE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 4, 1, '2026-01-15', '2026-02-05', '11:30:00', 'Adresse 4', 'Grenoble', '38000', 8, 280.00, 5.00, 0.00, 0.00, 285.00, FALSE, FALSE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 6, 3, '2026-02-10', '2026-02-18', '14:00:00', 'Adresse 6', 'Grenoble', '38000', 16, 448.00, 5.00, 44.80, 0.00, 408.20, TRUE, TRUE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 7, 4, '2026-02-18', '2026-02-26', '12:45:00', 'Adresse 7', 'Grenoble', '38000', 5, 150.00, 5.00, 0.00, 0.00, 155.00, FALSE, FALSE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 8, 5, '2026-03-22', '2026-04-05', '15:30:00', 'Adresse 8', 'Grenoble', '38000', 15, 600.00, 5.00, 60.00, 0.00, 545.00, TRUE, TRUE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 4, 6, '2026-04-05', '2026-04-30', '10:45:00', 'Adresse 4', 'Grenoble', '38000', 8, 256.00, 5.00, 0.00, 0.00, 261.00, FALSE, FALSE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 5, 7, '2026-03-12', '2026-04-05', '13:15:00', 'Adresse 5', 'Grenoble', '38000', 6, 174.00, 5.00, 0.00, 0.00, 179.00, TRUE, TRUE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 6, 8, '2026-05-10', '2026-05-15', '11:00:00', 'Adresse 6', 'Grenoble', '38000', 10, 380.00, 5.00, 0.00, 0.00, 385.00, FALSE, FALSE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 7, 9, '2026-05-01', '2026-05-20', '14:30:00', 'Adresse 7', 'Grenoble', '38000', 11, 396.00, 5.00, 39.60, 0.00, 361.40, TRUE, TRUE, 'Terminée'),
+(REPLACE(UUID(), '-', ''), 8, 10, '2026-07-10', '2026-08-01', '15:45:00', 'Adresse 8', 'Grenoble', '38000', 7, 238.00, 5.00, 0.00, 0.00, 243.00, TRUE, FALSE, 'En préparation');
+
+INSERT INTO commande_suivi (commande, statut, date_modification) VALUES
+(1, 'En attente', '2026-01-02 09:00:00'),
+(1, 'Accepté', '2026-01-03 10:00:00'),
+(1, 'En préparation', '2026-01-20 07:30:00'),
+(1, 'En cours de livraison', '2026-01-20 09:45:00'),
+(1, 'Livré', '2026-01-20 10:15:00'),
+(1, 'En attente du retour de matériel', '2026-01-20 12:00:00'),
+(1, 'Terminée', '2026-01-22 14:00:00'),
+(2, 'En attente', '2026-01-15 11:00:00'),
+(2, 'Accepté', '2026-01-16 09:30:00'),
+(2, 'En préparation', '2026-02-05 08:30:00'),
+(2, 'En cours de livraison', '2026-02-05 11:00:00'),
+(2, 'Livré', '2026-02-05 11:30:00'),
+(2, 'Terminée', '2026-02-05 11:35:00'),
+(3, 'En attente', '2026-02-10 14:00:00'),
+(3, 'Accepté', '2026-02-11 10:00:00'),
+(3, 'En préparation', '2026-02-18 10:00:00'),
+(3, 'En cours de livraison', '2026-02-18 13:30:00'),
+(3, 'Livré', '2026-02-18 14:00:00'),
+(3, 'En attente du retour de matériel', '2026-02-18 16:00:00'),
+(3, 'Terminée', '2026-02-20 11:00:00'),
+(4, 'En attente', '2026-02-18 15:00:00'),
+(4, 'Accepté', '2026-02-19 09:00:00'),
+(4, 'En préparation', '2026-02-26 09:30:00'),
+(4, 'En cours de livraison', '2026-02-26 12:15:00'),
+(4, 'Livré', '2026-02-26 12:45:00'),
+(4, 'Terminée', '2026-02-26 12:50:00'),
+(5, 'En attente', '2026-03-22 10:30:00'),
+(5, 'Accepté', '2026-03-23 11:00:00'),
+(5, 'En préparation', '2026-04-05 11:30:00'),
+(5, 'En cours de livraison', '2026-04-05 15:00:00'),
+(5, 'Livré', '2026-04-05 15:30:00'),
+(5, 'En attente du retour de matériel', '2026-04-05 17:00:00'),
+(5, 'Terminée', '2026-04-07 10:00:00'),
+(6, 'En attente', '2026-04-05 16:00:00'),
+(6, 'Accepté', '2026-04-06 09:00:00'),
+(6, 'En préparation', '2026-04-30 07:45:00'),
+(6, 'En cours de livraison', '2026-04-30 10:15:00'),
+(6, 'Livré', '2026-04-30 10:45:00'),
+(6, 'Terminée', '2026-04-30 10:50:00'),
+(7, 'En attente', '2026-03-12 13:00:00'),
+(7, 'Accepté', '2026-03-13 10:00:00'),
+(7, 'En préparation', '2026-04-05 09:30:00'),
+(7, 'En cours de livraison', '2026-04-05 12:45:00'),
+(7, 'Livré', '2026-04-05 13:15:00'),
+(7, 'En attente du retour de matériel', '2026-04-05 15:00:00'),
+(7, 'Terminée', '2026-04-08 09:30:00'),
+(8, 'En attente', '2026-05-10 12:00:00'),
+(8, 'Accepté', '2026-05-11 08:30:00'),
+(8, 'En préparation', '2026-05-15 08:00:00'),
+(8, 'En cours de livraison', '2026-05-15 10:30:00'),
+(8, 'Livré', '2026-05-15 11:00:00'),
+(8, 'Terminée', '2026-05-15 11:05:00'),
+(9, 'En attente', '2026-05-01 17:00:00'),
+(9, 'Accepté', '2026-05-02 10:00:00'),
+(9, 'En préparation', '2026-05-20 10:30:00'),
+(9, 'En cours de livraison', '2026-05-20 14:00:00'),
+(9, 'Livré', '2026-05-20 14:30:00'),
+(9, 'En attente du retour de matériel', '2026-05-20 16:30:00'),
+(9, 'Terminée', '2026-05-22 15:00:00'),
+(10, 'En attente', '2026-07-10 11:20:00'),
+(10, 'Accepté', '2026-07-11 09:15:00'),
+(10, 'En préparation', '2026-08-01 11:00:00');
+
+INSERT INTO horaires (jour, heure_ouverture, heure_fermeture, ferme) VALUES
+('Lundi', '11:30:00', '22:30:00', FALSE),
+('Mardi', '11:30:00', '22:30:00', FALSE),
+('Mercredi', '11:30:00', '22:30:00', FALSE),
+('Jeudi', '11:30:00', '22:30:00', FALSE),
+('Vendredi', '11:30:00', '22:30:00', FALSE),
+('Samedi', '11:30:00', '22:30:00', FALSE),
+('Dimanche', '11:30:00', '22:30:00', FALSE);
 
 INSERT INTO photos_menu (menu, chemin, ordre) VALUES
 (1,'images/menu-1-1.jpg',1),
