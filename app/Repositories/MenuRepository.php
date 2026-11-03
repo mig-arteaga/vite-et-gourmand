@@ -238,4 +238,21 @@ class MenuRepository {
 
         return $statement->rowCount() === 1;
     }
+
+    public function restoreStock(int $menuId, int $people): bool {
+        $sql = '
+            UPDATE menus
+            SET stock = stock + :people
+            WHERE id_menu = :menuId
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->execute([
+            'menuId' => $menuId,
+            'people' => $people
+        ]);
+
+        return $statement->rowCount() === 1;
+    }
 }

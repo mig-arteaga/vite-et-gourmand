@@ -61,3 +61,56 @@ export function initEmployeAvisFilter() {
         });
     });
 }
+
+export function initEmployeOrdersFilter() {
+    const statusSelect = document.getElementById("employe-order-status-filter");
+    const clientInput = document.getElementById("employe-order-client-filter");
+    const orderItems = document.querySelectorAll(".employe-order-item");
+
+    if (!statusSelect || !clientInput || orderItems.length === 0) {
+        return;
+    }
+
+    const filterOrders = () => {
+        const selectedStatus = statusSelect.value;
+        const clientQuery = clientInput.value.trim().toLowerCase();
+
+        orderItems.forEach((item) => {
+            const itemStatus = item.dataset.orderStatus || "";
+            const itemClient = item.dataset.orderClient || "";
+
+            const matchesStatus =
+                selectedStatus === "all" || itemStatus === selectedStatus;
+            const matchesClient =
+                clientQuery === "" || itemClient.includes(clientQuery);
+
+            item.style.display =
+                matchesStatus && matchesClient ? "flex" : "none";
+        });
+    };
+
+    statusSelect.addEventListener("change", filterOrders);
+    clientInput.addEventListener("input", filterOrders);
+}
+
+export function initEmployeOrderCancelToggle() {
+    const toggleButtons = document.querySelectorAll(".js-toggle-cancel");
+
+    if (toggleButtons.length === 0) {
+        return;
+    }
+
+    toggleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const targetId = button.dataset.target;
+            if (!targetId) {
+                return;
+            }
+
+            const cancelBox = document.getElementById(targetId);
+            if (cancelBox) {
+                cancelBox.hidden = !cancelBox.hidden;
+            }
+        });
+    });
+}

@@ -156,7 +156,16 @@ $router->get('/employe', function () {
         new \App\Repositories\AvisRepository($pdo)
     );
 
+    $commandeController = new CommandeController(
+        new MenuRepository($pdo),
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new CommandeService()
+    );
+
     $reviews = $avisController->getAllReviews();
+    $orders = $commandeController->getAllOrders();
+    $allowedOrderStatuses = $commandeController->getAllowedStatuses();
     $csrfToken = \App\Core\Csrf::generate();
 
     require __DIR__ . '/../views/pages/employe.php';
@@ -679,6 +688,17 @@ $router->post('/commande/create', function () {
         // Validation de la transaction
         $pdo->commit();
 
+        $mailService = new \App\Services\MailService();
+        $mailService->sendOrderConfirmation(
+            $user->getEmail(),
+            $user->getFirstName(),
+            $commandeId,
+            $menu->getTitle(),
+            $prices['totalPrice'],
+            $date->format('d/m/Y'),
+            $time
+        );
+
         echo json_encode([
             'success' => true,
             'message' => 'Commande enregistrée avec succès',
@@ -862,6 +882,98 @@ $router->post('/employe/avis/statut', function () {
     }
 
     header('Location: /employe?tab=avis');
+    exit;
+});
+
+$router->post('/employe/commandes/statut', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $orderId = filter_var(
+        $_POST['id_commande'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    $newStatus = is_string($_POST['statut'] ?? null)
+        ? trim($_POST['statut'])
+        : '';
+
+    $returned = isset($_POST['restitution']) && $_POST['restitution'] === '1';
+
+    if ($orderId !== false) {
+        $pdo = Database::connect();
+
+        $commandeController = new CommandeController(
+            new MenuRepository($pdo),
+            new UtilisateurRepository($pdo),
+            new CommandeRepository($pdo),
+            new CommandeService()
+        );
+
+        $commandeController->updateOrderStatusByEmployee(
+            (int) $orderId,
+            $newStatus,
+            $returned
+        );
+    }
+
+    header('Location: /employe?tab=commandes');
+    exit;
+});
+
+$router->post('/employe/commandes/annuler', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $orderId = filter_var(
+        $_POST['id_commande'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    $contactMode = is_string($_POST['mode_contact'] ?? null)
+        ? trim($_POST['mode_contact'])
+        : '';
+
+    $reason = is_string($_POST['motif_annulation'] ?? null)
+        ? trim($_POST['motif_annulation'])
+        : '';
+
+    if ($orderId !== false) {
+        $pdo = Database::connect();
+
+        $commandeController = new CommandeController(
+            new MenuRepository($pdo),
+            new UtilisateurRepository($pdo),
+            new CommandeRepository($pdo),
+            new CommandeService()
+        );
+
+        $commandeController->cancelOrderByEmployee(
+            (int) $orderId,
+            $contactMode,
+            $reason
+        );
+    }
+
+    header('Location: /employe?tab=commandes');
     exit;
 });
 

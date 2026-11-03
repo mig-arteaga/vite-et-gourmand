@@ -317,3 +317,248 @@
         align-items: flex-start;
     }
 }
+
+/* Filtres et cartes des commandes */
+.employe-orders-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.8rem;
+    background-color: #FFF;
+    padding: 2rem 2.4rem;
+    border-radius: 2rem 0 0 0;
+}
+
+.employe-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.employe-filter-label,
+.employe-inline-label {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--main-font-color-dark);
+}
+
+.employe-select,
+.employe-input {
+    width: 100%;
+    height: 3.8rem;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--body-font);
+    font-size: 1.4rem;
+    color: var(--body-font-color);
+    background-color: #FFF;
+    border: 1px solid var(--body-font-color-light);
+    border-radius: 0.4rem;
+}
+
+.employe-select:focus,
+.employe-input:focus {
+    outline: none;
+    border-color: var(--secondary-font-color);
+}
+
+.employe-select-inline {
+    width: auto;
+    min-width: 24rem;
+}
+
+.employe-orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+}
+
+.employe-order-item {
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    padding: 2.4rem 2.8rem;
+    border-left: 4px solid var(--secondary-font-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.employe-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    border-bottom: 1px solid #EDEDED;
+    padding-bottom: 1.5rem;
+}
+
+.employe-order-title {
+    font-family: var(--main-font);
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: var(--main-font-color-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    margin-bottom: 0.4rem;
+}
+
+.employe-order-sub {
+    font-size: 1.4rem;
+    color: var(--body-font-color);
+}
+
+.employe-order-badges {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.employe-order-price {
+    font-family: var(--main-font);
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--secondary-font-color);
+}
+
+.badge-encours {
+    background-color: #EEF1FD;
+    color: var(--color-4);
+    border: 1px solid var(--color-4);
+}
+
+.employe-order-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.employe-order-box {
+    background-color: #F8F8F8;
+    border-radius: 1.2rem 0 0 0;
+    padding: 1.6rem 1.8rem;
+}
+
+.employe-order-box-title {
+    font-family: var(--main-font);
+    font-size: 1.4rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--main-font-color-dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.employe-order-box-title i {
+    color: var(--secondary-font-color);
+}
+
+.employe-order-box p {
+    font-size: 1.35rem;
+    line-height: 1.6;
+    margin-bottom: 0.4rem;
+}
+
+.employe-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    max-height: 15rem;
+    overflow-y: auto;
+}
+
+.employe-history-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.25rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed var(--body-font-color-light);
+}
+
+.history-status {
+    font-weight: 700;
+    color: var(--main-font-color-dark);
+}
+
+.history-date {
+    color: var(--body-font-color);
+    white-space: nowrap;
+}
+
+.employe-history-empty {
+    font-size: 1.3rem;
+    font-style: italic;
+}
+
+.employe-order-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    border-top: 1px solid #EDEDED;
+    padding-top: 1.6rem;
+}
+
+.employe-status-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+}
+
+.employe-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--main-font-color-dark);
+    cursor: pointer;
+}
+
+.employe-cancel-info {
+    background-color: #FCEBF2;
+    color: var(--color-1);
+    border: 1px solid var(--color-1);
+    border-radius: 0.6rem;
+    padding: 1.2rem 1.6rem;
+    font-size: 1.4rem;
+}
+
+.employe-cancel-box {
+    background-color: #FDF7F9;
+    border: 1px solid var(--color-1);
+    border-radius: 1.2rem 0 0 0;
+    padding: 1.8rem 2rem;
+}
+
+.employe-cancel-warning {
+    font-size: 1.35rem;
+    color: var(--color-1);
+    font-weight: 700;
+    margin-bottom: 1.4rem;
+}
+
+.employe-cancel-fields {
+    display: grid;
+    grid-template-columns: 20rem 1fr auto;
+    align-items: end;
+    gap: 1.5rem;
+}
+
+@media screen and (max-width: 960px) {
+    .employe-orders-filters,
+    .employe-order-grid,
+    .employe-cancel-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .employe-select-inline {
+        width: 100%;
+    }
+}

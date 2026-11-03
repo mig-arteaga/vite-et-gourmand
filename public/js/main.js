@@ -21,7 +21,9 @@ import {
 } from "./commande.js";
 import {
     initEmployeTabs,
-    initEmployeAvisFilter
+    initEmployeAvisFilter,
+    initEmployeOrdersFilter,
+    initEmployeOrderCancelToggle
 } from "./employe.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,4 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Employé
     initEmployeTabs();
     initEmployeAvisFilter();
+    initEmployeOrdersFilter();
+    initEmployeOrderCancelToggle();
 });

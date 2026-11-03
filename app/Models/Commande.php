@@ -26,6 +26,9 @@ class Commande {
     private bool $equipmentLoan;
     private bool $returned;
     private string $status;
+    private ?string $contactMode;
+    private ?string $cancelReason;
+    private array $statusHistory;
 
     public function __construct(
         int $id,
@@ -46,7 +49,10 @@ class Commande {
         float $totalPrice,
         bool $equipmentLoan,
         bool $returned,
-        string $status
+        string $status,
+        ?string $contactMode = null,
+        ?string $cancelReason = null,
+        array $statusHistory = []
     ) {
         $this->id = $id;
         $this->orderToken = $orderToken;
@@ -67,6 +73,9 @@ class Commande {
         $this->equipmentLoan = $equipmentLoan;
         $this->returned = $returned;
         $this->status = $status;
+        $this->contactMode = $contactMode;
+        $this->cancelReason = $cancelReason;
+        $this->statusHistory = $statusHistory;
     }
 
     public function getId(): int {
@@ -143,5 +152,17 @@ class Commande {
 
     public function getTotalPrice(): float {
         return $this->totalPrice;
+    }
+
+    public function getContactMode(): ?string {
+        return $this->contactMode;
+    }
+
+    public function getCancelReason(): ?string {
+        return $this->cancelReason;
+    }
+
+    public function getStatusHistory(): array {
+        return $this->statusHistory;
     }
 }

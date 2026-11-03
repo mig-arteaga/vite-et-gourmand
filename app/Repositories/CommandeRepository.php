@@ -5,16 +5,21 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Commande;
+use DateTimeImmutable;
 use PDO;
 
 class CommandeRepository {
     private PDO $pdo;
+    private UtilisateurRepository $utilisateurRepository;
+    private MenuRepository $menuRepository;
 
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
+        $this->utilisateurRepository = new UtilisateurRepository($pdo);
+        $this->menuRepository = new MenuRepository($pdo);
     }
 
-public function create(Commande $commande): int {
+    public function create(Commande $commande): int {
         $sql = '
             INSERT INTO commandes (
                 order_token,
@@ -80,11 +85,14 @@ public function create(Commande $commande): int {
             'statut' => $commande->getStatus()
         ]);
 
-        return (int) $this->pdo->lastInsertId();
+        $commandeId = (int) $this->pdo->lastInsertId();
+
+        $this->addStatusHistory($commandeId, $commande->getStatus());
+
+        return $commandeId;
     }
 
-    public function findIdByOrderToken(string $orderToken, int $userId): ?int
-    {
+    public function findIdByOrderToken(string $orderToken, int $userId): ?int {
         $sql = '
             SELECT id_commande
             FROM commandes
@@ -100,8 +108,221 @@ public function create(Commande $commande): int {
             'utilisateur' => $userId
         ]);
 
-        $id = $statement->fetchColumn();
+        $result = $statement->fetchColumn();
 
-        return $id === false ? null : (int) $id;
+        return $result === false ? null : (int) $result;
+    }
+
+    public function findById(int $id): ?Commande {
+        $sql = '
+            SELECT
+                id_commande,
+                order_token,
+                utilisateur,
+                menu,
+                date_create,
+                date_livraison,
+                heure_livraison,
+                adresse_livraison,
+                ville_livraison,
+                code_postal_livraison,
+                qte_personnes,
+                prix_menus,
+                prix_livraison,
+                reduction_groupe,
+                frais_kilometriques,
+                prix_total,
+                pret_materiel,
+                restitution,
+                statut,
+                mode_contact,
+                motif_annulation
+            FROM commandes
+            WHERE id_commande = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['id' => $id]);
+
+        $data = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($data === false) {
+            return null;
+        }
+
+        return $this->hydrate($data);
+    }
+
+    public function findAll(): array {
+        $sql = '
+            SELECT
+                id_commande,
+                order_token,
+                utilisateur,
+                menu,
+                date_create,
+                date_livraison,
+                heure_livraison,
+                adresse_livraison,
+                ville_livraison,
+                code_postal_livraison,
+                qte_personnes,
+                prix_menus,
+                prix_livraison,
+                reduction_groupe,
+                frais_kilometriques,
+                prix_total,
+                pret_materiel,
+                restitution,
+                statut,
+                mode_contact,
+                motif_annulation
+            FROM commandes
+            ORDER BY
+                CASE
+                    WHEN statut = \'En attente\' THEN 0
+                    WHEN statut = \'Accepté\' THEN 1
+                    WHEN statut = \'En préparation\' THEN 2
+                    WHEN statut = \'En cours de livraison\' THEN 3
+                    WHEN statut = \'Livré\' THEN 4
+                    WHEN statut = \'En attente du retour de matériel\' THEN 5
+                    WHEN statut = \'Terminée\' THEN 6
+                    ELSE 7
+                END,
+                date_livraison DESC,
+                id_commande DESC
+        ';
+
+        $statement = $this->pdo->query($sql);
+
+        $orders = [];
+
+        while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $order = $this->hydrate($data);
+            if ($order !== null) {
+                $orders[] = $order;
+            }
+        }
+
+        return $orders;
+    }
+
+    public function addStatusHistory(int $commandeId, string $status): void {
+        $sql = '
+            INSERT INTO commande_suivi (commande, statut)
+            VALUES (:commande, :statut)
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'commande' => $commandeId,
+            'statut' => $status
+        ]);
+    }
+
+    public function findStatusHistory(int $commandeId): array {
+        $sql = '
+            SELECT
+                statut,
+                date_modification
+            FROM commande_suivi
+            WHERE commande = :commande
+            ORDER BY date_modification ASC, id_suivi ASC
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['commande' => $commandeId]);
+
+        $history = [];
+
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $history[] = [
+                'statut' => $row['statut'],
+                'date_modification' => new DateTimeImmutable($row['date_modification'])
+            ];
+        }
+
+        return $history;
+    }
+
+    public function updateStatus(int $id, string $status, bool $returned): bool {
+        $sql = '
+            UPDATE commandes
+            SET statut = :statut,
+                restitution = :restitution
+            WHERE id_commande = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'statut' => $status,
+            'restitution' => (int) $returned,
+            'id' => $id
+        ]);
+    }
+
+    public function cancelByEmployee(
+        int $id,
+        string $contactMode,
+        string $reason
+    ): bool {
+        $sql = '
+            UPDATE commandes
+            SET statut = \'Annulée\',
+                mode_contact = :mode_contact,
+                motif_annulation = :motif_annulation
+            WHERE id_commande = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'mode_contact' => $contactMode,
+            'motif_annulation' => $reason,
+            'id' => $id
+        ]);
+    }
+
+    private function hydrate(array $data): ?Commande {
+        $user = $this->utilisateurRepository->findById(
+            (int) $data['utilisateur']
+        );
+
+        $menu = $this->menuRepository->findById(
+            (int) $data['menu']
+        );
+
+        if ($user === null || $menu === null) {
+            return null;
+        }
+
+        $orderId = (int) $data['id_commande'];
+        $history = $this->findStatusHistory($orderId);
+
+        return new Commande(
+            $orderId,
+            $data['order_token'],
+            $user,
+            $menu,
+            new DateTimeImmutable($data['date_create']),
+            new DateTimeImmutable($data['date_livraison']),
+            substr($data['heure_livraison'], 0, 5),
+            $data['adresse_livraison'],
+            $data['ville_livraison'],
+            $data['code_postal_livraison'],
+            (int) $data['qte_personnes'],
+            (float) $data['prix_menus'],
+            (float) $data['prix_livraison'],
+            (float) $data['reduction_groupe'],
+            (float) $data['frais_kilometriques'],
+            (float) $data['prix_total'],
+            (bool) $data['pret_materiel'],
+            (bool) $data['restitution'],
+            $data['statut'],
+            $data['mode_contact'] ?? null,
+            $data['motif_annulation'] ?? null,
+            $history
+        );
     }
 }
