@@ -19,6 +19,7 @@ import {
     initCloseConfirmationMenu,
     initConfirmOrder
 } from "./commande.js";
+import { initEmployeTabs } from "./employe.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initHeaderBehaviour();
@@ -37,4 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initOpenConfirmationMenu();
     initCloseConfirmationMenu();
     initConfirmOrder();
+    // Employé
+    initEmployeTabs();
 });

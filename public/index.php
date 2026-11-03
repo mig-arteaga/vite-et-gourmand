@@ -143,6 +143,13 @@ $router->get('/employe', function () {
         'Employé'
     ]);
 
+    $activeTab = $_GET['tab'] ?? 'commandes';
+    $allowedTabs = ['commandes', 'avis', 'menus', 'horaires'];
+
+    if (!in_array($activeTab, $allowedTabs, true)) {
+        $activeTab = 'commandes';
+    }
+
     require __DIR__ . '/../views/pages/employe.php';
 });
 

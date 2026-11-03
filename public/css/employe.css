@@ -1,0 +1,125 @@
+/* Espace Employé */
+
+.employe-section {
+    min-height: 75vh;
+}
+
+.employe-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.employe-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.4rem;
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--body-font-color);
+    background-color: #EDEDED;
+    border: 2px solid transparent;
+    border-radius: 2rem 0 0 0;
+    cursor: pointer;
+    transition:
+        background-color 300ms ease,
+        color 300ms ease,
+        border-color 300ms ease,
+        transform 200ms ease;
+}
+
+.employe-tab-btn i {
+    color: var(--secondary-font-color);
+    font-size: 1.6rem;
+    transition: color 300ms ease;
+}
+
+.employe-tab-btn:hover,
+.employe-tab-btn:focus-visible {
+    border-color: var(--secondary-font-color);
+    color: var(--main-font-color-dark);
+    outline: none;
+}
+
+.employe-tab-btn.active {
+    background-color: var(--main-font-color-dark);
+    color: #FFF;
+    border-color: var(--secondary-font-color);
+}
+
+.employe-tab-btn.active i {
+    color: var(--secondary-font-color);
+}
+
+.employe-panel {
+    display: none;
+    text-align: left;
+}
+
+.employe-panel.active {
+    display: block;
+    animation: fadeUp 0.35s forwards;
+}
+
+.employe-card {
+    width: 100%;
+    background-color: #EDEDED;
+    border-radius: 4rem 0 0 0;
+    padding: 3.5rem 4rem;
+    margin-bottom: 4rem;
+}
+
+.employe-card-header {
+    border-bottom: 2px solid var(--body-font-color-light);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.employe-card-title {
+    font-family: var(--main-font);
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    color: var(--main-font-color-dark);
+    margin-bottom: 0.6rem;
+}
+
+.employe-card-subtitle {
+    font-size: 1.5rem;
+    color: var(--body-font-color);
+    line-height: 1.6;
+}
+
+.employe-card-body {
+    width: 100%;
+}
+
+.employe-placeholder {
+    font-size: 1.6rem;
+    color: var(--body-font-color);
+    font-style: italic;
+}
+
+@media screen and (max-width: 768px) {
+    .employe-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .employe-tab-btn {
+        justify-content: center;
+        padding: 1rem 1.2rem;
+        font-size: 1.3rem;
+    }
+
+    .employe-card {
+        padding: 2.5rem 2rem;
+    }
+}
