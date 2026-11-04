@@ -2,4 +2,5 @@
 /.env
 .DS_Store
 /backups/
+/storage/nosql/
 /documentation/journal_avancement.txt

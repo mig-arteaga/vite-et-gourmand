@@ -254,6 +254,7 @@
                 class="admin-panel <?= $activeTab === 'statistiques' ? 'active' : '' ?>"
             >
                 <?php
+                    $statsEngine = $analytics['engine'] ?? 'NoSQL';
                     $filters = $analytics['filters'] ?? ['menuId' => null, 'startDate' => '', 'endDate' => ''];
                     $chartStats = $analytics['chartStats'] ?? [];
                     $filteredStats = $analytics['filteredStats'] ?? [];
@@ -269,11 +270,16 @@
 
                 <!-- Filtres de calcul du chiffre d'affaires -->
                 <div class="employe-card">
-                    <div class="employe-card-header">
-                        <h3 class="employe-card-title">Calcul du chiffre d'affaires et filtres</h3>
-                        <p class="employe-card-subtitle">
-                            Filtrez les commandes par menu et/ou par période de livraison pour calculer le chiffre d'affaires correspondant.
-                        </p>
+                    <div class="employe-card-header employe-card-header-flex">
+                        <div>
+                            <h3 class="employe-card-title">Calcul du chiffre d'affaires et filtres</h3>
+                            <p class="employe-card-subtitle">
+                                Filtrez les commandes par menu et/ou par période de livraison pour calculer le chiffre d'affaires correspondant.
+                            </p>
+                        </div>
+                        <span class="employe-status-badge badge-encours" title="Source de données statistiques">
+                            <i class="fa-solid fa-database"></i> Source NoSQL : <?= htmlspecialchars((string) $statsEngine, ENT_QUOTES, 'UTF-8') ?>
+                        </span>
                     </div>
                     <div class="employe-card-body">
                         <form method="get" action="/admin" class="admin-stats-filter-form">

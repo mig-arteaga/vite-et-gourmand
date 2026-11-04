@@ -317,7 +317,9 @@ $router->get('/admin', function () {
 
     $adminController = new AdminController(
         new UtilisateurRepository($pdo),
-        new CommandeRepository($pdo)
+        new CommandeRepository($pdo),
+        new \App\Services\MailService(),
+        new \App\Repositories\StatsNoSqlRepository($pdo)
     );
 
     $menuController = new MenuController(
@@ -993,6 +995,8 @@ $router->post('/commande/create', function () {
 
         // Validation de la transaction
         $pdo->commit();
+
+        (new \App\Repositories\StatsNoSqlRepository($pdo))->syncFromRelational();
 
         $mailService = new \App\Services\MailService();
         $mailService->sendOrderConfirmation(

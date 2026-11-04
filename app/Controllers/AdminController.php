@@ -5,22 +5,26 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Repositories\CommandeRepository;
+use App\Repositories\StatsNoSqlRepository;
 use App\Repositories\UtilisateurRepository;
 use App\Services\MailService;
 
 class AdminController {
     private UtilisateurRepository $utilisateurRepository;
     private ?CommandeRepository $commandeRepository;
+    private ?StatsNoSqlRepository $statsNoSqlRepository;
     private MailService $mailService;
 
     public function __construct(
         UtilisateurRepository $utilisateurRepository,
         ?CommandeRepository $commandeRepository = null,
-        ?MailService $mailService = null
+        ?MailService $mailService = null,
+        ?StatsNoSqlRepository $statsNoSqlRepository = null
     ) {
         $this->utilisateurRepository = $utilisateurRepository;
         $this->commandeRepository = $commandeRepository;
         $this->mailService = $mailService ?? new MailService();
+        $this->statsNoSqlRepository = $statsNoSqlRepository;
     }
 
     public function getEmployees(): array {
@@ -129,9 +133,10 @@ class AdminController {
     }
 
     /**
-     * Retourne les statistiques globales et filtrées (commandes par menu et chiffre d'affaires).
+     * Retourne les statistiques globales et filtrées (commandes par menu et chiffre d'affaires) depuis NoSQL.
      *
      * @return array{
+     *     engine: string,
      *     filters: array{menuId: ?int, startDate: string, endDate: string},
      *     chartStats: array<int, array<string, mixed>>,
      *     filteredStats: array<int, array<string, mixed>>,
@@ -159,8 +164,9 @@ class AdminController {
             [$validStartDate, $validEndDate] = [$validEndDate, $validStartDate];
         }
 
-        if ($this->commandeRepository === null) {
+        if ($this->commandeRepository === null && $this->statsNoSqlRepository === null) {
             return [
+                'engine' => 'Indisponible',
                 'filters' => [
                     'menuId' => $validMenuId,
                     'startDate' => $validStartDate,
@@ -179,19 +185,39 @@ class AdminController {
             ];
         }
 
-        $chartStats = $this->commandeRepository->getRevenueStats(
-            null,
-            $validStartDate !== '' ? $validStartDate : null,
-            $validEndDate !== '' ? $validEndDate : null
-        );
-
-        $filteredStats = $validMenuId !== null
-            ? $this->commandeRepository->getRevenueStats(
-                $validMenuId,
+        if ($this->statsNoSqlRepository !== null) {
+            $chartResult = $this->statsNoSqlRepository->getRevenueStats(
+                null,
                 $validStartDate !== '' ? $validStartDate : null,
                 $validEndDate !== '' ? $validEndDate : null
-            )
-            : $chartStats;
+            );
+
+            $engine = $chartResult['engine'];
+            $chartStats = $chartResult['stats'];
+
+            $filteredStats = $validMenuId !== null
+                ? $this->statsNoSqlRepository->getRevenueStats(
+                    $validMenuId,
+                    $validStartDate !== '' ? $validStartDate : null,
+                    $validEndDate !== '' ? $validEndDate : null
+                )['stats']
+                : $chartStats;
+        } else {
+            $engine = 'MySQL (Relationnel)';
+            $chartStats = $this->commandeRepository->getRevenueStats(
+                null,
+                $validStartDate !== '' ? $validStartDate : null,
+                $validEndDate !== '' ? $validEndDate : null
+            );
+
+            $filteredStats = $validMenuId !== null
+                ? $this->commandeRepository->getRevenueStats(
+                    $validMenuId,
+                    $validStartDate !== '' ? $validStartDate : null,
+                    $validEndDate !== '' ? $validEndDate : null
+                )
+                : $chartStats;
+        }
 
         $totalRevenue = 0.0;
         $totalOrders = 0;
@@ -217,6 +243,7 @@ class AdminController {
         $averageBasket = $totalOrders > 0 ? ($totalRevenue / $totalOrders) : 0.0;
 
         return [
+            'engine' => $engine,
             'filters' => [
                 'menuId' => $validMenuId,
                 'startDate' => $validStartDate,
@@ -248,4 +275,3 @@ class AdminController {
         );
     }
 }
-
