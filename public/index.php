@@ -89,10 +89,69 @@ $router->get('/nous', function () {
 $router->get('/login', function () {
     \App\Core\Session::start();
 
+    $authFlash = $_SESSION['auth_flash'] ?? null;
+    unset($_SESSION['auth_flash']);
+
+    $oldEmail = $_SESSION['auth_old_email'] ?? '';
+    unset($_SESSION['auth_old_email']);
+
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
 
     require __DIR__ . '/../views/pages/login.php';
+});
+
+$router->get('/register', function () {
+    \App\Core\Session::start();
+
+    if (\App\Core\Session::isLoggedIn()) {
+        header('Location: /compte');
+        exit;
+    }
+
+    $authFlash = $_SESSION['auth_flash'] ?? null;
+    unset($_SESSION['auth_flash']);
+
+    $oldInput = $_SESSION['auth_old_input'] ?? [];
+    unset($_SESSION['auth_old_input']);
+
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
+    require __DIR__ . '/../views/pages/register.php';
+});
+
+$router->get('/forgot-password', function () {
+    \App\Core\Session::start();
+
+    $authFlash = $_SESSION['auth_flash'] ?? null;
+    unset($_SESSION['auth_flash']);
+
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
+    require __DIR__ . '/../views/pages/forgot-password.php';
+});
+
+$router->get('/reset-password', function () {
+    \App\Core\Session::start();
+
+    $authFlash = $_SESSION['auth_flash'] ?? null;
+    unset($_SESSION['auth_flash']);
+
+    $resetToken = trim((string) ($_GET['token'] ?? ''));
+
+    $pdo = Database::connect();
+    $utilisateurRepository = new UtilisateurRepository($pdo);
+    $authController = new AuthController(
+        new AuthService($utilisateurRepository),
+        $utilisateurRepository
+    );
+
+    $isValidToken = $authController->isResetTokenValid($resetToken);
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
+    require __DIR__ . '/../views/pages/reset-password.php';
 });
 
 $router->get('/logout', function () {
@@ -340,6 +399,9 @@ $router->post('/login', function () {
         return;
     }
 
+    $email = (string) ($_POST['email'] ?? '');
+    $password = (string) ($_POST['password'] ?? '');
+
     $pdo = Database::connect();
 
     $authController = new \App\Controllers\AuthController(
@@ -348,17 +410,134 @@ $router->post('/login', function () {
         )
     );
 
-    $redirect = $authController->login(
-        $_POST['email'] ?? '',
-        $_POST['password'] ?? ''
-    );
+    $redirect = $authController->login($email, $password);
 
     if ($redirect !== null) {
         header("Location: $redirect");
         exit;
     }
 
-    echo "Mail ou mot de passe incorrect";
+    $_SESSION['auth_flash'] = [
+        'success' => false,
+        'message' => 'Adresse e-mail ou mot de passe incorrect (ou compte désactivé).'
+    ];
+    $_SESSION['auth_old_email'] = $email;
+
+    header('Location: /login');
+    exit;
+});
+
+$router->post('/register', function () {
+    \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $input = [
+        'nom' => (string) ($_POST['nom'] ?? ''),
+        'prenom' => (string) ($_POST['prenom'] ?? ''),
+        'email' => (string) ($_POST['email'] ?? ''),
+        'telephone' => (string) ($_POST['telephone'] ?? ''),
+        'adresse' => (string) ($_POST['adresse'] ?? ''),
+        'code_postal' => (string) ($_POST['code_postal'] ?? ''),
+        'ville' => (string) ($_POST['ville'] ?? ''),
+    ];
+
+    $pdo = Database::connect();
+    $utilisateurRepository = new UtilisateurRepository($pdo);
+
+    $authController = new AuthController(
+        new AuthService($utilisateurRepository),
+        $utilisateurRepository
+    );
+
+    $result = $authController->register(
+        $input['nom'],
+        $input['prenom'],
+        $input['email'],
+        $input['telephone'],
+        $input['adresse'],
+        $input['code_postal'],
+        $input['ville'],
+        (string) ($_POST['password'] ?? ''),
+        (string) ($_POST['password_confirm'] ?? '')
+    );
+
+    $_SESSION['auth_flash'] = $result;
+
+    if ($result['success']) {
+        $_SESSION['auth_old_email'] = $input['email'];
+        header('Location: /login');
+        exit;
+    }
+
+    $_SESSION['auth_old_input'] = $input;
+    header('Location: /register');
+    exit;
+});
+
+$router->post('/forgot-password', function () {
+    \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $email = (string) ($_POST['email'] ?? '');
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
+    $baseUrl = $scheme . '://' . $host;
+
+    $pdo = Database::connect();
+    $utilisateurRepository = new UtilisateurRepository($pdo);
+
+    $authController = new AuthController(
+        new AuthService($utilisateurRepository),
+        $utilisateurRepository
+    );
+
+    $_SESSION['auth_flash'] = $authController->requestPasswordReset($email, $baseUrl);
+
+    header('Location: /forgot-password');
+    exit;
+});
+
+$router->post('/reset-password', function () {
+    \App\Core\Session::start();
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $token = (string) ($_POST['token'] ?? '');
+    $password = (string) ($_POST['password'] ?? '');
+    $passwordConfirm = (string) ($_POST['password_confirm'] ?? '');
+
+    $pdo = Database::connect();
+    $utilisateurRepository = new UtilisateurRepository($pdo);
+
+    $authController = new AuthController(
+        new AuthService($utilisateurRepository),
+        $utilisateurRepository
+    );
+
+    $result = $authController->resetPassword($token, $password, $passwordConfirm);
+    $_SESSION['auth_flash'] = $result;
+
+    if ($result['success']) {
+        header('Location: /login');
+        exit;
+    }
+
+    header('Location: /reset-password?token=' . urlencode($token));
+    exit;
 });
 
 $router->post('/menus/filter', function () {

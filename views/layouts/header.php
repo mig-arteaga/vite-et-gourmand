@@ -60,7 +60,7 @@
                                 <a href="/login">
                                     Se connecter
                                 </a>
-                                <a href="">
+                                <a href="/register">
                                     Créer un compte
                                 </a>
                             <?php endif; ?>

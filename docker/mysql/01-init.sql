@@ -38,8 +38,11 @@ CREATE TABLE utilisateurs (
     photo VARCHAR(255),
 	role INT NOT NULL,
     actif BOOLEAN NOT NULL DEFAULT TRUE,
+    reset_token VARCHAR(64) NULL,
+    reset_expires_at DATETIME NULL,
     CONSTRAINT chk_utilisateurs_actif
         CHECK (actif IN (0, 1)),
+    INDEX idx_utilisateurs_reset_token (reset_token),
 	FOREIGN KEY (role) REFERENCES roles(id_role)
 );
 

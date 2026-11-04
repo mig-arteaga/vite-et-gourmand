@@ -248,6 +248,148 @@ class UtilisateurRepository {
         ]);
     }
 
+    public function createClient(
+        string $lastName,
+        string $firstName,
+        string $email,
+        string $passwordHash,
+        string $phone,
+        string $address,
+        int $postalCode,
+        string $city
+    ): int {
+        $roleSql = '
+            SELECT id_role
+            FROM roles
+            WHERE libelle = :label
+            LIMIT 1
+        ';
+
+        $roleStmt = $this->pdo->prepare($roleSql);
+        $roleStmt->execute(['label' => 'Utilisateur']);
+        $roleId = (int) ($roleStmt->fetchColumn() ?: 3);
+
+        $sql = '
+            INSERT INTO utilisateurs (
+                nom,
+                prenom,
+                email,
+                mot_de_passe,
+                telephone,
+                adresse,
+                code_postal,
+                ville,
+                photo,
+                role,
+                actif
+            ) VALUES (
+                :last_name,
+                :first_name,
+                :email,
+                :password,
+                :phone,
+                :address,
+                :postal_code,
+                :city,
+                :photo,
+                :role,
+                1
+            )
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'last_name' => $lastName,
+            'first_name' => $firstName,
+            'email' => $email,
+            'password' => $passwordHash,
+            'phone' => $phone,
+            'address' => $address,
+            'postal_code' => $postalCode,
+            'city' => $city,
+            'photo' => 'images/profile-0.jpg',
+            'role' => $roleId
+        ]);
+
+        return (int) $this->pdo->lastInsertId();
+    }
+
+    public function saveResetToken(int $userId, string $tokenHash, string $expiresAt): bool {
+        $sql = '
+            UPDATE utilisateurs
+            SET
+                reset_token = :token_hash,
+                reset_expires_at = :expires_at
+            WHERE id_utilisateur = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'token_hash' => $tokenHash,
+            'expires_at' => $expiresAt,
+            'id' => $userId
+        ]);
+    }
+
+    public function findByValidResetToken(string $tokenHash): ?Utilisateur {
+        $sql = '
+            SELECT
+                u.id_utilisateur,
+                u.nom,
+                u.prenom,
+                u.email,
+                u.mot_de_passe,
+                u.telephone,
+                u.adresse,
+                u.code_postal,
+                u.ville,
+                u.photo,
+                u.actif,
+                r.id_role,
+                r.libelle AS role_label
+            FROM utilisateurs u
+            INNER JOIN roles r
+                ON u.role = r.id_role
+            WHERE u.reset_token = :token_hash
+              AND u.reset_expires_at IS NOT NULL
+              AND u.reset_expires_at >= NOW()
+              AND u.actif = 1
+            LIMIT 1
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'token_hash' => $tokenHash
+        ]);
+
+        $data = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if ($data === false) {
+            return null;
+        }
+
+        return $this->hydrate($data);
+    }
+
+    public function updatePasswordAndClearResetToken(int $userId, string $passwordHash): bool {
+        $sql = '
+            UPDATE utilisateurs
+            SET
+                mot_de_passe = :password_hash,
+                reset_token = NULL,
+                reset_expires_at = NULL
+            WHERE id_utilisateur = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'password_hash' => $passwordHash,
+            'id' => $userId
+        ]);
+    }
+
     private function hydrate(array $data): Utilisateur {
         $role = new Role(
             (int) $data['id_role'],

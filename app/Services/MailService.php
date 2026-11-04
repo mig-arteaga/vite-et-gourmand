@@ -77,6 +77,40 @@ class MailService {
         return $this->send($toEmail, $subject, $body);
     }
 
+    public function sendWelcomeEmail(
+        string $toEmail,
+        string $firstName,
+        string $lastName
+    ): bool {
+        $subject = "Bienvenue chez Vite & Gourmand, {$firstName} !";
+        $body =
+            "Bonjour {$firstName} {$lastName},\n\n" .
+            "Nous vous souhaitons la bienvenue chez Vite & Gourmand !\n" .
+            "Votre compte client est désormais actif avec l'identifiant : {$toEmail}.\n\n" .
+            "Vous pouvez dès à présent découvrir nos menus sur mesure, passer commande et suivre vos prestations depuis votre espace personnel.\n\n" .
+            "À très bientôt,\n" .
+            "Julie & José — L'équipe Vite & Gourmand";
+
+        return $this->send($toEmail, $subject, $body);
+    }
+
+    public function sendPasswordResetEmail(
+        string $toEmail,
+        string $firstName,
+        string $resetLink
+    ): bool {
+        $subject = "Réinitialisation de votre mot de passe - Vite & Gourmand";
+        $body =
+            "Bonjour {$firstName},\n\n" .
+            "Nous avons reçu une demande de réinitialisation du mot de passe associé à votre compte Vite & Gourmand.\n" .
+            "Pour choisir un nouveau mot de passe (lien valable 1 heure), cliquez sur le lien suivant :\n" .
+            "{$resetLink}\n\n" .
+            "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité.\n\n" .
+            "L'équipe Vite & Gourmand";
+
+        return $this->send($toEmail, $subject, $body);
+    }
+
     private function send(string $to, string $subject, string $body): bool {
         $headers =
             'From: ' . self::FROM_EMAIL . "\r\n" .
