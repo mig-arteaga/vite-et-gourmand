@@ -3,6 +3,22 @@ SET CHARACTER SET utf8mb4;
 
 USE vite_et_gourmand;
 
+-- Drop existing tables in reverse foreign-key order (for clean re-initialization)
+DROP TABLE IF EXISTS photos_menu;
+DROP TABLE IF EXISTS horaires;
+DROP TABLE IF EXISTS commande_suivi;
+DROP TABLE IF EXISTS avis;
+DROP TABLE IF EXISTS commandes;
+DROP TABLE IF EXISTS menus_plats;
+DROP TABLE IF EXISTS menus;
+DROP TABLE IF EXISTS plats_allergenes;
+DROP TABLE IF EXISTS plats;
+DROP TABLE IF EXISTS utilisateurs;
+DROP TABLE IF EXISTS regimes;
+DROP TABLE IF EXISTS themes;
+DROP TABLE IF EXISTS allergenes;
+DROP TABLE IF EXISTS roles;
+
 -- Create tables
 
 CREATE TABLE roles (
@@ -470,13 +486,13 @@ INSERT INTO avis (utilisateur, commande, date_avis, note, message, statut) VALUE
 (8, 5, '2026-02-14', 4, 'Nous recommandons vivement Vite & Gourmand pour vos événements. Les menus proposés sont équilibrés, gourmands et adaptés à différents besoins. L’équipe est disponible et à l’écoute pour personnaliser la prestation selon les attentes des clients.', 'En attente');
 
 INSERT INTO horaires (jour, heure_ouverture, heure_fermeture, ferme) VALUES
-('Lundi', '11:30:00', '22:30:00', FALSE),
-('Mardi', '11:30:00', '22:30:00', FALSE),
-('Mercredi', '11:30:00', '22:30:00', FALSE),
-('Jeudi', '11:30:00', '22:30:00', FALSE),
-('Vendredi', '11:30:00', '22:30:00', FALSE),
-('Samedi', '11:30:00', '22:30:00', FALSE),
-('Dimanche', '11:30:00', '22:30:00', FALSE);
+('Lundi', '08:30:00', '22:30:00', FALSE),
+('Mardi', '08:30:00', '22:30:00', FALSE),
+('Mercredi', '08:30:00', '22:30:00', FALSE),
+('Jeudi', '08:30:00', '22:30:00', FALSE),
+('Vendredi', '08:30:00', '22:30:00', FALSE),
+('Samedi', '08:30:00', '22:30:00', FALSE),
+('Dimanche', '08:30:00', '22:30:00', FALSE);
 
 INSERT INTO photos_menu (menu, chemin, ordre) VALUES
 (1,'images/menu-1-1.jpg',1),
