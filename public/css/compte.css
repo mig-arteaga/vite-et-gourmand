@@ -80,16 +80,3 @@
 .compte-order-hint i {
     color: var(--secondary-font-color);
 }
-
-@media screen and (max-width: 768px) {
-    .compte-tabs {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .compte-tab-btn {
-        justify-content: center;
-        width: 100%;
-    }
-}
-

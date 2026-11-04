@@ -200,18 +200,3 @@ button {
     font-family: var(--body-font);
     padding-bottom: 0.4rem;
 }
-
-@media screen and (max-width: 768px) {
-    .login-form,
-    .login-form-wide {
-        padding: 4rem 2.4rem;
-    }
-
-    .auth-form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-span-2 {
-        grid-column: span 1;
-    }
-}

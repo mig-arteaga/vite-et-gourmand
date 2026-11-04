@@ -291,33 +291,6 @@
     color: #FFF;
 }
 
-@media screen and (max-width: 768px) {
-    .employe-tabs {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .employe-tab-btn {
-        justify-content: center;
-        padding: 1rem 1.2rem;
-        font-size: 1.3rem;
-    }
-
-    .employe-card {
-        padding: 2.5rem 2rem;
-    }
-
-    .employe-avis-item {
-        padding: 2rem;
-    }
-
-    .employe-avis-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
 /* Filtres et cartes des commandes */
 .employe-orders-filters {
     display: grid;
@@ -549,18 +522,6 @@
     grid-template-columns: 20rem 1fr auto;
     align-items: end;
     gap: 1.5rem;
-}
-
-@media screen and (max-width: 960px) {
-    .employe-orders-filters,
-    .employe-order-grid,
-    .employe-cancel-fields {
-        grid-template-columns: 1fr;
-    }
-
-    .employe-select-inline {
-        width: 100%;
-    }
 }
 
 /* Gestion des menus et des plats */
@@ -803,29 +764,4 @@
 
 .employe-horaire-closed-chip {
     padding: 0.85rem 1.4rem;
-}
-
-@media screen and (max-width: 960px) {
-    .employe-form-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .employe-menu-row {
-        grid-template-columns: 1fr;
-    }
-
-    .employe-menu-thumb {
-        width: 100%;
-        height: 18rem;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .employe-form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .employe-span-2 {
-        grid-column: span 1;
-    }
 }
