@@ -94,7 +94,9 @@ export function initEmployeOrdersFilter() {
 }
 
 export function initEmployeOrderCancelToggle() {
-    const toggleButtons = document.querySelectorAll(".js-toggle-cancel");
+    const toggleButtons = document.querySelectorAll(
+        ".js-toggle-cancel, .js-toggle-box"
+    );
 
     if (toggleButtons.length === 0) {
         return;
@@ -107,10 +109,71 @@ export function initEmployeOrderCancelToggle() {
                 return;
             }
 
-            const cancelBox = document.getElementById(targetId);
-            if (cancelBox) {
-                cancelBox.hidden = !cancelBox.hidden;
+            const targetBox = document.getElementById(targetId);
+            if (targetBox) {
+                targetBox.hidden = !targetBox.hidden;
             }
         });
+    });
+}
+
+export function initEmployeDeleteModal() {
+    const deleteForms = document.querySelectorAll(".js-delete-form");
+    const modal = document.getElementById("employe-confirm-modal");
+    const messageEl = document.getElementById("employe-confirm-message");
+    const cancelBtn = document.getElementById("employe-confirm-cancel");
+    const submitBtn = document.getElementById("employe-confirm-submit");
+
+    if (
+        deleteForms.length === 0 ||
+        !modal ||
+        !messageEl ||
+        !cancelBtn ||
+        !submitBtn
+    ) {
+        return;
+    }
+
+    let pendingForm = null;
+
+    const closeModal = () => {
+        modal.hidden = true;
+        pendingForm = null;
+    };
+
+    deleteForms.forEach((form) => {
+        form.addEventListener("submit", (event) => {
+            if (form.dataset.confirmed === "true") {
+                return;
+            }
+
+            event.preventDefault();
+            pendingForm = form;
+            messageEl.textContent =
+                form.dataset.confirmMessage ||
+                "Êtes-vous sûr de vouloir supprimer cet élément ?";
+            modal.hidden = false;
+        });
+    });
+
+    cancelBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) {
+            closeModal();
+        }
+    });
+
+    submitBtn.addEventListener("click", () => {
+        if (pendingForm) {
+            pendingForm.dataset.confirmed = "true";
+            pendingForm.submit();
+        }
     });
 }

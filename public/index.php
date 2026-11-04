@@ -163,9 +163,24 @@ $router->get('/employe', function () {
         new CommandeService()
     );
 
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo),
+        new \App\Repositories\AllergeneRepository($pdo),
+        new \App\Repositories\PhotoMenuRepository($pdo)
+    );
+
     $reviews = $avisController->getAllReviews();
     $orders = $commandeController->getAllOrders();
     $allowedOrderStatuses = $commandeController->getAllowedStatuses();
+    $menus = $menuController->getAll();
+    $dishes = $menuController->getAllDishes();
+    $themes = $menuController->getAllThemes();
+    $regimes = $menuController->getAllRegimes();
+    $allergens = $menuController->getAllAllergens();
+    $availablePhotos = $menuController->getAvailablePhotos();
     $csrfToken = \App\Core\Csrf::generate();
 
     require __DIR__ . '/../views/pages/employe.php';
@@ -974,6 +989,195 @@ $router->post('/employe/commandes/annuler', function () {
     }
 
     header('Location: /employe?tab=commandes');
+    exit;
+});
+
+$router->post('/employe/menus/create', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo),
+        new \App\Repositories\AllergeneRepository($pdo),
+        new \App\Repositories\PhotoMenuRepository($pdo)
+    );
+
+    $dishIds = is_array($_POST['plats'] ?? null) ? $_POST['plats'] : [];
+
+    $menuController->createMenu(
+        (string) ($_POST['titre'] ?? ''),
+        (string) ($_POST['description'] ?? ''),
+        (int) ($_POST['theme'] ?? 0),
+        (int) ($_POST['regime'] ?? 0),
+        (int) ($_POST['min_personnes'] ?? 0),
+        (float) ($_POST['prix_personne'] ?? 0),
+        (int) ($_POST['jours_avant'] ?? 0),
+        (int) ($_POST['stock'] ?? 0),
+        $dishIds,
+        (string) ($_POST['photo'] ?? 'images/menu-1-1.jpg')
+    );
+
+    header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/menus/update', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo),
+        new \App\Repositories\AllergeneRepository($pdo),
+        new \App\Repositories\PhotoMenuRepository($pdo)
+    );
+
+    $dishIds = is_array($_POST['plats'] ?? null) ? $_POST['plats'] : [];
+
+    $menuController->updateMenu(
+        (int) ($_POST['id_menu'] ?? 0),
+        (string) ($_POST['titre'] ?? ''),
+        (string) ($_POST['description'] ?? ''),
+        (int) ($_POST['theme'] ?? 0),
+        (int) ($_POST['regime'] ?? 0),
+        (int) ($_POST['min_personnes'] ?? 0),
+        (float) ($_POST['prix_personne'] ?? 0),
+        (int) ($_POST['jours_avant'] ?? 0),
+        (int) ($_POST['stock'] ?? 0),
+        $dishIds,
+        (string) ($_POST['photo'] ?? 'images/menu-1-1.jpg')
+    );
+
+    header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/menus/delete', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo)
+    );
+
+    $menuController->deleteMenu((int) ($_POST['id_menu'] ?? 0));
+
+    header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/plats/create', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo)
+    );
+
+    $allergenIds = is_array($_POST['allergenes'] ?? null) ? $_POST['allergenes'] : [];
+
+    $menuController->createDish(
+        (string) ($_POST['titre'] ?? ''),
+        (string) ($_POST['description'] ?? ''),
+        (string) ($_POST['type'] ?? ''),
+        $allergenIds
+    );
+
+    header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/plats/update', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo)
+    );
+
+    $allergenIds = is_array($_POST['allergenes'] ?? null) ? $_POST['allergenes'] : [];
+
+    $menuController->updateDish(
+        (int) ($_POST['id_plat'] ?? 0),
+        (string) ($_POST['titre'] ?? ''),
+        (string) ($_POST['description'] ?? ''),
+        (string) ($_POST['type'] ?? ''),
+        $allergenIds
+    );
+
+    header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/plats/delete', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo),
+        new \App\Repositories\PlatRepository($pdo)
+    );
+
+    $menuController->deleteDish((int) ($_POST['id_plat'] ?? 0));
+
+    header('Location: /employe?tab=menus');
     exit;
 });
 

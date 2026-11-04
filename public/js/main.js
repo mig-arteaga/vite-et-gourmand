@@ -23,7 +23,8 @@ import {
     initEmployeTabs,
     initEmployeAvisFilter,
     initEmployeOrdersFilter,
-    initEmployeOrderCancelToggle
+    initEmployeOrderCancelToggle,
+    initEmployeDeleteModal
 } from "./employe.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -48,4 +49,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initEmployeAvisFilter();
     initEmployeOrdersFilter();
     initEmployeOrderCancelToggle();
+    initEmployeDeleteModal();
 });

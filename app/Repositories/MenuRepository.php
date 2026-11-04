@@ -255,4 +255,150 @@ class MenuRepository {
 
         return $statement->rowCount() === 1;
     }
+
+    public function create(
+        string $title,
+        string $description,
+        int $themeId,
+        int $regimeId,
+        int $minPeople,
+        float $unitPrice,
+        int $daysBefore,
+        int $stock,
+        array $dishIds,
+        string $mainPhotoPath
+    ): int {
+        $sql = '
+            INSERT INTO menus (
+                titre,
+                description,
+                theme,
+                regime,
+                min_personnes,
+                prix_personne,
+                jours_avant,
+                stock
+            ) VALUES (
+                :titre,
+                :description,
+                :theme,
+                :regime,
+                :min_personnes,
+                :prix_personne,
+                :jours_avant,
+                :stock
+            )
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'titre' => $title,
+            'description' => $description,
+            'theme' => $themeId,
+            'regime' => $regimeId,
+            'min_personnes' => $minPeople,
+            'prix_personne' => $unitPrice,
+            'jours_avant' => $daysBefore,
+            'stock' => $stock
+        ]);
+
+        $menuId = (int) $this->pdo->lastInsertId();
+
+        $this->syncDishes($menuId, $dishIds);
+        $this->photoMenuRepository->replaceMenuPhotos($menuId, $mainPhotoPath);
+
+        return $menuId;
+    }
+
+    public function update(
+        int $id,
+        string $title,
+        string $description,
+        int $themeId,
+        int $regimeId,
+        int $minPeople,
+        float $unitPrice,
+        int $daysBefore,
+        int $stock,
+        array $dishIds,
+        string $mainPhotoPath
+    ): bool {
+        $sql = '
+            UPDATE menus
+            SET titre = :titre,
+                description = :description,
+                theme = :theme,
+                regime = :regime,
+                min_personnes = :min_personnes,
+                prix_personne = :prix_personne,
+                jours_avant = :jours_avant,
+                stock = :stock
+            WHERE id_menu = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $updated = $statement->execute([
+            'titre' => $title,
+            'description' => $description,
+            'theme' => $themeId,
+            'regime' => $regimeId,
+            'min_personnes' => $minPeople,
+            'prix_personne' => $unitPrice,
+            'jours_avant' => $daysBefore,
+            'stock' => $stock,
+            'id' => $id
+        ]);
+
+        if (!$updated) {
+            return false;
+        }
+
+        $this->syncDishes($id, $dishIds);
+        $this->photoMenuRepository->replaceMenuPhotos($id, $mainPhotoPath);
+
+        return true;
+    }
+
+    public function delete(int $id): bool {
+        // Vérifier si des commandes référencent déjà ce menu
+        $checkStmt = $this->pdo->prepare('SELECT COUNT(*) FROM commandes WHERE menu = :id');
+        $checkStmt->execute(['id' => $id]);
+        $ordersCount = (int) $checkStmt->fetchColumn();
+
+        if ($ordersCount > 0) {
+            // Si des commandes historiques existent, on passe le stock à 0 pour préserver l'intégrité référentielle
+            $zeroStmt = $this->pdo->prepare('UPDATE menus SET stock = 0 WHERE id_menu = :id');
+            return $zeroStmt->execute(['id' => $id]);
+        }
+
+        $delDishes = $this->pdo->prepare('DELETE FROM menus_plats WHERE menu = :id');
+        $delDishes->execute(['id' => $id]);
+
+        $this->photoMenuRepository->deleteByMenuId($id);
+
+        $delMenu = $this->pdo->prepare('DELETE FROM menus WHERE id_menu = :id');
+
+        return $delMenu->execute(['id' => $id]);
+    }
+
+    private function syncDishes(int $menuId, array $dishIds): void {
+        $del = $this->pdo->prepare('DELETE FROM menus_plats WHERE menu = :menu');
+        $del->execute(['menu' => $menuId]);
+
+        $ins = $this->pdo->prepare('
+            INSERT INTO menus_plats (menu, plat)
+            VALUES (:menu, :plat)
+        ');
+
+        $uniqueIds = array_unique(array_map('intval', $dishIds));
+
+        foreach ($uniqueIds as $dishId) {
+            if ($dishId > 0) {
+                $ins->execute([
+                    'menu' => $menuId,
+                    'plat' => $dishId
+                ]);
+            }
+        }
+    }
 }

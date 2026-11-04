@@ -14,6 +14,29 @@ class AllergeneRepository {
         $this->pdo = $pdo;
     }
 
+    public function findAll(): array {
+        $sql = '
+            SELECT
+                id_allergene,
+                libelle
+            FROM allergenes
+            ORDER BY id_allergene
+        ';
+
+        $statement = $this->pdo->query($sql);
+
+        $allergenes = [];
+
+        while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $allergenes[] = new Allergene(
+                (int) $data['id_allergene'],
+                $data['libelle']
+            );
+        }
+
+        return $allergenes;
+    }
+
     public function findByDishId(int $dishId): array {
         $sql = '
             SELECT

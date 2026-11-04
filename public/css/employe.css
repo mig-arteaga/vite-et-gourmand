@@ -562,3 +562,223 @@
         width: 100%;
     }
 }
+
+/* Gestion des menus et des plats */
+.employe-card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.employe-form-panel {
+    background-color: #F8F8F8;
+    border: 1px solid var(--secondary-font-color);
+    border-radius: 2rem 0 0 0;
+    padding: 2.4rem 2.8rem;
+    margin-bottom: 2.5rem;
+}
+
+.employe-form-title {
+    font-family: var(--main-font);
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--main-font-color-dark);
+    margin-bottom: 1.8rem;
+}
+
+.employe-crud-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.employe-form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.employe-span-2 {
+    grid-column: span 2;
+}
+
+.employe-full-width {
+    width: 100%;
+}
+
+.employe-textarea {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    font-family: var(--body-font);
+    font-size: 1.4rem;
+    color: var(--body-font-color);
+    background-color: #FFF;
+    border: 1px solid var(--body-font-color-light);
+    border-radius: 0.4rem;
+    resize: vertical;
+}
+
+.employe-textarea:focus {
+    outline: none;
+    border-color: var(--secondary-font-color);
+}
+
+.employe-checkbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.4rem;
+}
+
+.employe-checkbox-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    background-color: #FFF;
+    border: 1px solid var(--body-font-color-light);
+    border-radius: 0.4rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.employe-form-submit-row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.employe-menu-row {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    gap: 2.2rem;
+    align-items: start;
+}
+
+.employe-menu-thumb {
+    width: 14rem;
+    height: 14rem;
+    object-fit: cover;
+    border-radius: 1.6rem 0 0 0;
+}
+
+.employe-menu-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+.employe-dish-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.employe-dish-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background-color: #F4F4F4;
+    border: 1px solid var(--body-font-color-light);
+    border-radius: 0.4rem;
+    font-size: 1.25rem;
+    color: var(--body-font-color);
+}
+
+.employe-dish-tag i {
+    color: var(--secondary-font-color);
+}
+
+.btn-edit {
+    background-color: var(--color-4);
+    color: #FFF;
+}
+
+/* Modale de confirmation de suppression */
+.employe-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(18, 18, 18, 0.72);
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.employe-modal-backdrop[hidden] {
+    display: none;
+}
+
+.employe-modal-box {
+    background-color: #FFF;
+    border-radius: 2.5rem 0 0 0;
+    border-left: 5px solid var(--color-1);
+    max-width: 48rem;
+    width: 100%;
+    padding: 3rem 3.2rem;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.employe-modal-title {
+    font-family: var(--main-font);
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--color-1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.employe-modal-message {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    color: var(--main-font-color-dark);
+}
+
+.employe-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 0.8rem;
+}
+
+.btn-cancel-modal {
+    background-color: #EDEDED;
+    color: var(--main-font-color-dark);
+}
+
+@media screen and (max-width: 960px) {
+    .employe-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .employe-menu-row {
+        grid-template-columns: 1fr;
+    }
+
+    .employe-menu-thumb {
+        width: 100%;
+        height: 18rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .employe-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .employe-span-2 {
+        grid-column: span 1;
+    }
+}
