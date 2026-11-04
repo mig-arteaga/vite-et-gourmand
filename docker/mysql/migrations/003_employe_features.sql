@@ -104,11 +104,11 @@ INSERT INTO commande_suivi (commande, statut, date_modification) VALUES
 
 -- 6. Initialiser les horaires d'ouverture
 INSERT INTO horaires (jour, heure_ouverture, heure_fermeture, ferme) VALUES
-('Lundi', '11:30:00', '22:30:00', FALSE),
-('Mardi', '11:30:00', '22:30:00', FALSE),
-('Mercredi', '11:30:00', '22:30:00', FALSE),
-('Jeudi', '11:30:00', '22:30:00', FALSE),
-('Vendredi', '11:30:00', '22:30:00', FALSE),
-('Samedi', '11:30:00', '22:30:00', FALSE),
-('Dimanche', '11:30:00', '22:30:00', FALSE);
+('Lundi', '08:30:00', '22:30:00', FALSE),
+('Mardi', '08:30:00', '22:30:00', FALSE),
+('Mercredi', '08:30:00', '22:30:00', FALSE),
+('Jeudi', '08:30:00', '22:30:00', FALSE),
+('Vendredi', '08:30:00', '22:30:00', FALSE),
+('Samedi', '08:30:00', '22:30:00', FALSE),
+('Dimanche', '08:30:00', '22:30:00', FALSE);
 
