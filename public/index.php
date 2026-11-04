@@ -12,6 +12,7 @@ use App\Controllers\ContactController;
 use App\Controllers\CommandeController;
 use App\Controllers\DistanceController;
 use App\Controllers\HoraireController;
+use App\Controllers\AdminController;
 use App\Repositories\MenuRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\RegimeRepository;
@@ -227,6 +228,15 @@ $router->get('/admin', function () {
     }
 
     $pdo = Database::connect();
+
+    $adminController = new AdminController(
+        new UtilisateurRepository($pdo)
+    );
+
+    $employees = $adminController->getEmployees();
+    $adminFlash = $_SESSION['admin_flash'] ?? null;
+    unset($_SESSION['admin_flash']);
+
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
     $csrfToken = \App\Core\Csrf::generate();
 
@@ -1252,6 +1262,67 @@ $router->post('/employe/horaires/update', function () {
     }
 
     header('Location: /employe?tab=horaires');
+    exit;
+});
+
+$router->post('/admin/employes/create', function () {
+    \App\Core\Session::requireRoles(['Administrateur']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $pdo = Database::connect();
+
+    $adminController = new AdminController(
+        new UtilisateurRepository($pdo)
+    );
+
+    $_SESSION['admin_flash'] = $adminController->createEmployee(
+        (string) ($_POST['nom'] ?? ''),
+        (string) ($_POST['prenom'] ?? ''),
+        (string) ($_POST['email'] ?? ''),
+        (string) ($_POST['password'] ?? ''),
+        (string) ($_POST['telephone'] ?? '')
+    );
+
+    header('Location: /admin?tab=employes');
+    exit;
+});
+
+$router->post('/admin/employes/statut', function () {
+    \App\Core\Session::requireRoles(['Administrateur']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $userId = filter_var(
+        $_POST['id_utilisateur'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    $active = (string) ($_POST['actif'] ?? '0') === '1';
+
+    if ($userId !== false) {
+        $pdo = Database::connect();
+
+        $adminController = new AdminController(
+            new UtilisateurRepository($pdo)
+        );
+
+        $_SESSION['admin_flash'] = $adminController->toggleEmployeeStatus(
+            (int) $userId,
+            $active
+        );
+    }
+
+    header('Location: /admin?tab=employes');
     exit;
 });
 
