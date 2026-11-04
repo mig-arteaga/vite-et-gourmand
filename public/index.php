@@ -170,10 +170,13 @@ $router->get('/compte', function () {
     $pdo = Database::connect();
 
     $compteController = new CompteController(
-        new UtilisateurRepository($pdo)
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new MenuRepository($pdo)
     );
 
     $currentUser = $compteController->getUser($userId);
+    $clientOrders = $compteController->getUserOrders($userId);
     $compteFlash = $_SESSION['compte_flash'] ?? null;
     unset($_SESSION['compte_flash']);
 
@@ -1407,6 +1410,79 @@ $router->post('/compte/profil/update', function () {
     );
 
     header('Location: /compte?tab=profil');
+    exit;
+});
+
+$router->post('/compte/commandes/update', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé',
+        'Utilisateur'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $userId = (int) ($_SESSION['user_id'] ?? 0);
+    $orderId = (int) ($_POST['id_commande'] ?? 0);
+
+    $pdo = Database::connect();
+
+    $compteController = new CompteController(
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new MenuRepository($pdo)
+    );
+
+    $_SESSION['compte_flash'] = $compteController->updateOrderByClient(
+        $userId,
+        $orderId,
+        (string) ($_POST['date_livraison'] ?? ''),
+        (string) ($_POST['heure_livraison'] ?? ''),
+        (string) ($_POST['adresse_livraison'] ?? ''),
+        (string) ($_POST['code_postal_livraison'] ?? ''),
+        (string) ($_POST['ville_livraison'] ?? ''),
+        (int) ($_POST['qte_personnes'] ?? 0),
+        isset($_POST['pret_materiel']) && (string) $_POST['pret_materiel'] === '1'
+    );
+
+    header('Location: /compte?tab=commandes');
+    exit;
+});
+
+$router->post('/compte/commandes/cancel', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé',
+        'Utilisateur'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $userId = (int) ($_SESSION['user_id'] ?? 0);
+    $orderId = (int) ($_POST['id_commande'] ?? 0);
+
+    $pdo = Database::connect();
+
+    $compteController = new CompteController(
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new MenuRepository($pdo)
+    );
+
+    $_SESSION['compte_flash'] = $compteController->cancelOrderByClient(
+        $userId,
+        $orderId
+    );
+
+    header('Location: /compte?tab=commandes');
     exit;
 });
 

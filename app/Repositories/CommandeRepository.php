@@ -207,6 +207,141 @@ class CommandeRepository {
         return $orders;
     }
 
+    /**
+     * @return Commande[]
+     */
+    public function findByUserId(int $userId): array {
+        $sql = '
+            SELECT
+                id_commande,
+                order_token,
+                utilisateur,
+                menu,
+                date_create,
+                date_livraison,
+                heure_livraison,
+                adresse_livraison,
+                ville_livraison,
+                code_postal_livraison,
+                qte_personnes,
+                prix_menus,
+                prix_livraison,
+                reduction_groupe,
+                frais_kilometriques,
+                prix_total,
+                pret_materiel,
+                restitution,
+                statut,
+                mode_contact,
+                motif_annulation
+            FROM commandes
+            WHERE utilisateur = :user_id
+            ORDER BY
+                CASE
+                    WHEN statut = \'En attente\' THEN 0
+                    WHEN statut = \'Accepté\' THEN 1
+                    WHEN statut = \'En préparation\' THEN 2
+                    WHEN statut = \'En cours de livraison\' THEN 3
+                    WHEN statut = \'Livré\' THEN 4
+                    WHEN statut = \'En attente du retour de matériel\' THEN 5
+                    WHEN statut = \'Terminée\' THEN 6
+                    ELSE 7
+                END,
+                date_livraison DESC,
+                id_commande DESC
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['user_id' => $userId]);
+
+        $orders = [];
+
+        while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $order = $this->hydrate($data);
+            if ($order !== null) {
+                $orders[] = $order;
+            }
+        }
+
+        return $orders;
+    }
+
+    public function updateByClient(
+        int $orderId,
+        int $userId,
+        string $deliveryDate,
+        string $deliveryTime,
+        string $deliveryAddress,
+        string $deliveryCity,
+        string $deliveryPostalCode,
+        int $peopleCount,
+        float $menuPrice,
+        float $deliveryPrice,
+        float $groupDiscount,
+        float $distanceFee,
+        float $totalPrice,
+        bool $equipmentLoan
+    ): bool {
+        $sql = '
+            UPDATE commandes
+            SET
+                date_livraison = :date_livraison,
+                heure_livraison = :heure_livraison,
+                adresse_livraison = :adresse_livraison,
+                ville_livraison = :ville_livraison,
+                code_postal_livraison = :code_postal_livraison,
+                qte_personnes = :qte_personnes,
+                prix_menus = :prix_menus,
+                prix_livraison = :prix_livraison,
+                reduction_groupe = :reduction_groupe,
+                frais_kilometriques = :frais_kilometriques,
+                prix_total = :prix_total,
+                pret_materiel = :pret_materiel
+            WHERE id_commande = :id
+              AND utilisateur = :user_id
+              AND statut = \'En attente\'
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'date_livraison' => $deliveryDate,
+            'heure_livraison' => $deliveryTime,
+            'adresse_livraison' => $deliveryAddress,
+            'ville_livraison' => $deliveryCity,
+            'code_postal_livraison' => $deliveryPostalCode,
+            'qte_personnes' => $peopleCount,
+            'prix_menus' => $menuPrice,
+            'prix_livraison' => $deliveryPrice,
+            'reduction_groupe' => $groupDiscount,
+            'frais_kilometriques' => $distanceFee,
+            'prix_total' => $totalPrice,
+            'pret_materiel' => $equipmentLoan ? 1 : 0,
+            'id' => $orderId,
+            'user_id' => $userId
+        ]);
+    }
+
+    public function cancelByClient(int $orderId, int $userId): bool {
+        $sql = '
+            UPDATE commandes
+            SET statut = \'Annulée\',
+                mode_contact = \'Espace client\',
+                motif_annulation = \'Annulation effectuée par le client depuis son espace personnel\'
+            WHERE id_commande = :id
+              AND utilisateur = :user_id
+              AND statut = \'En attente\'
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'id' => $orderId,
+            'user_id' => $userId
+        ]);
+
+        return $statement->rowCount() === 1;
+    }
+
     public function addStatusHistory(int $commandeId, string $status): void {
         $sql = '
             INSERT INTO commande_suivi (commande, statut)

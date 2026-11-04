@@ -69,6 +69,18 @@
     padding: 2.6rem 3rem;
 }
 
+.compte-order-hint {
+    font-size: 1.35rem;
+    color: var(--body-font-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.compte-order-hint i {
+    color: var(--secondary-font-color);
+}
+
 @media screen and (max-width: 768px) {
     .compte-tabs {
         flex-direction: column;
