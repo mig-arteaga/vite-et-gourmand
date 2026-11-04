@@ -11,11 +11,13 @@ use App\Controllers\AuthController;
 use App\Controllers\ContactController;
 use App\Controllers\CommandeController;
 use App\Controllers\DistanceController;
+use App\Controllers\HoraireController;
 use App\Repositories\MenuRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\RegimeRepository;
 use App\Repositories\CommandeRepository;
 use App\Repositories\UtilisateurRepository;
+use App\Repositories\HoraireRepository;
 use App\Services\AuthService;
 use App\Services\DistanceService;
 use App\Services\CommandeService;
@@ -31,7 +33,12 @@ $router->get('/', function () {
         new \App\Repositories\AvisRepository($pdo)
     );
 
+    $horaireController = new HoraireController(
+        new HoraireRepository($pdo)
+    );
+
     $reviews = $avisController->getValidatedReviews();
+    $horaires = $horaireController->getAll();
 
     require __DIR__ . '/../views/pages/index.php';
 });
@@ -47,9 +54,14 @@ $router->get('/menus', function () {
         new \App\Repositories\RegimeRepository($pdo)
     );
 
+    $horaireController = new HoraireController(
+        new HoraireRepository($pdo)
+    );
+
     $menuService = new \App\Services\MenuService();
 
     $menus = $menuController->getAll();
+    $horaires = $horaireController->getAll();
 
     require __DIR__ . '/../views/pages/menus.php';
 });
@@ -57,17 +69,26 @@ $router->get('/menus', function () {
 $router->get('/contact', function () {
     \App\Core\Session::start();
 
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
     require __DIR__ . '/../views/pages/contact.php';
 });
 
 $router->get('/nous', function () {
     \App\Core\Session::start();
 
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
     require __DIR__ . '/../views/pages/nous.php';
 });
 
 $router->get('/login', function () {
     \App\Core\Session::start();
+
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
 
     require __DIR__ . '/../views/pages/login.php';
 });
@@ -123,6 +144,7 @@ $router->get('/commande', function () {
     $menu = $detail['menu'];
     $user = $detail['user'];
     $menuList = $detail['menuList'];
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
 
     require __DIR__ . '/../views/pages/commande.php';
 });
@@ -133,6 +155,9 @@ $router->get('/compte', function () {
         'Employé',
         'Utilisateur'
     ]);
+
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
 
     require __DIR__ . '/../views/pages/compte.php';
 });
@@ -172,6 +197,10 @@ $router->get('/employe', function () {
         new \App\Repositories\PhotoMenuRepository($pdo)
     );
 
+    $horaireController = new HoraireController(
+        new HoraireRepository($pdo)
+    );
+
     $reviews = $avisController->getAllReviews();
     $orders = $commandeController->getAllOrders();
     $allowedOrderStatuses = $commandeController->getAllowedStatuses();
@@ -181,6 +210,7 @@ $router->get('/employe', function () {
     $regimes = $menuController->getAllRegimes();
     $allergens = $menuController->getAllAllergens();
     $availablePhotos = $menuController->getAvailablePhotos();
+    $horaires = $horaireController->getAll();
     $csrfToken = \App\Core\Csrf::generate();
 
     require __DIR__ . '/../views/pages/employe.php';
@@ -189,17 +219,26 @@ $router->get('/employe', function () {
 $router->get('/admin', function () {
     \App\Core\Session::requireRoles(['Administrateur']);
 
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
     require __DIR__ . '/../views/pages/admin.php';
 });
 
 $router->get('/cgv', function () {
     \App\Core\Session::start();
 
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+
     require __DIR__ . '/../views/pages/cgv.php';
 });
 
 $router->get('/legal', function () {
     \App\Core\Session::start();
+
+    $pdo = Database::connect();
+    $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
 
     require __DIR__ . '/../views/pages/legal.php';
 });
@@ -1178,6 +1217,33 @@ $router->post('/employe/plats/delete', function () {
     $menuController->deleteDish((int) ($_POST['id_plat'] ?? 0));
 
     header('Location: /employe?tab=menus');
+    exit;
+});
+
+$router->post('/employe/horaires/update', function () {
+    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $submittedHoraires = is_array($_POST['horaires'] ?? null)
+        ? $_POST['horaires']
+        : [];
+
+    if (!empty($submittedHoraires)) {
+        $pdo = Database::connect();
+
+        $horaireController = new HoraireController(
+            new HoraireRepository($pdo)
+        );
+
+        $horaireController->updateAll($submittedHoraires);
+    }
+
+    header('Location: /employe?tab=horaires');
     exit;
 });
 

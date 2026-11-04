@@ -1038,7 +1038,83 @@
                         <p class="employe-card-subtitle">Mettez à jour les horaires d'ouverture affichés dans le pied de page du site.</p>
                     </div>
                     <div class="employe-card-body">
-                        <p class="employe-placeholder">Module de gestion des horaires prêt à être connecté (Étape 12.2.6).</p>
+                        <?php if (empty($horaires)): ?>
+                            <p class="employe-placeholder">Aucun horaire configuré.</p>
+                        <?php else: ?>
+                            <form method="post" action="/employe/horaires/update" class="employe-crud-form">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+
+                                <div class="employe-horaires-list">
+                                    <?php foreach ($horaires as $horaire): ?>
+                                        <?php
+                                            $horaireId = $horaire->getId();
+                                            $isClosed = $horaire->isClosed();
+                                        ?>
+                                        <div class="employe-horaire-row js-horaire-row">
+                                            <div class="employe-horaire-day">
+                                                <strong><?= htmlspecialchars($horaire->getDay(), ENT_QUOTES, 'UTF-8') ?></strong>
+                                                <span class="employe-status-badge <?= $isClosed ? 'badge-refuse' : 'badge-valide' ?>">
+                                                    <?= htmlspecialchars($horaire->getFormattedSlot(), ENT_QUOTES, 'UTF-8') ?>
+                                                </span>
+                                            </div>
+
+                                            <div class="employe-horaire-inputs">
+                                                <div class="employe-filter-group">
+                                                    <label
+                                                        for="horaire-open-<?= (int) $horaireId ?>"
+                                                        class="employe-filter-label"
+                                                    >
+                                                        Ouverture
+                                                    </label>
+                                                    <input
+                                                        type="time"
+                                                        id="horaire-open-<?= (int) $horaireId ?>"
+                                                        name="horaires[<?= (int) $horaireId ?>][heure_ouverture]"
+                                                        class="employe-input js-horaire-time"
+                                                        value="<?= htmlspecialchars($horaire->getOpeningTimeForInput(), ENT_QUOTES, 'UTF-8') ?>"
+                                                        <?= $isClosed ? 'disabled' : 'required' ?>
+                                                    >
+                                                </div>
+
+                                                <div class="employe-filter-group">
+                                                    <label
+                                                        for="horaire-close-<?= (int) $horaireId ?>"
+                                                        class="employe-filter-label"
+                                                    >
+                                                        Fermeture
+                                                    </label>
+                                                    <input
+                                                        type="time"
+                                                        id="horaire-close-<?= (int) $horaireId ?>"
+                                                        name="horaires[<?= (int) $horaireId ?>][heure_fermeture]"
+                                                        class="employe-input js-horaire-time"
+                                                        value="<?= htmlspecialchars($horaire->getClosingTimeForInput(), ENT_QUOTES, 'UTF-8') ?>"
+                                                        <?= $isClosed ? 'disabled' : 'required' ?>
+                                                    >
+                                                </div>
+
+                                                <label class="employe-checkbox-chip employe-horaire-closed-chip">
+                                                    <input
+                                                        type="checkbox"
+                                                        name="horaires[<?= (int) $horaireId ?>][ferme]"
+                                                        value="1"
+                                                        class="js-horaire-closed"
+                                                        <?= $isClosed ? 'checked' : '' ?>
+                                                    >
+                                                    <span>Fermé toute la journée</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <div class="employe-form-submit-row">
+                                    <button type="submit" class="employe-action-btn btn-approve">
+                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer les horaires
+                                    </button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

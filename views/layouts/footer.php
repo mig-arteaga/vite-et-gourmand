@@ -7,11 +7,21 @@
                     <img src="images/vg-logo-2.svg" alt="">
                 </a>
                 <div class="asterisk"><i class="fas fa-asterisk"></i></div>
-                <p>Nous vous accueillons au cœur de Grenoble dans un cadre chaleureux, avec une cuisine préparée à partir de produits de qualité.</p>
                 <p>
-                    3 Place Notre Dame, 38000 Grenoble<br>
-                    Ouvert du lundi au dimanche de 11h30 à 22h30<br>
+                    3 Place Notre Dame, 38000 Grenoble
                 </p>
+                <?php if (!empty($horaires)): ?>
+                    <ul class="footer-horaires" aria-label="Horaires d'ouverture">
+                        <?php foreach ($horaires as $horaire): ?>
+                            <li class="footer-horaire-item">
+                                <span class="footer-horaire-day"><?= htmlspecialchars($horaire->getDay(), ENT_QUOTES, 'UTF-8') ?></span>
+                                <span class="footer-horaire-slot"><?= htmlspecialchars($horaire->getFormattedSlot(), ENT_QUOTES, 'UTF-8') ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>Ouvert du lundi au dimanche de 11h30 à 22h30</p>
+                <?php endif; ?>
                 <p class="p-legal">
                     <a href="/legal" class="btn footer-btn">Mentions légales</a>
                     <a href="/cgv" class="btn footer-btn">CGV</a>

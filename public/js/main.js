@@ -24,7 +24,8 @@ import {
     initEmployeAvisFilter,
     initEmployeOrdersFilter,
     initEmployeOrderCancelToggle,
-    initEmployeDeleteModal
+    initEmployeDeleteModal,
+    initEmployeHorairesToggle
 } from "./employe.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -50,4 +51,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initEmployeOrdersFilter();
     initEmployeOrderCancelToggle();
     initEmployeDeleteModal();
+    initEmployeHorairesToggle();
 });

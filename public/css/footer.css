@@ -109,3 +109,34 @@ footer {
     justify-content: center;
     gap: 4rem;
 }
+
+/* Horaires d'ouverture */
+.footer-horaires {
+    list-style: none;
+    max-width: 32rem;
+    margin: 2rem auto 0;
+    padding: 1.4rem 1.8rem;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 1.4rem 0 0 0;
+    border-left: 3px solid var(--secondary-font-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.footer-horaire-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.35rem;
+    line-height: 1.5;
+}
+
+.footer-horaire-day {
+    font-weight: 700;
+    color: var(--secondary-font-color);
+}
+
+.footer-horaire-slot {
+    color: #FFF;
+}

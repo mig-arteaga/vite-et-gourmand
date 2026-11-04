@@ -177,3 +177,28 @@ export function initEmployeDeleteModal() {
         }
     });
 }
+
+export function initEmployeHorairesToggle() {
+    const rows = document.querySelectorAll(".js-horaire-row");
+
+    if (rows.length === 0) {
+        return;
+    }
+
+    rows.forEach((row) => {
+        const closedCheckbox = row.querySelector(".js-horaire-closed");
+        const timeInputs = row.querySelectorAll(".js-horaire-time");
+
+        if (!closedCheckbox || timeInputs.length === 0) {
+            return;
+        }
+
+        closedCheckbox.addEventListener("change", () => {
+            const isClosed = closedCheckbox.checked;
+            timeInputs.forEach((input) => {
+                input.disabled = isClosed;
+                input.required = !isClosed;
+            });
+        });
+    });
+}
