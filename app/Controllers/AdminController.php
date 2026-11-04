@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Repositories\CommandeRepository;
 use App\Repositories\UtilisateurRepository;
 use App\Services\MailService;
 
 class AdminController {
     private UtilisateurRepository $utilisateurRepository;
+    private ?CommandeRepository $commandeRepository;
     private MailService $mailService;
 
     public function __construct(
         UtilisateurRepository $utilisateurRepository,
+        ?CommandeRepository $commandeRepository = null,
         ?MailService $mailService = null
     ) {
         $this->utilisateurRepository = $utilisateurRepository;
+        $this->commandeRepository = $commandeRepository;
         $this->mailService = $mailService ?? new MailService();
     }
 
@@ -121,6 +125,113 @@ class AdminController {
         return [
             'success' => true,
             'message' => "Le compte employé de {$user->getFirstName()} {$user->getLastName()} a été {$statusLabel}."
+        ];
+    }
+
+    /**
+     * Retourne les statistiques globales et filtrées (commandes par menu et chiffre d'affaires).
+     *
+     * @return array{
+     *     filters: array{menuId: ?int, startDate: string, endDate: string},
+     *     chartStats: array<int, array<string, mixed>>,
+     *     filteredStats: array<int, array<string, mixed>>,
+     *     summary: array{totalRevenue: float, totalOrders: int, totalPeople: int, averageBasket: float, maxOrders: int, maxRevenue: float}
+     * }
+     */
+    public function getAnalyticsData(
+        ?int $menuId = null,
+        ?string $startDate = null,
+        ?string $endDate = null
+    ): array {
+        $validMenuId = ($menuId !== null && $menuId > 0) ? $menuId : null;
+        $validStartDate = ($startDate !== null && preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate))
+            ? $startDate
+            : '';
+        $validEndDate = ($endDate !== null && preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate))
+            ? $endDate
+            : '';
+
+        if (
+            $validStartDate !== '' &&
+            $validEndDate !== '' &&
+            $validStartDate > $validEndDate
+        ) {
+            [$validStartDate, $validEndDate] = [$validEndDate, $validStartDate];
+        }
+
+        if ($this->commandeRepository === null) {
+            return [
+                'filters' => [
+                    'menuId' => $validMenuId,
+                    'startDate' => $validStartDate,
+                    'endDate' => $validEndDate
+                ],
+                'chartStats' => [],
+                'filteredStats' => [],
+                'summary' => [
+                    'totalRevenue' => 0.0,
+                    'totalOrders' => 0,
+                    'totalPeople' => 0,
+                    'averageBasket' => 0.0,
+                    'maxOrders' => 1,
+                    'maxRevenue' => 1.0
+                ]
+            ];
+        }
+
+        $chartStats = $this->commandeRepository->getRevenueStats(
+            null,
+            $validStartDate !== '' ? $validStartDate : null,
+            $validEndDate !== '' ? $validEndDate : null
+        );
+
+        $filteredStats = $validMenuId !== null
+            ? $this->commandeRepository->getRevenueStats(
+                $validMenuId,
+                $validStartDate !== '' ? $validStartDate : null,
+                $validEndDate !== '' ? $validEndDate : null
+            )
+            : $chartStats;
+
+        $totalRevenue = 0.0;
+        $totalOrders = 0;
+        $totalPeople = 0;
+        $maxOrders = 0;
+        $maxRevenue = 0.0;
+
+        foreach ($filteredStats as $row) {
+            $totalRevenue += (float) $row['chiffre_affaires'];
+            $totalOrders += (int) $row['nb_commandes'];
+            $totalPeople += (int) $row['total_personnes'];
+        }
+
+        foreach ($chartStats as $row) {
+            if ((int) $row['nb_commandes'] > $maxOrders) {
+                $maxOrders = (int) $row['nb_commandes'];
+            }
+            if ((float) $row['chiffre_affaires'] > $maxRevenue) {
+                $maxRevenue = (float) $row['chiffre_affaires'];
+            }
+        }
+
+        $averageBasket = $totalOrders > 0 ? ($totalRevenue / $totalOrders) : 0.0;
+
+        return [
+            'filters' => [
+                'menuId' => $validMenuId,
+                'startDate' => $validStartDate,
+                'endDate' => $validEndDate
+            ],
+            'chartStats' => $chartStats,
+            'filteredStats' => $filteredStats,
+            'summary' => [
+                'totalRevenue' => $totalRevenue,
+                'totalOrders' => $totalOrders,
+                'totalPeople' => $totalPeople,
+                'averageBasket' => $averageBasket,
+                'maxOrders' => max(1, $maxOrders),
+                'maxRevenue' => max(1.0, $maxRevenue)
+            ]
         ];
     }
 

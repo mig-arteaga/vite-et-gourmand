@@ -253,13 +253,180 @@
                 aria-labelledby="admin-tab-btn-statistiques"
                 class="admin-panel <?= $activeTab === 'statistiques' ? 'active' : '' ?>"
             >
+                <?php
+                    $filters = $analytics['filters'] ?? ['menuId' => null, 'startDate' => '', 'endDate' => ''];
+                    $chartStats = $analytics['chartStats'] ?? [];
+                    $filteredStats = $analytics['filteredStats'] ?? [];
+                    $summary = $analytics['summary'] ?? [
+                        'totalRevenue' => 0.0,
+                        'totalOrders' => 0,
+                        'totalPeople' => 0,
+                        'averageBasket' => 0.0,
+                        'maxOrders' => 1,
+                        'maxRevenue' => 1.0
+                    ];
+                ?>
+
+                <!-- Filtres de calcul du chiffre d'affaires -->
                 <div class="employe-card">
                     <div class="employe-card-header">
-                        <h3 class="employe-card-title">Statistiques des commandes et chiffre d'affaires</h3>
-                        <p class="employe-card-subtitle">Visualisez les ventes par menu sous forme de graphique et calculez le chiffre d'affaires sur la période de votre choix.</p>
+                        <h3 class="employe-card-title">Calcul du chiffre d'affaires et filtres</h3>
+                        <p class="employe-card-subtitle">
+                            Filtrez les commandes par menu et/ou par période de livraison pour calculer le chiffre d'affaires correspondant.
+                        </p>
                     </div>
                     <div class="employe-card-body">
-                        <p class="employe-placeholder">Module de statistiques et de calcul du chiffre d'affaires prêt à être connecté (Étape 12.3.4).</p>
+                        <form method="get" action="/admin" class="admin-stats-filter-form">
+                            <input type="hidden" name="tab" value="statistiques">
+
+                            <div class="employe-filter-group">
+                                <label for="stats-menu-id" class="employe-filter-label">Menu</label>
+                                <select id="stats-menu-id" name="menu_id" class="employe-select">
+                                    <option value="">Tous les menus</option>
+                                    <?php foreach (($menus ?? []) as $menuOption): ?>
+                                        <option
+                                            value="<?= (int) $menuOption->getId() ?>"
+                                            <?= $filters['menuId'] === $menuOption->getId() ? 'selected' : '' ?>
+                                        >
+                                            <?= htmlspecialchars($menuOption->getTitle(), ENT_QUOTES, 'UTF-8') ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="employe-filter-group">
+                                <label for="stats-date-debut" class="employe-filter-label">Date de début</label>
+                                <input
+                                    type="date"
+                                    id="stats-date-debut"
+                                    name="date_debut"
+                                    class="employe-input"
+                                    value="<?= htmlspecialchars((string) $filters['startDate'], ENT_QUOTES, 'UTF-8') ?>"
+                                >
+                            </div>
+
+                            <div class="employe-filter-group">
+                                <label for="stats-date-fin" class="employe-filter-label">Date de fin</label>
+                                <input
+                                    type="date"
+                                    id="stats-date-fin"
+                                    name="date_fin"
+                                    class="employe-input"
+                                    value="<?= htmlspecialchars((string) $filters['endDate'], ENT_QUOTES, 'UTF-8') ?>"
+                                >
+                            </div>
+
+                            <div class="admin-stats-filter-actions">
+                                <button type="submit" class="employe-action-btn btn-approve">
+                                    <i class="fa-solid fa-calculator"></i> Calculer
+                                </button>
+                                <a href="/admin?tab=statistiques" class="employe-action-btn btn-cancel-modal admin-reset-link">
+                                    <i class="fa-solid fa-rotate-left"></i> Réinitialiser
+                                </a>
+                            </div>
+                        </form>
+
+                        <!-- Indicateurs clés (KPI) -->
+                        <div class="admin-kpi-grid">
+                            <div class="admin-kpi-card">
+                                <span class="admin-kpi-label">Chiffre d'affaires (sélection)</span>
+                                <strong class="admin-kpi-value">
+                                    <?= number_format((float) $summary['totalRevenue'], 2, ',', ' ') ?> €
+                                </strong>
+                            </div>
+
+                            <div class="admin-kpi-card">
+                                <span class="admin-kpi-label">Commandes validées</span>
+                                <strong class="admin-kpi-value">
+                                    <?= (int) $summary['totalOrders'] ?>
+                                </strong>
+                            </div>
+
+                            <div class="admin-kpi-card">
+                                <span class="admin-kpi-label">Convives servis</span>
+                                <strong class="admin-kpi-value">
+                                    <?= (int) $summary['totalPeople'] ?> pers.
+                                </strong>
+                            </div>
+
+                            <div class="admin-kpi-card">
+                                <span class="admin-kpi-label">Panier moyen</span>
+                                <strong class="admin-kpi-value">
+                                    <?= number_format((float) $summary['averageBasket'], 2, ',', ' ') ?> €
+                                </strong>
+                            </div>
+                        </div>
+
+                        <!-- Tableau détaillé du chiffre d'affaires par menu -->
+                        <div class="admin-table-wrapper">
+                            <table class="admin-stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Menu</th>
+                                        <th>Prix / pers.</th>
+                                        <th>Commandes</th>
+                                        <th>Total convives</th>
+                                        <th>Chiffre d'affaires</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($filteredStats as $statRow): ?>
+                                        <tr>
+                                            <td>
+                                                <strong><?= htmlspecialchars((string) $statRow['titre'], ENT_QUOTES, 'UTF-8') ?></strong>
+                                            </td>
+                                            <td><?= number_format((float) $statRow['prix_personne'], 2, ',', ' ') ?> €</td>
+                                            <td><?= (int) $statRow['nb_commandes'] ?></td>
+                                            <td><?= (int) $statRow['total_personnes'] ?> pers.</td>
+                                            <td class="admin-td-revenue">
+                                                <?= number_format((float) $statRow['chiffre_affaires'], 2, ',', ' ') ?> €
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphique comparatif du nombre de commandes par menu -->
+                <div class="employe-card">
+                    <div class="employe-card-header">
+                        <h3 class="employe-card-title">Comparatif graphique des commandes par menu</h3>
+                        <p class="employe-card-subtitle">
+                            Visualisation du nombre de commandes et de la répartition des ventes entre vos différents menus.
+                        </p>
+                    </div>
+                    <div class="employe-card-body">
+                        <div class="admin-chart-list" role="img" aria-label="Graphique à barres du nombre de commandes par menu">
+                            <?php foreach ($chartStats as $chartRow): ?>
+                                <?php
+                                    $orderCount = (int) $chartRow['nb_commandes'];
+                                    $revenueAmount = (float) $chartRow['chiffre_affaires'];
+                                    $barPercent = $summary['maxOrders'] > 0
+                                        ? round(($orderCount / $summary['maxOrders']) * 100)
+                                        : 0;
+                                    $isSelectedMenu = $filters['menuId'] === (int) $chartRow['id_menu'];
+                                ?>
+                                <div class="admin-chart-row <?= $isSelectedMenu ? 'admin-chart-row-highlight' : '' ?>">
+                                    <div class="admin-chart-label-row">
+                                        <span class="admin-chart-menu-name">
+                                            <?= htmlspecialchars((string) $chartRow['titre'], ENT_QUOTES, 'UTF-8') ?>
+                                        </span>
+                                        <span class="admin-chart-metrics">
+                                            <strong><?= $orderCount ?> commande<?= $orderCount > 1 ? 's' : '' ?></strong>
+                                            (<?= number_format($revenueAmount, 2, ',', ' ') ?> €)
+                                        </span>
+                                    </div>
+                                    <div class="admin-chart-track">
+                                        <div
+                                            class="admin-chart-bar"
+                                            style="width: <?= max($orderCount > 0 ? 8 : 0, (int) $barPercent) ?>%;"
+                                        ></div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>

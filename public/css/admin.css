@@ -118,7 +118,170 @@
     margin-right: 0.6rem;
 }
 
+/* Statistiques et chiffre d'affaires */
+.admin-stats-filter-form {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+    align-items: end;
+    gap: 1.6rem;
+    background-color: #FFF;
+    padding: 2rem 2.4rem;
+    border-radius: 2rem 0 0 0;
+    margin-bottom: 2.8rem;
+}
+
+.admin-stats-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-reset-link {
+    text-decoration: none;
+}
+
+.admin-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.8rem;
+    margin-bottom: 2.8rem;
+}
+
+.admin-kpi-card {
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    border-left: 4px solid var(--secondary-font-color);
+    padding: 2rem 2.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.admin-kpi-label {
+    font-family: var(--main-font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--body-font-color);
+}
+
+.admin-kpi-value {
+    font-family: var(--main-font);
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--main-font-color-dark);
+}
+
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    padding: 1.6rem 2rem;
+}
+
+.admin-stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.45rem;
+}
+
+.admin-stats-table th,
+.admin-stats-table td {
+    padding: 1.3rem 1.4rem;
+    text-align: left;
+    border-bottom: 1px solid #EDEDED;
+}
+
+.admin-stats-table th {
+    font-family: var(--main-font);
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--main-font-color-dark);
+}
+
+.admin-td-revenue {
+    font-family: var(--main-font);
+    font-weight: 900;
+    color: var(--secondary-font-color);
+}
+
+.admin-chart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    padding: 2.4rem 2.8rem;
+}
+
+.admin-chart-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0.8rem;
+}
+
+.admin-chart-row-highlight {
+    background-color: #FDF9F0;
+    border-left: 3px solid var(--secondary-font-color);
+}
+
+.admin-chart-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 1.45rem;
+}
+
+.admin-chart-menu-name {
+    font-family: var(--main-font);
+    font-weight: 900;
+    color: var(--main-font-color-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+}
+
+.admin-chart-metrics {
+    color: var(--body-font-color);
+}
+
+.admin-chart-track {
+    width: 100%;
+    height: 1.6rem;
+    background-color: #EDEDED;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.admin-chart-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-font-color), #b68440);
+    border-radius: 1rem;
+    transition: width 400ms ease;
+}
+
+@media screen and (max-width: 960px) {
+    .admin-stats-filter-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .admin-stats-filter-form,
+    .admin-kpi-grid {
+        grid-template-columns: 1fr;
+    }
     .admin-tabs {
         flex-direction: column;
         align-items: stretch;

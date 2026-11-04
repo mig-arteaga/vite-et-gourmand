@@ -230,10 +230,38 @@ $router->get('/admin', function () {
     $pdo = Database::connect();
 
     $adminController = new AdminController(
-        new UtilisateurRepository($pdo)
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo)
     );
 
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo)
+    );
+
+    $filterMenuId = filter_var(
+        $_GET['menu_id'] ?? null,
+        FILTER_VALIDATE_INT,
+        ['options' => ['min_range' => 1]]
+    );
+
+    $filterStartDate = is_string($_GET['date_debut'] ?? null)
+        ? trim($_GET['date_debut'])
+        : null;
+
+    $filterEndDate = is_string($_GET['date_fin'] ?? null)
+        ? trim($_GET['date_fin'])
+        : null;
+
     $employees = $adminController->getEmployees();
+    $menus = $menuController->getAll();
+    $analytics = $adminController->getAnalyticsData(
+        $filterMenuId !== false ? (int) $filterMenuId : null,
+        $filterStartDate,
+        $filterEndDate
+    );
+
     $adminFlash = $_SESSION['admin_flash'] ?? null;
     unset($_SESSION['admin_flash']);
 

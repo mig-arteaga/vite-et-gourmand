@@ -284,6 +284,83 @@ class CommandeRepository {
         ]);
     }
 
+    /**
+     * Calcule le nombre de commandes et le chiffre d'affaires par menu (hors commandes annulées),
+     * avec filtres optionnels par menu et par plage de dates de livraison.
+     *
+     * @return array<int, array{
+     *     id_menu: int,
+     *     titre: string,
+     *     prix_personne: float,
+     *     nb_commandes: int,
+     *     total_personnes: int,
+     *     chiffre_affaires: float
+     * }>
+     */
+    public function getRevenueStats(
+        ?int $menuId = null,
+        ?string $startDate = null,
+        ?string $endDate = null
+    ): array {
+        $joinConditions = ["c.menu = m.id_menu", "c.statut <> 'Annulée'"];
+        $whereConditions = [];
+        $params = [];
+
+        if ($startDate !== null && $startDate !== '') {
+            $joinConditions[] = 'c.date_livraison >= :start_date';
+            $params['start_date'] = $startDate;
+        }
+
+        if ($endDate !== null && $endDate !== '') {
+            $joinConditions[] = 'c.date_livraison <= :end_date';
+            $params['end_date'] = $endDate;
+        }
+
+        if ($menuId !== null && $menuId > 0) {
+            $whereConditions[] = 'm.id_menu = :menu_id';
+            $params['menu_id'] = $menuId;
+        }
+
+        $joinClause = implode(' AND ', $joinConditions);
+        $whereClause = !empty($whereConditions)
+            ? 'WHERE ' . implode(' AND ', $whereConditions)
+            : '';
+
+        $sql = "
+            SELECT
+                m.id_menu,
+                m.titre,
+                m.prix_personne,
+                COUNT(c.id_commande) AS nb_commandes,
+                COALESCE(SUM(c.qte_personnes), 0) AS total_personnes,
+                COALESCE(SUM(c.prix_total), 0) AS chiffre_affaires
+            FROM menus m
+            LEFT JOIN commandes c
+                ON {$joinClause}
+            {$whereClause}
+            GROUP BY m.id_menu, m.titre, m.prix_personne
+            ORDER BY chiffre_affaires DESC, nb_commandes DESC, m.id_menu ASC
+        ";
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute($params);
+
+        $stats = [];
+
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $stats[] = [
+                'id_menu' => (int) $row['id_menu'],
+                'titre' => (string) $row['titre'],
+                'prix_personne' => (float) $row['prix_personne'],
+                'nb_commandes' => (int) $row['nb_commandes'],
+                'total_personnes' => (int) $row['total_personnes'],
+                'chiffre_affaires' => (float) $row['chiffre_affaires']
+            ];
+        }
+
+        return $stats;
+    }
+
     private function hydrate(array $data): ?Commande {
         $user = $this->utilisateurRepository->findById(
             (int) $data['utilisateur']
