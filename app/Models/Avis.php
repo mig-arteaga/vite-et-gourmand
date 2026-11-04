@@ -13,6 +13,7 @@ class Avis {
     private int $rating;
     private string $message;
     private string $status;
+    private ?int $orderId;
 
     public function __construct(
         int $id,
@@ -20,7 +21,8 @@ class Avis {
         DateTimeImmutable $date,
         int $rating,
         string $message,
-        string $status
+        string $status,
+        ?int $orderId = null
     ) {
         $this->id = $id;
         $this->user = $user;
@@ -28,6 +30,7 @@ class Avis {
         $this->rating = $rating;
         $this->message = $message;
         $this->status = $status;
+        $this->orderId = $orderId;
     }
 
     public function getId(): int {
@@ -52,5 +55,9 @@ class Avis {
 
     public function getStatus(): string {
         return $this->status;
+    }
+
+    public function getOrderId(): ?int {
+        return $this->orderId;
     }
 }

@@ -343,6 +343,82 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                        <?php elseif ($status === 'Terminée'): ?>
+                                            <?php $alreadyReviewed = !empty($reviewedOrderIds[$orderId]); ?>
+                                            <?php if ($alreadyReviewed): ?>
+                                                <div class="employe-order-actions">
+                                                    <span class="compte-order-hint">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                        Vous avez déjà déposé un avis pour cette commande. Merci pour votre retour !
+                                                    </span>
+                                                </div>
+                                            <?php else: ?>
+                                                <!-- Action disponible si la commande est 'Terminée' et non encore évaluée : donner un avis -->
+                                                <div class="employe-order-actions">
+                                                    <span class="compte-order-hint">
+                                                        <i class="fa-solid fa-star"></i>
+                                                        Cette prestation est terminée : partagez votre expérience avec notre équipe !
+                                                    </span>
+
+                                                    <button
+                                                        type="button"
+                                                        class="employe-action-btn btn-approve js-toggle-box"
+                                                        data-target="review-client-order-<?= (int) $orderId ?>"
+                                                    >
+                                                        <i class="fa-solid fa-comment-dots"></i> Donner mon avis
+                                                    </button>
+                                                </div>
+
+                                                <!-- Formulaire dépliable de dépôt d'avis (note de 1 à 5 + commentaire) -->
+                                                <div id="review-client-order-<?= (int) $orderId ?>" class="employe-form-panel" hidden>
+                                                    <h4 class="employe-form-title">
+                                                        Laisser un avis sur la commande #<?= (int) $orderId ?> (« <?= htmlspecialchars($menuObj->getTitle(), ENT_QUOTES, 'UTF-8') ?> »)
+                                                    </h4>
+                                                    <form method="post" action="/compte/avis/create" class="employe-crud-form">
+                                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') ?>">
+                                                        <input type="hidden" name="id_commande" value="<?= (int) $orderId ?>">
+
+                                                        <div class="employe-filter-group">
+                                                            <label for="review-note-<?= (int) $orderId ?>" class="employe-filter-label">
+                                                                Votre note (de 1 à 5) *
+                                                            </label>
+                                                            <select
+                                                                id="review-note-<?= (int) $orderId ?>"
+                                                                name="note"
+                                                                class="employe-select employe-select-inline"
+                                                                required
+                                                            >
+                                                                <option value="5">★★★★★ — 5 / 5 (Excellent)</option>
+                                                                <option value="4">★★★★☆ — 4 / 5 (Très bien)</option>
+                                                                <option value="3">★★★☆☆ — 3 / 5 (Satisfaisant)</option>
+                                                                <option value="2">★★☆☆☆ — 2 / 5 (Moyen)</option>
+                                                                <option value="1">★☆☆☆☆ — 1 / 5 (Insatisfaisant)</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="employe-filter-group employe-full-width">
+                                                            <label for="review-message-<?= (int) $orderId ?>" class="employe-filter-label">
+                                                                Votre commentaire *
+                                                            </label>
+                                                            <textarea
+                                                                id="review-message-<?= (int) $orderId ?>"
+                                                                name="message"
+                                                                class="employe-textarea"
+                                                                rows="3"
+                                                                maxlength="1000"
+                                                                placeholder="Décrivez votre expérience (qualité des plats, ponctualité, service...)"
+                                                                required
+                                                            ></textarea>
+                                                        </div>
+
+                                                        <div class="employe-form-submit-row">
+                                                            <button type="submit" class="employe-action-btn btn-approve">
+                                                                <i class="fa-solid fa-paper-plane"></i> Envoyer mon avis
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </article>
                                 <?php endforeach; ?>
@@ -350,6 +426,46 @@
                         <?php endif; ?>
                     </div>
                 </div>
+
+                <!-- Historique des avis déposés par le client -->
+                <?php if (!empty($clientReviews)): ?>
+                    <div class="employe-card">
+                        <div class="employe-card-header">
+                            <h3 class="employe-card-title">Mes avis déposés (<?= count($clientReviews) ?>)</h3>
+                            <p class="employe-card-subtitle">
+                                Retrouvez ici les avis que vous avez partagés suite à vos prestations.
+                            </p>
+                        </div>
+                        <div class="employe-card-body">
+                            <div class="employe-avis-list">
+                                <?php foreach ($clientReviews as $review): ?>
+                                    <article class="employe-avis-item">
+                                        <div class="employe-avis-top">
+                                            <div>
+                                                <span class="employe-avis-meta">
+                                                    <?php if ($review->getOrderId() !== null): ?>
+                                                        Commande #<?= (int) $review->getOrderId() ?> •
+                                                    <?php endif; ?>
+                                                    Déposé le <?= htmlspecialchars($review->getDate()->format('d/m/Y'), ENT_QUOTES, 'UTF-8') ?>
+                                                </span>
+                                            </div>
+                                            <div class="employe-avis-badges">
+                                                <div class="employe-avis-stars" aria-label="Note de <?= (int) $review->getRating() ?> sur 5">
+                                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                        <i class="fa-solid fa-star <?= $i <= $review->getRating() ? 'star-filled' : 'star-empty' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="employe-avis-message">
+                                            « <?= htmlspecialchars($review->getMessage(), ENT_QUOTES, 'UTF-8') ?> »
+                                        </p>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <!-- Panneau 2 : Mes informations personnelles -->

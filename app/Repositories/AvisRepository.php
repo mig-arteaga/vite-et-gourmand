@@ -22,6 +22,7 @@ class AvisRepository {
             SELECT
                 id_avis,
                 utilisateur,
+                commande,
                 date_avis,
                 note,
                 message,
@@ -45,6 +46,7 @@ class AvisRepository {
             SELECT
                 id_avis,
                 utilisateur,
+                commande,
                 date_avis,
                 note,
                 message,
@@ -80,6 +82,70 @@ class AvisRepository {
         ]);
     }
 
+    public function findByUserId(int $userId): array {
+        $sql = '
+            SELECT
+                id_avis,
+                utilisateur,
+                commande,
+                date_avis,
+                note,
+                message,
+                statut
+            FROM avis
+            WHERE utilisateur = :user_id
+            ORDER BY date_avis DESC, id_avis DESC
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['user_id' => $userId]);
+
+        return $this->hydrateAll($statement);
+    }
+
+    public function existsForOrder(int $orderId): bool {
+        $sql = '
+            SELECT COUNT(*)
+            FROM avis
+            WHERE commande = :order_id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['order_id' => $orderId]);
+
+        return ((int) $statement->fetchColumn()) > 0;
+    }
+
+    public function create(int $userId, int $orderId, int $rating, string $message): int {
+        $sql = '
+            INSERT INTO avis (
+                utilisateur,
+                commande,
+                date_avis,
+                note,
+                message,
+                statut
+            ) VALUES (
+                :user_id,
+                :order_id,
+                CURRENT_DATE,
+                :rating,
+                :message,
+                \'En attente\'
+            )
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([
+            'user_id' => $userId,
+            'order_id' => $orderId,
+            'rating' => $rating,
+            'message' => $message
+        ]);
+
+        return (int) $this->pdo->lastInsertId();
+    }
+
     private function hydrateAll(\PDOStatement $statement): array {
         $reviews = [];
 
@@ -98,7 +164,8 @@ class AvisRepository {
                 new DateTimeImmutable($data['date_avis']),
                 (int) $data['note'],
                 $data['message'],
-                $data['statut']
+                $data['statut'],
+                isset($data['commande']) && $data['commande'] !== null ? (int) $data['commande'] : null
             );
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Utilisateur;
+use App\Repositories\AvisRepository;
 use App\Repositories\CommandeRepository;
 use App\Repositories\MenuRepository;
 use App\Repositories\UtilisateurRepository;
@@ -15,18 +16,21 @@ class CompteController {
     private UtilisateurRepository $utilisateurRepository;
     private ?CommandeRepository $commandeRepository;
     private ?MenuRepository $menuRepository;
+    private ?AvisRepository $avisRepository;
     private CommandeService $commandeService;
 
     public function __construct(
         UtilisateurRepository $utilisateurRepository,
         ?CommandeRepository $commandeRepository = null,
         ?MenuRepository $menuRepository = null,
-        ?CommandeService $commandeService = null
+        ?CommandeService $commandeService = null,
+        ?AvisRepository $avisRepository = null
     ) {
         $this->utilisateurRepository = $utilisateurRepository;
         $this->commandeRepository = $commandeRepository;
         $this->menuRepository = $menuRepository;
         $this->commandeService = $commandeService ?? new CommandeService();
+        $this->avisRepository = $avisRepository;
     }
 
     public function getUser(int $userId): ?Utilisateur {
@@ -39,6 +43,33 @@ class CompteController {
         }
 
         return $this->commandeRepository->findByUserId($userId);
+    }
+
+    public function getUserReviews(int $userId): array {
+        if ($this->avisRepository === null || $userId <= 0) {
+            return [];
+        }
+
+        return $this->avisRepository->findByUserId($userId);
+    }
+
+    /**
+     * Retourne la liste des identifiants de commandes déjà évaluées par le client (indexée par ID).
+     *
+     * @return array<int, bool>
+     */
+    public function getReviewedOrderIds(int $userId): array {
+        $reviews = $this->getUserReviews($userId);
+        $reviewedOrderIds = [];
+
+        foreach ($reviews as $review) {
+            $orderId = $review->getOrderId();
+            if ($orderId !== null) {
+                $reviewedOrderIds[$orderId] = true;
+            }
+        }
+
+        return $reviewedOrderIds;
     }
 
     /**
@@ -289,6 +320,64 @@ class CompteController {
         return [
             'success' => false,
             'message' => 'Impossible d\'annuler cette commande.'
+        ];
+    }
+
+    /**
+     * Permet au client de déposer un avis (note de 1 à 5 + commentaire) sur une commande au statut 'Terminée'.
+     *
+     * @return array{success: bool, message: string}
+     */
+    public function submitReview(
+        int $userId,
+        int $orderId,
+        int $rating,
+        string $message
+    ): array {
+        if ($this->commandeRepository === null || $this->avisRepository === null) {
+            return [
+                'success' => false,
+                'message' => 'Service d\'avis indisponible.'
+            ];
+        }
+
+        $order = $this->commandeRepository->findById($orderId);
+
+        if ($order === null || $order->getUser()->getId() !== $userId) {
+            return [
+                'success' => false,
+                'message' => 'Commande introuvable.'
+            ];
+        }
+
+        if ($order->getStatus() !== 'Terminée') {
+            return [
+                'success' => false,
+                'message' => 'Vous ne pouvez laisser un avis que sur une commande ayant le statut « Terminée ».'
+            ];
+        }
+
+        if ($this->avisRepository->existsForOrder($orderId)) {
+            return [
+                'success' => false,
+                'message' => 'Vous avez déjà déposé un avis pour cette commande.'
+            ];
+        }
+
+        $message = trim($message);
+
+        if ($rating < 1 || $rating > 5 || $message === '' || mb_strlen($message) > 1000) {
+            return [
+                'success' => false,
+                'message' => 'Veuillez attribuer une note entre 1 et 5 étoiles et rédiger un commentaire (1000 caractères max.).'
+            ];
+        }
+
+        $this->avisRepository->create($userId, $orderId, $rating, $message);
+
+        return [
+            'success' => true,
+            'message' => 'Merci pour votre retour ! Votre avis a bien été enregistré.'
         ];
     }
 }

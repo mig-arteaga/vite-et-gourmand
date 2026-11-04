@@ -172,11 +172,15 @@ $router->get('/compte', function () {
     $compteController = new CompteController(
         new UtilisateurRepository($pdo),
         new CommandeRepository($pdo),
-        new MenuRepository($pdo)
+        new MenuRepository($pdo),
+        new CommandeService(),
+        new \App\Repositories\AvisRepository($pdo)
     );
 
     $currentUser = $compteController->getUser($userId);
     $clientOrders = $compteController->getUserOrders($userId);
+    $clientReviews = $compteController->getUserReviews($userId);
+    $reviewedOrderIds = $compteController->getReviewedOrderIds($userId);
     $compteFlash = $_SESSION['compte_flash'] ?? null;
     unset($_SESSION['compte_flash']);
 
@@ -1480,6 +1484,45 @@ $router->post('/compte/commandes/cancel', function () {
     $_SESSION['compte_flash'] = $compteController->cancelOrderByClient(
         $userId,
         $orderId
+    );
+
+    header('Location: /compte?tab=commandes');
+    exit;
+});
+
+$router->post('/compte/avis/create', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé',
+        'Utilisateur'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $userId = (int) ($_SESSION['user_id'] ?? 0);
+    $orderId = (int) ($_POST['id_commande'] ?? 0);
+    $rating = (int) ($_POST['note'] ?? 0);
+    $message = (string) ($_POST['message'] ?? '');
+
+    $pdo = Database::connect();
+
+    $compteController = new CompteController(
+        new UtilisateurRepository($pdo),
+        new CommandeRepository($pdo),
+        new MenuRepository($pdo),
+        new CommandeService(),
+        new \App\Repositories\AvisRepository($pdo)
+    );
+
+    $_SESSION['compte_flash'] = $compteController->submitReview(
+        $userId,
+        $orderId,
+        $rating,
+        $message
     );
 
     header('Location: /compte?tab=commandes');

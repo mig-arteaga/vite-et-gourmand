@@ -43,16 +43,6 @@ CREATE TABLE utilisateurs (
 	FOREIGN KEY (role) REFERENCES roles(id_role)
 );
 
-CREATE TABLE avis (
-	id_avis INT PRIMARY KEY AUTO_INCREMENT,
-	utilisateur INT NOT NULL,
-    date_avis DATE NOT NULL DEFAULT (CURRENT_DATE),
-	note INT NOT NULL,
-	message TEXT NOT NULL,
-    statut VARCHAR(50) NOT NULL DEFAULT "En attente",
-	FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur)
-);
-
 CREATE TABLE plats (
 	id_plat INT PRIMARY KEY AUTO_INCREMENT,
 	titre VARCHAR(50) NOT NULL,
@@ -120,6 +110,18 @@ CREATE TABLE commandes (
         CHECK (restitution = FALSE OR pret_materiel = TRUE),
     FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
     FOREIGN KEY (menu) REFERENCES menus(id_menu)
+);
+
+CREATE TABLE avis (
+	id_avis INT PRIMARY KEY AUTO_INCREMENT,
+	utilisateur INT NOT NULL,
+    commande INT NULL UNIQUE,
+    date_avis DATE NOT NULL DEFAULT (CURRENT_DATE),
+	note INT NOT NULL,
+	message TEXT NOT NULL,
+    statut VARCHAR(50) NOT NULL DEFAULT "En attente",
+	FOREIGN KEY (utilisateur) REFERENCES utilisateurs(id_utilisateur),
+    FOREIGN KEY (commande) REFERENCES commandes(id_commande) ON DELETE SET NULL
 );
 
 CREATE TABLE commande_suivi (
@@ -195,13 +197,6 @@ INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, telephone, adresse, 
 ('Berly', 'Kim', 'k.berly@mail.com', '$2y$10$x4UafOSeJCZQNdsS7m.Bnesaq216GnVuLTJIsIsj9ZKgKRhju46U2', '+33 6 23 45 67 89', 'Adresse 6', 38000, 'Grenoble', 'images/profile-6.jpg', 3),
 ('Urban', 'Karl', 'k.urban@mail.com', '$2y$10$tSoompCjAVD4CMHBiyKokOmcaGzqXD9hnFjQwPiEKZ1zaKrL65.a6', '+33 7 23 45 67 89', 'Adresse 7', 38000, 'Grenoble', 'images/profile-7.jpg', 3),
 ('Zeroual', 'Sif', 's.zeroual@mail.com', '$2y$10$tXAKsjYHGCY8Gthcfd5MwOrAZ2WBTDxI/dkL8d2kyVOIPC4S89T.6', '+33 8 23 45 67 89', 'Adresse 8', 38000, 'Grenoble', 'images/profile-8.jpg', 3);
-
-INSERT INTO avis (utilisateur, date_avis, note, message, statut) VALUES
-(4, '2026-06-15', 5, 'Nous avons fait appel à Vite & Gourmand pour un repas de famille et nous avons été très satisfaits. Les plats étaient savoureux, bien présentés et préparés avec des produits de qualité. Toute l’équipe a été très professionnelle du début à la fin.', 'Validé'),
-(5, '2026-05-28', 4, 'Très bonne expérience avec un service efficace et des menus variés. Les portions étaient généreuses et les invités ont beaucoup apprécié la qualité des plats proposés. Petit bémol sur le délai de livraison légèrement plus long que prévu, mais cela reste une excellente prestation.', 'Validé'),
-(6, '2026-04-10', 5, 'Une prestation parfaite pour notre événement professionnel. La commande était conforme à nos attentes, les produits étaient frais et la présentation soignée. L’accompagnement de l’équipe nous a permis d’organiser notre repas en toute tranquillité.', 'Validé'),
-(7, '2026-03-22', 3, 'Le repas était globalement bon et les produits semblaient de bonne qualité. Cependant, quelques ajustements pourraient être faits concernant l’organisation de la livraison et la communication avant l’événement. Malgré cela, nous avons passé un agréable moment.', 'Validé'),
-(8, '2026-02-14', 4, 'Nous recommandons vivement Vite & Gourmand pour vos événements. Les menus proposés sont équilibrés, gourmands et adaptés à différents besoins. L’équipe est disponible et à l’écoute pour personnaliser la prestation selon les attentes des clients.', 'En attente');
 
 INSERT INTO plats (titre, description, type) VALUES
 -- Entrées
@@ -463,6 +458,13 @@ INSERT INTO commande_suivi (commande, statut, date_modification) VALUES
 (20, 'En cours de livraison', '2026-06-25 11:15:00'),
 (20, 'Livré', '2026-06-25 12:00:00'),
 (20, 'Terminée', '2026-06-25 12:05:00');
+
+INSERT INTO avis (utilisateur, commande, date_avis, note, message, statut) VALUES
+(4, 2, '2026-06-15', 5, 'Nous avons fait appel à Vite & Gourmand pour un repas de famille et nous avons été très satisfaits. Les plats étaient savoureux, bien présentés et préparés avec des produits de qualité. Toute l’équipe a été très professionnelle du début à la fin.', 'Validé'),
+(5, 1, '2026-05-28', 4, 'Très bonne expérience avec un service efficace et des menus variés. Les portions étaient généreuses et les invités ont beaucoup apprécié la qualité des plats proposés. Petit bémol sur le délai de livraison légèrement plus long que prévu, mais cela reste une excellente prestation.', 'Validé'),
+(6, 3, '2026-04-10', 5, 'Une prestation parfaite pour notre événement professionnel. La commande était conforme à nos attentes, les produits étaient frais et la présentation soignée. L’accompagnement de l’équipe nous a permis d’organiser notre repas en toute tranquillité.', 'Validé'),
+(7, 4, '2026-03-22', 3, 'Le repas était globalement bon et les produits semblaient de bonne qualité. Cependant, quelques ajustements pourraient être faits concernant l’organisation de la livraison et la communication avant l’événement. Malgré cela, nous avons passé un agréable moment.', 'Validé'),
+(8, 5, '2026-02-14', 4, 'Nous recommandons vivement Vite & Gourmand pour vos événements. Les menus proposés sont équilibrés, gourmands et adaptés à différents besoins. L’équipe est disponible et à l’écoute pour personnaliser la prestation selon les attentes des clients.', 'En attente');
 
 INSERT INTO horaires (jour, heure_ouverture, heure_fermeture, ferme) VALUES
 ('Lundi', '11:30:00', '22:30:00', FALSE),
