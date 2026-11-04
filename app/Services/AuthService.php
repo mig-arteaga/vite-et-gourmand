@@ -17,7 +17,7 @@ class AuthService {
     public function authenticate(string $email, string $password): ?Utilisateur {
         $user = $this->utilisateurRepository->findByEmail($email);
 
-        if ($user === null) {
+        if ($user === null || !$user->isActive()) {
             return null;
         }
 

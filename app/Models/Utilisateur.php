@@ -16,6 +16,7 @@ class Utilisateur {
     private string $city;
     private ?string $photo;
     private Role $role;
+    private bool $active;
 
     public function __construct(
         int $id,
@@ -28,7 +29,8 @@ class Utilisateur {
         int $postalCode,
         string $city,
         ?string $photo,
-        Role $role
+        Role $role,
+        bool $active = true
     ) {
         $this->id = $id;
         $this->lastName = $lastName;
@@ -41,6 +43,7 @@ class Utilisateur {
         $this->city = $city;
         $this->photo = $photo;
         $this->role = $role;
+        $this->active = $active;
     }
 
     public function getId(): int {
@@ -85,5 +88,9 @@ class Utilisateur {
 
     public function getRole(): Role {
         return $this->role;
+    }
+
+    public function isActive(): bool {
+        return $this->active;
     }
 }

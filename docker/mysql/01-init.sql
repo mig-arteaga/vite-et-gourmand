@@ -37,6 +37,9 @@ CREATE TABLE utilisateurs (
 	ville VARCHAR(50) NOT NULL,
     photo VARCHAR(255),
 	role INT NOT NULL,
+    actif BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT chk_utilisateurs_actif
+        CHECK (actif IN (0, 1)),
 	FOREIGN KEY (role) REFERENCES roles(id_role)
 );
 

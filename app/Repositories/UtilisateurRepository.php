@@ -28,6 +28,7 @@ class UtilisateurRepository {
                 u.code_postal,
                 u.ville,
                 u.photo,
+                u.actif,
                 r.id_role,
                 r.libelle AS role_label
             FROM utilisateurs u
@@ -64,6 +65,7 @@ class UtilisateurRepository {
                 u.code_postal,
                 u.ville,
                 u.photo,
+                u.actif,
                 r.id_role,
                 r.libelle AS role_label
             FROM utilisateurs u
@@ -104,7 +106,8 @@ class UtilisateurRepository {
             (int) $data['code_postal'],
             $data['ville'],
             $data['photo'],
-            $role
+            $role,
+            isset($data['actif']) ? (bool) $data['actif'] : true
         );
     }
 }
