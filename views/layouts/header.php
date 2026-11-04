@@ -7,7 +7,7 @@
     <div class="container">
         <nav class="nav">
             <a href="/" class="logo-link">
-                <img src="images/vg-logo-1.svg" alt="" class="title-img">
+                <img src="images/vg-logo-1.svg" alt="Vite & Gourmand - Accueil" class="title-img">
             </a>
             <ul class="nav-list" id="nav-list">
                 <li class="nav-item">

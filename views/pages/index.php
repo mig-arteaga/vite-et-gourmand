@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Accueil - Vite & Gourmand</title>
@@ -56,7 +56,7 @@
                     <a href="/nous" class="btn body-btn btn-underline">Sur nous</a>
                 </div>
                 <div class="restaurant-info-img animate-left">
-                    <img src="images/team-1.jpg" alt="">
+                    <img src="images/team-1.jpg" alt="L'équipe Vite & Gourmand en cuisine">
                 </div>
             </div>
         </div>

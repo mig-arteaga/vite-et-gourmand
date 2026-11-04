@@ -4,7 +4,7 @@
         <div class="footer-content">
             <div class="footer-content-about">
                 <a href="/">
-                    <img src="images/vg-logo-2.svg" alt="">
+                    <img src="images/vg-logo-2.svg" alt="Vite & Gourmand - Accueil">
                 </a>
                 <div class="asterisk"><i class="fas fa-asterisk"></i></div>
                 <p>
@@ -31,17 +31,17 @@
                 <div class="social-media">
                     <h4>Suivez-nous</h4>
                     <ul class="social-icons">
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-facebook-square"></i></a></li>
-                        <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
-                        <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                        <li><a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#" aria-label="Facebook"><i class="fab fa-facebook-square"></i></a></li>
+                        <li><a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a></li>
+                        <li><a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></li>
                     </ul>
                 </div>
                 <div class="newsletter-container">
                     <h4>Newsletter</h4>
                     <form action="" class="newsletter-form">
-                        <input type="text" class="newsletter-input" placeholder="Your email address...">
-                        <button class="newsletter-btn" type="submit">
+                        <input type="email" class="newsletter-input" aria-label="Votre adresse e-mail pour la newsletter" placeholder="Votre adresse e-mail...">
+                        <button class="newsletter-btn" type="submit" aria-label="S'inscrire à la newsletter">
                             <i class="fa-regular fa-envelope"></i>
                         </button>
                     </form>

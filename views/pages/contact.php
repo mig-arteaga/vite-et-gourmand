@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Contact - Vite & Gourmand</title>
@@ -28,6 +28,7 @@
             <p class="p-margin">Une question, une demande d'information ou une envie de réserver une table ? L'équipe de Vite & Gourmand reste disponible pour répondre à vos demandes. Retrouvez toutes nos informations pratiques ci-dessous et n'hésitez pas à nous contacter pour préparer votre prochaine visite.</p>
             <p class="p-margin"><strong>Téléphone : </strong>+33 1 23 45 67 89</p>
             <iframe 
+                title="Carte de localisation du restaurant Vite & Gourmand à Grenoble"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d844.0219956220348!2d5.731085646359987!3d45.19234292374179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478af48a93b77c33%3A0x93bf5478697b83f5!2s3%20Place%20Notre%20Dame%2C%2038000%20Grenoble!5e0!3m2!1sfr!2sfr!4v1784583131775!5m2!1sfr!2sfr"
                 width="100%"
                 height="400"
@@ -63,14 +64,14 @@
                             value="<?= htmlspecialchars(\App\Core\Csrf::generate(), ENT_QUOTES, 'UTF-8') ?>"
                         >
                         <div class="form-content">
-                            <h5 class="content-sub-title">Nom</h5>
-                                <input type="text" name="name" class="nom" autocomplete="name">
-                            <h5 class="content-sub-title">Adresse mail</h5>
-                                <input type="text" name="mail" class="email" autocomplete="email">
-                            <h5 class="content-sub-title">Sujet</h5>
-                                <input type="text" name="subject" class="sujet" autocomplete="none">
-                            <h5 class="content-sub-title">Message</h5>
-                                <textarea name="message" class="message"></textarea>
+                            <label for="contact-name"><h5 class="content-sub-title">Nom</h5></label>
+                                <input type="text" id="contact-name" name="name" class="nom" autocomplete="name" required>
+                            <label for="contact-mail"><h5 class="content-sub-title">Adresse mail</h5></label>
+                                <input type="email" id="contact-mail" name="mail" class="email" autocomplete="email" required>
+                            <label for="contact-subject"><h5 class="content-sub-title">Sujet</h5></label>
+                                <input type="text" id="contact-subject" name="subject" class="sujet" autocomplete="off" required>
+                            <label for="contact-message"><h5 class="content-sub-title">Message</h5></label>
+                                <textarea id="contact-message" name="message" class="message" required></textarea>
                             <button type="submit" name="submit" class="btn body-btn btn-underline">Envoyer</button>
                         </div>
                     </form>

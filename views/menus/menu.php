@@ -1,6 +1,6 @@
 <!-- Menu -->
 <div class="menu">
-    <img src="<?= htmlspecialchars($menu->getPhotos()[0]?->getPath() ?? 'images/menu-1-1.jpg'); ?>" alt="" class="menu-img">
+    <img src="<?= htmlspecialchars($menu->getPhotos()[0]?->getPath() ?? 'images/menu-1-1.jpg'); ?>" alt="Photo du menu <?= htmlspecialchars($menu->getTitle(), ENT_QUOTES, 'UTF-8'); ?>" class="menu-img">
     <div class="menu-grid">
         <div class="menu-info">
             <h3>

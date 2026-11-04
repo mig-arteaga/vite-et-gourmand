@@ -2,7 +2,7 @@
 <div class="review">
     <div class="review-main">
         <div class="review-header">
-            <img src="<?php echo htmlspecialchars($review->getUser()->getPhoto() ?? ''); ?>" alt="" class="review-img">
+            <img src="<?php echo htmlspecialchars($review->getUser()->getPhoto() ?? ''); ?>" alt="Photo de <?php echo htmlspecialchars($review->getUser()->getFirstName()); ?>" class="review-img">
             <div class="review-name">
                 <h3>
                     <?php

@@ -126,7 +126,7 @@
         <div class="order-dataset">
             <h4>Informations du menu</h4>
             <div class="order-field">
-                <label for="menu" class="form-label">Menu :</label>
+                <label for="menu-list" class="form-label">Menu :</label>
                 <select name="menu" class="input-element" id="menu-list">
                     <?php foreach ($menuList as $menuListItem): ?>
                         <option
@@ -151,7 +151,7 @@
                 ?>
                 <img
                     src="<?= htmlspecialchars($menuPhoto) ?>"
-                    alt=""
+                    alt="Photo du menu <?= htmlspecialchars($menu->getTitle(), ENT_QUOTES, 'UTF-8') ?>"
                     class="order-menu-img"
                     id="order-menu-img"
                 >
