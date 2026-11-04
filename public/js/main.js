@@ -27,6 +27,7 @@ import {
     initEmployeDeleteModal,
     initEmployeHorairesToggle
 } from "./employe.js";
+import { initAdminTabs } from "./admin.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initHeaderBehaviour();
@@ -52,4 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initEmployeOrderCancelToggle();
     initEmployeDeleteModal();
     initEmployeHorairesToggle();
+    // Admin
+    initAdminTabs();
 });

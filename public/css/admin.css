@@ -1,0 +1,97 @@
+/* Espace Administrateur */
+
+.admin-section {
+    min-height: 75vh;
+}
+
+.admin-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.admin-tab-btn,
+.admin-shortcut-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.4rem;
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--body-font-color);
+    background-color: #EDEDED;
+    border: 2px solid transparent;
+    border-radius: 2rem 0 2rem 0;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+        background-color 300ms ease,
+        color 300ms ease,
+        border-color 300ms ease,
+        transform 200ms ease;
+}
+
+.admin-tab-btn i,
+.admin-shortcut-link i {
+    color: var(--secondary-font-color);
+    font-size: 1.6rem;
+    transition: color 300ms ease;
+}
+
+.admin-tab-btn:hover,
+.admin-tab-btn:focus-visible,
+.admin-shortcut-link:hover,
+.admin-shortcut-link:focus-visible {
+    border-color: var(--secondary-font-color);
+    color: var(--main-font-color-dark);
+    outline: none;
+}
+
+.admin-tab-btn.active {
+    background-color: var(--main-font-color-dark);
+    color: #FFF;
+    border-color: var(--secondary-font-color);
+}
+
+.admin-shortcut-link {
+    background-color: #FFF;
+    border-color: var(--secondary-font-color);
+    color: var(--main-font-color-dark);
+}
+
+.admin-shortcut-link:hover {
+    background-color: var(--secondary-font-color);
+    color: #FFF;
+}
+
+.admin-shortcut-link:hover i {
+    color: #FFF;
+}
+
+.admin-panel {
+    display: none;
+    text-align: left;
+}
+
+.admin-panel.active {
+    display: block;
+    animation: fadeUp 0.35s forwards;
+}
+
+@media screen and (max-width: 768px) {
+    .admin-tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-tab-btn,
+    .admin-shortcut-link {
+        justify-content: center;
+        width: 100%;
+    }
+}
+

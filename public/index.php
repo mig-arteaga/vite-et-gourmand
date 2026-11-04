@@ -219,8 +219,16 @@ $router->get('/employe', function () {
 $router->get('/admin', function () {
     \App\Core\Session::requireRoles(['Administrateur']);
 
+    $activeTab = $_GET['tab'] ?? 'employes';
+    $allowedTabs = ['employes', 'statistiques'];
+
+    if (!in_array($activeTab, $allowedTabs, true)) {
+        $activeTab = 'employes';
+    }
+
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+    $csrfToken = \App\Core\Csrf::generate();
 
     require __DIR__ . '/../views/pages/admin.php';
 });
