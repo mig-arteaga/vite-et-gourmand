@@ -462,7 +462,7 @@ $router->post('/commande/distance', function () {
         fn($timestamp) => $timestamp > $now - 60
     );
 
-    if (count($_SESSION['distance_requests']) >= 10) {
+    if (count($_SESSION['distance_requests']) >= 30) {
         http_response_code(429);
         header('Content-Type: application/json; charset=utf-8');
 
