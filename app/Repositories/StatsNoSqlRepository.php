@@ -22,8 +22,13 @@ class StatsNoSqlRepository {
 
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
-        $this->mongoUri = (string) (getenv('MONGODB_URI') ?: 'mongodb://mongo:27017');
-        $this->mongoDatabase = (string) (getenv('MONGODB_DATABASE') ?: 'vite_et_gourmand_stats');
+        $rawUri = trim((string) (getenv('MONGODB_URI') ?: getenv('MONGO_PUBLIC_URL') ?: getenv('MONGO_URL') ?: 'mongodb://mongo:27017'));
+        if (str_contains($rawUri, '@') && !str_contains($rawUri, 'authSource=')) {
+            $separator = str_contains($rawUri, '?') ? '&' : '?';
+            $rawUri .= $separator . 'authSource=admin';
+        }
+        $this->mongoUri = $rawUri;
+        $this->mongoDatabase = trim((string) (getenv('MONGODB_DATABASE') ?: getenv('MONGO_DB') ?: 'vite_et_gourmand_stats'));
         $this->fallbackFile = __DIR__ . '/../../storage/nosql/orders_stats.json';
     }
 
@@ -45,7 +50,7 @@ class StatsNoSqlRepository {
         }
 
         return [
-            'engine' => 'NoSQL Document Store (JSON)',
+            'engine' => 'MongoDB (' . $this->mongoDatabase . '.orders_stats)',
             'syncedCount' => count($documents)
         ];
     }
@@ -243,8 +248,8 @@ class StatsNoSqlRepository {
             $bulkClass = '\MongoDB\Driver\BulkWrite';
 
             $manager = new $managerClass($this->mongoUri, [
-                'connectTimeoutMS' => 1500,
-                'serverSelectionTimeoutMS' => 1500
+                'connectTimeoutMS' => 5000,
+                'serverSelectionTimeoutMS' => 5000
             ]);
 
             $bulk = new $bulkClass();
@@ -276,8 +281,8 @@ class StatsNoSqlRepository {
             $queryClass = '\MongoDB\Driver\Query';
 
             $manager = new $managerClass($this->mongoUri, [
-                'connectTimeoutMS' => 1500,
-                'serverSelectionTimeoutMS' => 1500
+                'connectTimeoutMS' => 5000,
+                'serverSelectionTimeoutMS' => 5000
             ]);
 
             $query = new $queryClass([]);
