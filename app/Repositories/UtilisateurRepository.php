@@ -211,6 +211,43 @@ class UtilisateurRepository {
         ]);
     }
 
+    public function updateProfile(
+        int $userId,
+        string $lastName,
+        string $firstName,
+        string $email,
+        string $phone,
+        string $address,
+        int $postalCode,
+        string $city
+    ): bool {
+        $sql = '
+            UPDATE utilisateurs
+            SET
+                nom = :last_name,
+                prenom = :first_name,
+                email = :email,
+                telephone = :phone,
+                adresse = :address,
+                code_postal = :postal_code,
+                ville = :city
+            WHERE id_utilisateur = :id
+        ';
+
+        $statement = $this->pdo->prepare($sql);
+
+        return $statement->execute([
+            'last_name' => $lastName,
+            'first_name' => $firstName,
+            'email' => $email,
+            'phone' => $phone,
+            'address' => $address,
+            'postal_code' => $postalCode,
+            'city' => $city,
+            'id' => $userId
+        ]);
+    }
+
     private function hydrate(array $data): Utilisateur {
         $role = new Role(
             (int) $data['id_role'],

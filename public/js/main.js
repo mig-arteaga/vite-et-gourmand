@@ -28,6 +28,7 @@ import {
     initEmployeHorairesToggle
 } from "./employe.js";
 import { initAdminTabs } from "./admin.js";
+import { initCompteTabs } from "./compte.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initHeaderBehaviour();
@@ -55,4 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initEmployeHorairesToggle();
     // Admin
     initAdminTabs();
+    // Compte
+    initCompteTabs();
 });

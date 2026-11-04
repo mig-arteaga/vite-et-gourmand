@@ -13,6 +13,7 @@ use App\Controllers\CommandeController;
 use App\Controllers\DistanceController;
 use App\Controllers\HoraireController;
 use App\Controllers\AdminController;
+use App\Controllers\CompteController;
 use App\Repositories\MenuRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\RegimeRepository;
@@ -157,8 +158,27 @@ $router->get('/compte', function () {
         'Utilisateur'
     ]);
 
+    $activeTab = $_GET['tab'] ?? 'commandes';
+    $allowedTabs = ['commandes', 'profil'];
+
+    if (!in_array($activeTab, $allowedTabs, true)) {
+        $activeTab = 'commandes';
+    }
+
+    $userId = (int) ($_SESSION['user_id'] ?? 0);
+
     $pdo = Database::connect();
+
+    $compteController = new CompteController(
+        new UtilisateurRepository($pdo)
+    );
+
+    $currentUser = $compteController->getUser($userId);
+    $compteFlash = $_SESSION['compte_flash'] ?? null;
+    unset($_SESSION['compte_flash']);
+
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
+    $csrfToken = \App\Core\Csrf::generate();
 
     require __DIR__ . '/../views/pages/compte.php';
 });
@@ -1351,6 +1371,42 @@ $router->post('/admin/employes/statut', function () {
     }
 
     header('Location: /admin?tab=employes');
+    exit;
+});
+
+$router->post('/compte/profil/update', function () {
+    \App\Core\Session::requireRoles([
+        'Administrateur',
+        'Employé',
+        'Utilisateur'
+    ]);
+
+    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+        http_response_code(403);
+        echo 'Requête invalide (CSRF)';
+        return;
+    }
+
+    $userId = (int) ($_SESSION['user_id'] ?? 0);
+
+    $pdo = Database::connect();
+
+    $compteController = new CompteController(
+        new UtilisateurRepository($pdo)
+    );
+
+    $_SESSION['compte_flash'] = $compteController->updateProfile(
+        $userId,
+        (string) ($_POST['nom'] ?? ''),
+        (string) ($_POST['prenom'] ?? ''),
+        (string) ($_POST['email'] ?? ''),
+        (string) ($_POST['telephone'] ?? ''),
+        (string) ($_POST['adresse'] ?? ''),
+        (string) ($_POST['code_postal'] ?? ''),
+        (string) ($_POST['ville'] ?? '')
+    );
+
+    header('Location: /compte?tab=profil');
     exit;
 });
 

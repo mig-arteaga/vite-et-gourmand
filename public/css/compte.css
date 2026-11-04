@@ -1,0 +1,83 @@
+/* Espace Client (Mon Compte) */
+
+.compte-section {
+    min-height: 75vh;
+}
+
+.compte-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.compte-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem 2.4rem;
+    font-family: var(--main-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--body-font-color);
+    background-color: #EDEDED;
+    border: 2px solid transparent;
+    border-radius: 2rem 0 2rem 0;
+    cursor: pointer;
+    transition:
+        background-color 300ms ease,
+        color 300ms ease,
+        border-color 300ms ease,
+        transform 200ms ease;
+}
+
+.compte-tab-btn i {
+    color: var(--secondary-font-color);
+    font-size: 1.6rem;
+    transition: color 300ms ease;
+}
+
+.compte-tab-btn:hover,
+.compte-tab-btn:focus-visible {
+    border-color: var(--secondary-font-color);
+    color: var(--main-font-color-dark);
+    outline: none;
+}
+
+.compte-tab-btn.active {
+    background-color: var(--main-font-color-dark);
+    color: #FFF;
+    border-color: var(--secondary-font-color);
+}
+
+.compte-panel {
+    display: none;
+    text-align: left;
+}
+
+.compte-panel.active {
+    display: block;
+    animation: fadeUp 0.35s forwards;
+}
+
+.compte-profile-form {
+    background-color: #FFF;
+    border-radius: 2rem 0 0 0;
+    border-left: 4px solid var(--secondary-font-color);
+    padding: 2.6rem 3rem;
+}
+
+@media screen and (max-width: 768px) {
+    .compte-tabs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .compte-tab-btn {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
