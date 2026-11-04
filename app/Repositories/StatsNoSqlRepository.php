@@ -20,6 +20,9 @@ class StatsNoSqlRepository {
     private string $mongoDatabase;
     private string $fallbackFile;
 
+    /** @var ?array<int, array<string, mixed>> */
+    private ?array $lastSyncedDocuments = null;
+
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
         $rawUri = trim((string) (getenv('MONGODB_URI') ?: getenv('MONGO_PUBLIC_URL') ?: getenv('MONGO_URL') ?: 'mongodb://mongo:27017'));
@@ -39,15 +42,10 @@ class StatsNoSqlRepository {
      */
     public function syncFromRelational(): array {
         $documents = $this->fetchRelationalDocuments();
+        $this->lastSyncedDocuments = $documents;
 
         $this->writeFallbackDocuments($documents);
-
-        if ($this->syncToMongo($documents)) {
-            return [
-                'engine' => 'MongoDB (' . $this->mongoDatabase . '.orders_stats)',
-                'syncedCount' => count($documents)
-            ];
-        }
+        $this->syncToMongo($documents);
 
         return [
             'engine' => 'MongoDB (' . $this->mongoDatabase . '.orders_stats)',
@@ -78,14 +76,8 @@ class StatsNoSqlRepository {
         $syncInfo = $this->syncFromRelational();
         $menus = $this->fetchAllMenusCatalog();
 
-        $mongoDocs = $this->readFromMongo();
-        if ($mongoDocs !== null) {
-            $documents = $mongoDocs;
-            $engine = 'MongoDB (' . $this->mongoDatabase . '.orders_stats)';
-        } else {
-            $documents = $this->readFallbackDocuments();
-            $engine = $syncInfo['engine'];
-        }
+        $documents = $this->lastSyncedDocuments ?? $this->readFromMongo() ?? $this->readFallbackDocuments();
+        $engine = $syncInfo['engine'];
 
         $aggregated = [];
         foreach ($menus as $idMenu => $menuMeta) {
@@ -248,8 +240,8 @@ class StatsNoSqlRepository {
             $bulkClass = '\MongoDB\Driver\BulkWrite';
 
             $manager = new $managerClass($this->mongoUri, [
-                'connectTimeoutMS' => 5000,
-                'serverSelectionTimeoutMS' => 5000
+                'connectTimeoutMS' => 2500,
+                'serverSelectionTimeoutMS' => 2500
             ]);
 
             $bulk = new $bulkClass();
@@ -281,8 +273,8 @@ class StatsNoSqlRepository {
             $queryClass = '\MongoDB\Driver\Query';
 
             $manager = new $managerClass($this->mongoUri, [
-                'connectTimeoutMS' => 5000,
-                'serverSelectionTimeoutMS' => 5000
+                'connectTimeoutMS' => 2500,
+                'serverSelectionTimeoutMS' => 2500
             ]);
 
             $query = new $queryClass([]);
@@ -344,4 +336,3 @@ class StatsNoSqlRepository {
         return $decoded['documents'];
     }
 }
-

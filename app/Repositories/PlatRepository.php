@@ -11,9 +11,17 @@ class PlatRepository {
     private PDO $pdo;
     private AllergeneRepository $allergeneRepository;
 
+    /** @var ?array<int, Plat[]> */
+    private static ?array $byMenuCache = null;
+
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
         $this->allergeneRepository = new AllergeneRepository($pdo);
+    }
+
+    public static function clearCache(): void {
+        self::$byMenuCache = null;
+        AllergeneRepository::clearCache();
     }
 
     public function findAll(): array {
@@ -39,26 +47,40 @@ class PlatRepository {
     }
 
     public function findByMenuId(int $menuId): array {
-        $sql = '
-            SELECT
-                p.id_plat,
-                p.titre,
-                p.description,
-                p.type
-            FROM plats p
-            INNER JOIN menus_plats mp
-                ON p.id_plat = mp.plat
-            WHERE mp.menu = :menuId
-            ORDER BY p.id_plat
-        ';
+        if (self::$byMenuCache === null) {
+            self::$byMenuCache = [];
 
-        $statement = $this->pdo->prepare($sql);
+            $sql = '
+                SELECT
+                    mp.menu,
+                    p.id_plat,
+                    p.titre,
+                    p.description,
+                    p.type
+                FROM plats p
+                INNER JOIN menus_plats mp
+                    ON p.id_plat = mp.plat
+                ORDER BY mp.menu, p.id_plat
+            ';
 
-        $statement->execute([
-            'menuId' => $menuId
-        ]);
+            $statement = $this->pdo->query($sql);
 
-        return $this->hydrateAll($statement);
+            while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $mId = (int) $data['menu'];
+                $dishId = (int) $data['id_plat'];
+                $allergenes = $this->allergeneRepository->findByDishId($dishId);
+
+                self::$byMenuCache[$mId][] = new Plat(
+                    $dishId,
+                    $data['titre'],
+                    $data['description'],
+                    $data['type'],
+                    $allergenes
+                );
+            }
+        }
+
+        return self::$byMenuCache[$menuId] ?? [];
     }
 
     public function create(
@@ -82,6 +104,7 @@ class PlatRepository {
         $dishId = (int) $this->pdo->lastInsertId();
 
         $this->syncAllergens($dishId, $allergenIds);
+        self::clearCache();
 
         return $dishId;
     }
@@ -114,6 +137,7 @@ class PlatRepository {
         }
 
         $this->syncAllergens($id, $allergenIds);
+        self::clearCache();
 
         return true;
     }
@@ -126,8 +150,11 @@ class PlatRepository {
         $delMenus->execute(['id' => $id]);
 
         $delPlat = $this->pdo->prepare('DELETE FROM plats WHERE id_plat = :id');
+        $deleted = $delPlat->execute(['id' => $id]);
 
-        return $delPlat->execute(['id' => $id]);
+        self::clearCache();
+
+        return $deleted;
     }
 
     private function syncAllergens(int $dishId, array $allergenIds): void {

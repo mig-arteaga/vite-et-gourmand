@@ -14,50 +14,34 @@ class MenuRepository {
     private PhotoMenuRepository $photoMenuRepository;
     private PlatRepository $platRepository;
 
+    /** @var ?array<int, Menu> */
+    private static ?array $allMenusCache = null;
+
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
         $this->photoMenuRepository = new PhotoMenuRepository($pdo);
         $this->platRepository = new PlatRepository($pdo);
     }
 
+    public static function clearCache(): void {
+        self::$allMenusCache = null;
+        PlatRepository::clearCache();
+        PhotoMenuRepository::clearCache();
+    }
+
     public function findById(int $id): ?Menu {
-        $sql = '
-            SELECT
-                m.id_menu,
-                m.titre,
-                m.description,
-                m.min_personnes,
-                m.prix_personne,
-                m.jours_avant,
-                m.stock,
-                t.id_theme,
-                t.libelle AS theme_label,
-                r.id_regime,
-                r.libelle AS regime_label
-            FROM menus m
-            INNER JOIN themes t
-                ON m.theme = t.id_theme
-            INNER JOIN regimes r
-                ON m.regime = r.id_regime
-            WHERE m.id_menu = :id
-        ';
-
-        $statement = $this->pdo->prepare($sql);
-
-        $statement->execute([
-            'id' => $id
-        ]);
-
-        $data = $statement->fetch(PDO::FETCH_ASSOC);
-
-        if ($data === false) {
-            return null;
+        if (self::$allMenusCache === null) {
+            $this->findAll();
         }
 
-        return $this->hydrate($data);
+        return self::$allMenusCache[$id] ?? null;
     }
 
     public function findAll(): array {
+        if (self::$allMenusCache !== null) {
+            return array_values(self::$allMenusCache);
+        }
+
         $sql = '
             SELECT
                 m.id_menu,
@@ -81,13 +65,14 @@ class MenuRepository {
 
         $statement = $this->pdo->query($sql);
 
-        $menus = [];
+        self::$allMenusCache = [];
 
         while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $menus[] = $this->hydrate($data);
+            $menu = $this->hydrate($data);
+            self::$allMenusCache[$menu->getId()] = $menu;
         }
 
-        return $menus;
+        return array_values(self::$allMenusCache);
     }
 
     public function findByFilters(array $filters): array {
@@ -236,6 +221,8 @@ class MenuRepository {
             'people' => $people
         ]);
 
+        self::clearCache();
+
         return $statement->rowCount() === 1;
     }
 
@@ -252,6 +239,8 @@ class MenuRepository {
             'menuId' => $menuId,
             'people' => $people
         ]);
+
+        self::clearCache();
 
         return $statement->rowCount() === 1;
     }
@@ -306,6 +295,7 @@ class MenuRepository {
 
         $this->syncDishes($menuId, $dishIds);
         $this->photoMenuRepository->replaceMenuPhotos($menuId, $mainPhotoPath);
+        self::clearCache();
 
         return $menuId;
     }
@@ -355,6 +345,7 @@ class MenuRepository {
 
         $this->syncDishes($id, $dishIds);
         $this->photoMenuRepository->replaceMenuPhotos($id, $mainPhotoPath);
+        self::clearCache();
 
         return true;
     }
@@ -368,7 +359,9 @@ class MenuRepository {
         if ($ordersCount > 0) {
             // Si des commandes historiques existent, on passe le stock à 0 pour préserver l'intégrité référentielle
             $zeroStmt = $this->pdo->prepare('UPDATE menus SET stock = 0 WHERE id_menu = :id');
-            return $zeroStmt->execute(['id' => $id]);
+            $updated = $zeroStmt->execute(['id' => $id]);
+            self::clearCache();
+            return $updated;
         }
 
         $delDishes = $this->pdo->prepare('DELETE FROM menus_plats WHERE menu = :id');
@@ -377,8 +370,11 @@ class MenuRepository {
         $this->photoMenuRepository->deleteByMenuId($id);
 
         $delMenu = $this->pdo->prepare('DELETE FROM menus WHERE id_menu = :id');
+        $deleted = $delMenu->execute(['id' => $id]);
 
-        return $delMenu->execute(['id' => $id]);
+        self::clearCache();
+
+        return $deleted;
     }
 
     private function syncDishes(int $menuId, array $dishIds): void {

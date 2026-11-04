@@ -11,8 +11,15 @@ use PDO;
 class UtilisateurRepository {
     private PDO $pdo;
 
+    /** @var ?array<int, Utilisateur> */
+    private static ?array $byIdCache = null;
+
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
+    }
+
+    public static function clearCache(): void {
+        self::$byIdCache = null;
     }
 
     public function findByEmail(string $email): ?Utilisateur {
@@ -53,40 +60,38 @@ class UtilisateurRepository {
     }
 
     public function findById(int $id): ?Utilisateur {
-        $sql = '
-            SELECT
-                u.id_utilisateur,
-                u.nom,
-                u.prenom,
-                u.email,
-                u.mot_de_passe,
-                u.telephone,
-                u.adresse,
-                u.code_postal,
-                u.ville,
-                u.photo,
-                u.actif,
-                r.id_role,
-                r.libelle AS role_label
-            FROM utilisateurs u
-            INNER JOIN roles r
-                ON u.role = r.id_role
-            WHERE u.id_utilisateur = :id
-        ';
+        if (self::$byIdCache === null) {
+            self::$byIdCache = [];
 
-        $statement = $this->pdo->prepare($sql);
+            $sql = '
+                SELECT
+                    u.id_utilisateur,
+                    u.nom,
+                    u.prenom,
+                    u.email,
+                    u.mot_de_passe,
+                    u.telephone,
+                    u.adresse,
+                    u.code_postal,
+                    u.ville,
+                    u.photo,
+                    u.actif,
+                    r.id_role,
+                    r.libelle AS role_label
+                FROM utilisateurs u
+                INNER JOIN roles r
+                    ON u.role = r.id_role
+            ';
 
-        $statement->execute([
-            'id' => $id
-        ]);
+            $statement = $this->pdo->query($sql);
 
-        $data = $statement->fetch(PDO::FETCH_ASSOC);
-
-        if ($data === false) {
-            return null;
+            while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $user = $this->hydrate($data);
+                self::$byIdCache[$user->getId()] = $user;
+            }
         }
 
-        return $this->hydrate($data);
+        return self::$byIdCache[$id] ?? null;
     }
 
     /**
@@ -189,6 +194,8 @@ class UtilisateurRepository {
             'role' => $roleId
         ]);
 
+        self::clearCache();
+
         return (int) $this->pdo->lastInsertId();
     }
 
@@ -204,11 +211,15 @@ class UtilisateurRepository {
 
         $statement = $this->pdo->prepare($sql);
 
-        return $statement->execute([
+        $updated = $statement->execute([
             'active' => $active ? 1 : 0,
             'id' => $userId,
             'role_label' => 'Employé'
         ]);
+
+        self::clearCache();
+
+        return $updated;
     }
 
     public function updateProfile(
@@ -236,7 +247,7 @@ class UtilisateurRepository {
 
         $statement = $this->pdo->prepare($sql);
 
-        return $statement->execute([
+        $updated = $statement->execute([
             'last_name' => $lastName,
             'first_name' => $firstName,
             'email' => $email,
@@ -246,6 +257,10 @@ class UtilisateurRepository {
             'city' => $city,
             'id' => $userId
         ]);
+
+        self::clearCache();
+
+        return $updated;
     }
 
     public function createClient(
@@ -310,6 +325,8 @@ class UtilisateurRepository {
             'photo' => 'images/profile-0.jpg',
             'role' => $roleId
         ]);
+
+        self::clearCache();
 
         return (int) $this->pdo->lastInsertId();
     }
@@ -384,10 +401,14 @@ class UtilisateurRepository {
 
         $statement = $this->pdo->prepare($sql);
 
-        return $statement->execute([
+        $updated = $statement->execute([
             'password_hash' => $passwordHash,
             'id' => $userId
         ]);
+
+        self::clearCache();
+
+        return $updated;
     }
 
     private function hydrate(array $data): Utilisateur {

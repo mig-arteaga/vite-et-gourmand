@@ -10,6 +10,9 @@ use PDO;
 class PhotoMenuRepository {
     private PDO $pdo;
 
+    /** @var ?array<int, PhotoMenu[]> */
+    private static ?array $byMenuCache = null;
+
     private const AVAILABLE_PHOTOS = [
         'images/menu-1-1.jpg',
         'images/menu-1-2.jpg',
@@ -27,38 +30,41 @@ class PhotoMenuRepository {
         $this->pdo = $pdo;
     }
 
+    public static function clearCache(): void {
+        self::$byMenuCache = null;
+    }
+
     public function getAvailablePhotos(): array {
         return self::AVAILABLE_PHOTOS;
     }
 
     public function findByMenuId(int $menuId): array {
-        $sql = '
-            SELECT
-                id_photo,
-                chemin,
-                ordre
-            FROM photos_menu
-            WHERE menu = :menuId
-            ORDER BY ordre
-        ';
+        if (self::$byMenuCache === null) {
+            self::$byMenuCache = [];
 
-        $statement = $this->pdo->prepare($sql);
+            $sql = '
+                SELECT
+                    menu,
+                    id_photo,
+                    chemin,
+                    ordre
+                FROM photos_menu
+                ORDER BY menu, ordre
+            ';
 
-        $statement->execute([
-            'menuId' => $menuId
-        ]);
+            $statement = $this->pdo->query($sql);
 
-        $photos = [];
-
-        while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $photos[] = new PhotoMenu(
-                (int) $data['id_photo'],
-                $data['chemin'],
-                (int) $data['ordre']
-            );
+            while ($data = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $mId = (int) $data['menu'];
+                self::$byMenuCache[$mId][] = new PhotoMenu(
+                    (int) $data['id_photo'],
+                    $data['chemin'],
+                    (int) $data['ordre']
+                );
+            }
         }
 
-        return $photos;
+        return self::$byMenuCache[$menuId] ?? [];
     }
 
     public function replaceMenuPhotos(int $menuId, string $mainPhotoPath): void {
@@ -90,10 +96,13 @@ class PhotoMenuRepository {
                 'ordre' => $order
             ]);
         }
+
+        self::clearCache();
     }
 
     public function deleteByMenuId(int $menuId): void {
         $statement = $this->pdo->prepare('DELETE FROM photos_menu WHERE menu = :menuId');
         $statement->execute(['menuId' => $menuId]);
+        self::clearCache();
     }
 }

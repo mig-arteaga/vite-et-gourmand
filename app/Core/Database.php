@@ -8,7 +8,13 @@ use PDO;
 use PDOException;
 
 class Database {
+    private static ?PDO $instance = null;
+
     public static function connect(): PDO {
+        if (self::$instance !== null) {
+            return self::$instance;
+        }
+
         if (getenv('MYSQLHOST')) {
             $host = getenv('MYSQLHOST');
             $dbname = getenv('MYSQLDATABASE');
@@ -27,15 +33,16 @@ class Database {
             $pdo = new PDO(
                 "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4",
                 $username,
-                $password
+                $password,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
             );
 
-            $pdo->setAttribute(
-                PDO::ATTR_ERRMODE,
-                PDO::ERRMODE_EXCEPTION
-            );
+            self::$instance = $pdo;
 
-            return $pdo;
+            return self::$instance;
         } catch (PDOException $e) {
             throw $e;
         }

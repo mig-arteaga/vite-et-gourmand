@@ -13,10 +13,17 @@ class CommandeRepository {
     private UtilisateurRepository $utilisateurRepository;
     private MenuRepository $menuRepository;
 
+    /** @var ?array<int, array<int, array{statut: string, date_modification: DateTimeImmutable}>> */
+    private static ?array $historyCache = null;
+
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
         $this->utilisateurRepository = new UtilisateurRepository($pdo);
         $this->menuRepository = new MenuRepository($pdo);
+    }
+
+    public static function clearHistoryCache(): void {
+        self::$historyCache = null;
     }
 
     public function create(Commande $commande): int {
@@ -353,31 +360,35 @@ class CommandeRepository {
             'commande' => $commandeId,
             'statut' => $status
         ]);
+
+        self::clearHistoryCache();
     }
 
     public function findStatusHistory(int $commandeId): array {
-        $sql = '
-            SELECT
-                statut,
-                date_modification
-            FROM commande_suivi
-            WHERE commande = :commande
-            ORDER BY date_modification ASC, id_suivi ASC
-        ';
+        if (self::$historyCache === null) {
+            self::$historyCache = [];
 
-        $statement = $this->pdo->prepare($sql);
-        $statement->execute(['commande' => $commandeId]);
+            $sql = '
+                SELECT
+                    commande,
+                    statut,
+                    date_modification
+                FROM commande_suivi
+                ORDER BY commande ASC, date_modification ASC, id_suivi ASC
+            ';
 
-        $history = [];
+            $statement = $this->pdo->query($sql);
 
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $history[] = [
-                'statut' => $row['statut'],
-                'date_modification' => new DateTimeImmutable($row['date_modification'])
-            ];
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                $cId = (int) $row['commande'];
+                self::$historyCache[$cId][] = [
+                    'statut' => $row['statut'],
+                    'date_modification' => new DateTimeImmutable($row['date_modification'])
+                ];
+            }
         }
 
-        return $history;
+        return self::$historyCache[$commandeId] ?? [];
     }
 
     public function updateStatus(int $id, string $status, bool $returned): bool {
