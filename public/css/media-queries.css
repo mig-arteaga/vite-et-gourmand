@@ -247,9 +247,11 @@
 
     /* Espace employé */
     .employe-tabs {
+        width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: 0.6rem;
+        border-radius: 2rem;
     }
 
     .employe-tab-btn {
@@ -278,8 +280,11 @@
     }
 
     .admin-tabs {
+        width: 100%;
+        display: flex;
         flex-direction: column;
         align-items: stretch;
+        border-radius: 2rem;
     }
 
     .admin-tab-btn,
@@ -290,8 +295,11 @@
 
     /* Espace client */
     .compte-tabs {
+        width: 100%;
+        display: flex;
         flex-direction: column;
         align-items: stretch;
+        border-radius: 2rem;
     }
 
     .compte-tab-btn {

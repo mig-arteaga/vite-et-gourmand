@@ -37,7 +37,6 @@
                     class="admin-tab-btn <?= $activeTab === 'employes' ? 'active' : '' ?>"
                     data-admin-tab="employes"
                 >
-                    <i class="fa-solid fa-user-shield"></i>
                     <span>Comptes employés</span>
                 </button>
 
@@ -50,13 +49,11 @@
                     class="admin-tab-btn <?= $activeTab === 'statistiques' ? 'active' : '' ?>"
                     data-admin-tab="statistiques"
                 >
-                    <i class="fa-solid fa-chart-column"></i>
-                    <span>Statistiques & Chiffre d'affaires</span>
+                    <span>Statistiques</span>
                 </button>
 
                 <a href="/employe" class="admin-shortcut-link">
-                    <i class="fa-solid fa-briefcase"></i>
-                    <span>Accéder à l'espace employé</span>
+                    <span>Espace employé</span>
                 </a>
             </div>
 
@@ -81,9 +78,9 @@
                     <div class="employe-card-header employe-card-header-flex">
                         <div>
                             <h3 class="employe-card-title">Gestion des comptes employés (<?= count($employees ?? []) ?>)</h3>
-                            <p class="employe-card-subtitle">
-                                Créez de nouveaux accès employés (la création d'un compte administrateur n'est pas autorisée) et activez ou suspendez les comptes existants.
-                            </p>
+                            <!-- <p class="employe-card-subtitle">
+                                Créez de nouveaux accès employés et activez ou suspendez les comptes existants.
+                            </p> -->
                         </div>
                         <button
                             type="button"
@@ -181,7 +178,7 @@
 
                                 <div class="employe-form-submit-row">
                                     <button type="submit" class="employe-action-btn btn-approve">
-                                        <i class="fa-solid fa-check"></i> Créer le compte employé
+                                        <i class="fa-solid fa-check"></i> Créer
                                     </button>
                                 </div>
                             </form>
@@ -217,7 +214,7 @@
                                                     <?= htmlspecialchars($employee->getRole()->getLabel(), ENT_QUOTES, 'UTF-8') ?>
                                                 </span>
                                                 <span class="employe-status-badge <?= $isActive ? 'badge-valide' : 'badge-refuse' ?>">
-                                                    <?= $isActive ? 'Compte actif' : 'Compte désactivé' ?>
+                                                    <?= $isActive ? 'Actif' : 'Désactivé' ?>
                                                 </span>
                                             </div>
                                         </div>
@@ -229,11 +226,11 @@
                                                 <input type="hidden" name="actif" value="<?= $isActive ? '0' : '1' ?>">
                                                 <?php if ($isActive): ?>
                                                     <button type="submit" class="employe-action-btn btn-reject">
-                                                        <i class="fa-solid fa-user-slash"></i> Désactiver le compte
+                                                        <i class="fa-solid fa-user-slash"></i> Désactiver
                                                     </button>
                                                 <?php else: ?>
                                                     <button type="submit" class="employe-action-btn btn-approve">
-                                                        <i class="fa-solid fa-user-check"></i> Réactiver le compte
+                                                        <i class="fa-solid fa-user-check"></i> Réactiver
                                                     </button>
                                                 <?php endif; ?>
                                             </form>
@@ -272,10 +269,10 @@
                 <div class="employe-card">
                     <div class="employe-card-header employe-card-header-flex">
                         <div>
-                            <h3 class="employe-card-title">Calcul du chiffre d'affaires et filtres</h3>
-                            <p class="employe-card-subtitle">
+                            <h3 class="employe-card-title">Calcul du chiffre d'affaires</h3>
+                            <!-- <p class="employe-card-subtitle">
                                 Filtrez les commandes par menu et/ou par période de livraison pour calculer le chiffre d'affaires correspondant.
-                            </p>
+                            </p> -->
                         </div>
                         <span class="employe-status-badge badge-encours" title="Source de données statistiques">
                             <i class="fa-solid fa-database"></i> Source NoSQL : <?= htmlspecialchars((string) $statsEngine, ENT_QUOTES, 'UTF-8') ?>

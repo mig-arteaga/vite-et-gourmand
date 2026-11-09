@@ -37,8 +37,7 @@
                     class="compte-tab-btn <?= $activeTab === 'commandes' ? 'active' : '' ?>"
                     data-compte-tab="commandes"
                 >
-                    <i class="fa-solid fa-receipt"></i>
-                    <span>Mes commandes</span>
+                    <span>Commandes</span>
                 </button>
 
                 <button
@@ -50,8 +49,7 @@
                     class="compte-tab-btn <?= $activeTab === 'profil' ? 'active' : '' ?>"
                     data-compte-tab="profil"
                 >
-                    <i class="fa-solid fa-user-pen"></i>
-                    <span>Mes informations personnelles</span>
+                    <span>Informations personnelles</span>
                 </button>
             </div>
 
@@ -338,7 +336,7 @@
 
                                                     <div class="employe-form-submit-row">
                                                         <button type="submit" class="employe-action-btn btn-approve">
-                                                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications
+                                                            <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                                                         </button>
                                                     </div>
                                                 </form>
@@ -585,7 +583,7 @@
 
                                 <div class="employe-form-submit-row">
                                     <button type="submit" class="employe-action-btn btn-approve">
-                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer mes informations
+                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                                     </button>
                                 </div>
                             </form>

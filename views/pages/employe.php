@@ -37,7 +37,6 @@
                     class="employe-tab-btn <?= $activeTab === 'commandes' ? 'active' : '' ?>"
                     data-tab="commandes"
                 >
-                    <i class="fa-solid fa-receipt"></i>
                     <span>Commandes</span>
                 </button>
 
@@ -50,7 +49,6 @@
                     class="employe-tab-btn <?= $activeTab === 'avis' ? 'active' : '' ?>"
                     data-tab="avis"
                 >
-                    <i class="fa-solid fa-star"></i>
                     <span>Avis clients</span>
                 </button>
 
@@ -63,7 +61,6 @@
                     class="employe-tab-btn <?= $activeTab === 'menus' ? 'active' : '' ?>"
                     data-tab="menus"
                 >
-                    <i class="fa-solid fa-utensils"></i>
                     <span>Menus & Plats</span>
                 </button>
 
@@ -76,7 +73,6 @@
                     class="employe-tab-btn <?= $activeTab === 'horaires' ? 'active' : '' ?>"
                     data-tab="horaires"
                 >
-                    <i class="fa-solid fa-clock"></i>
                     <span>Horaires</span>
                 </button>
             </div>
@@ -277,7 +273,7 @@
                                                         class="employe-action-btn btn-reject js-toggle-cancel"
                                                         data-target="cancel-box-<?= (int) $order->getId() ?>"
                                                     >
-                                                        <i class="fa-solid fa-ban"></i> Annuler la commande
+                                                        <i class="fa-solid fa-ban"></i> Annuler
                                                     </button>
                                                 <?php endif; ?>
                                             </div>
@@ -581,7 +577,7 @@
 
                                 <div class="employe-form-submit-row">
                                     <button type="submit" class="employe-action-btn btn-approve">
-                                        <i class="fa-solid fa-check"></i> Enregistrer le menu
+                                        <i class="fa-solid fa-check"></i> Enregistrer
                                     </button>
                                 </div>
                             </form>
@@ -811,7 +807,7 @@
 
                                             <div class="employe-form-submit-row">
                                                 <button type="submit" class="employe-action-btn btn-approve">
-                                                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications
+                                                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                                                 </button>
                                             </div>
                                         </form>
@@ -1013,7 +1009,7 @@
 
                                             <div class="employe-form-submit-row">
                                                 <button type="submit" class="employe-action-btn btn-approve">
-                                                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer les modifications
+                                                    <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                                                 </button>
                                             </div>
                                         </form>
@@ -1110,7 +1106,7 @@
 
                                 <div class="employe-form-submit-row">
                                     <button type="submit" class="employe-action-btn btn-approve">
-                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer les horaires
+                                        <i class="fa-solid fa-floppy-disk"></i> Enregistrer
                                     </button>
                                 </div>
                             </form>
