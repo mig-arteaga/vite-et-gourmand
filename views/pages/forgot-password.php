@@ -64,12 +64,12 @@
                         >
 
                         <div class="login-buttons">
-                            <button type="submit" class="btn body-btn btn-underline">
-                                Envoyer le lien
-                            </button>
                             <a href="/login" class="btn body-btn btn-underline">
                                 Retour connexion
                             </a>
+                            <button type="submit" class="btn body-btn btn-underline">
+                                Envoyer le lien
+                            </button>
                         </div>
                     </div>
                 </form>

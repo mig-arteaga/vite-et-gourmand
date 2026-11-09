@@ -111,7 +111,7 @@
                                     type="search"
                                     id="employe-order-client-filter"
                                     class="employe-input"
-                                    placeholder="Ex : Josh Peck, j.peck@mail.com..."
+                                    placeholder="Ex : John Doe, j.doe@mail.com..."
                                 >
                             </div>
                         </div>

@@ -67,12 +67,12 @@
                         </div>
 
                         <div class="login-buttons">
-                            <button type="submit" class="btn body-btn btn-underline">
-                                Se connecter
-                            </button>
                             <a href="/" class="btn body-btn btn-underline">
                                 Accueil
                             </a>
+                            <button type="submit" class="btn body-btn btn-underline">
+                                Se connecter
+                            </button>
                         </div>
 
                         <div class="auth-switch-row">

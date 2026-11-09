@@ -158,12 +158,12 @@
                         </p>
 
                         <div class="login-buttons">
-                            <button type="submit" class="btn body-btn btn-underline">
-                                S'inscrire
-                            </button>
                             <a href="/login" class="btn body-btn btn-underline">
                                 Déjà inscrit ?
                             </a>
+                            <button type="submit" class="btn body-btn btn-underline">
+                                S'inscrire
+                            </button>
                         </div>
                     </div>
                 </form>

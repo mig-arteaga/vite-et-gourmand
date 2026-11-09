@@ -85,12 +85,12 @@
                             </p>
 
                             <div class="login-buttons">
-                                <button type="submit" class="btn body-btn btn-underline">
-                                    Valider
-                                </button>
                                 <a href="/login" class="btn body-btn btn-underline">
                                     Annuler
                                 </a>
+                                <button type="submit" class="btn body-btn btn-underline">
+                                    Valider
+                                </button>
                             </div>
                         <?php endif; ?>
                     </div>
