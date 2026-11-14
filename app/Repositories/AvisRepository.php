@@ -29,7 +29,7 @@ class AvisRepository {
                 statut
             FROM avis
             WHERE statut = :status
-            ORDER BY date_avis
+            ORDER BY date_avis DESC, id_avis DESC
         ';
 
         $statement = $this->pdo->prepare($sql);

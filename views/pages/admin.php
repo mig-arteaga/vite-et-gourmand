@@ -170,7 +170,7 @@
                                         <input
                                             type="text"
                                             class="employe-input"
-                                            value="Employé (création de compte Administrateur non autorisée)"
+                                            value="Employé"
                                             disabled
                                         >
                                     </div>

@@ -5,9 +5,9 @@
 <!-- Header -->
 <header id="header">
     <div class="container">
-        <nav class="nav">
-            <a href="/" class="logo-link">
-                <img src="images/vg-logo-1.svg" alt="Vite & Gourmand - Accueil" class="title-img">
+        <nav class="nav" aria-label="Navigation principale">
+            <a href="/" class="logo-link" aria-label="Vite & Gourmand - Accueil">
+                <img src="images/vg-logo-1.svg" alt="Vite & Gourmand Logo" class="title-img">
             </a>
             <ul class="nav-list" id="nav-list">
                 <li class="nav-item">
