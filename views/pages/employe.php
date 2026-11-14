@@ -267,7 +267,7 @@
                                                     </button>
                                                 </form>
 
-                                                <?php if ($orderStatus !== 'Terminée'): ?>
+                                                <?php if ($orderStatus === 'En attente'): ?>
                                                     <button
                                                         type="button"
                                                         class="employe-action-btn btn-reject js-toggle-cancel"
@@ -278,7 +278,7 @@
                                                 <?php endif; ?>
                                             </div>
 
-                                            <?php if ($orderStatus !== 'Terminée'): ?>
+                                            <?php if ($orderStatus === 'En attente'): ?>
                                                 <!-- Formulaire d'annulation (nécessite contact client + motif selon l'énoncé) -->
                                                 <div id="cancel-box-<?= (int) $order->getId() ?>" class="employe-cancel-box" hidden>
                                                     <form method="post" action="/employe/commandes/annuler" class="employe-cancel-form">

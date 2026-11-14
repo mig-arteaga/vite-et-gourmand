@@ -139,8 +139,7 @@ class CommandeController {
 
         if (
             $order === null ||
-            $order->getStatus() === 'Terminée' ||
-            $order->getStatus() === 'Annulée'
+            $order->getStatus() === 'En attente'
         ) {
             return false;
         }
