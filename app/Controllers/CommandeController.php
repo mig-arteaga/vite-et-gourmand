@@ -139,7 +139,7 @@ class CommandeController {
 
         if (
             $order === null ||
-            $order->getStatus() === 'En attente'
+            $order->getStatus() !== 'En attente'
         ) {
             return false;
         }

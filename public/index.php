@@ -5,7 +5,9 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Core\Router;
+use App\Core\Session;
 use App\Core\Database;
+use App\Core\Csrf;
 use App\Controllers\MenuController;
 use App\Controllers\AuthController;
 use App\Controllers\ContactController;
@@ -14,25 +16,33 @@ use App\Controllers\DistanceController;
 use App\Controllers\HoraireController;
 use App\Controllers\AdminController;
 use App\Controllers\CompteController;
+use App\Controllers\AvisController;
 use App\Repositories\MenuRepository;
 use App\Repositories\ThemeRepository;
 use App\Repositories\RegimeRepository;
 use App\Repositories\CommandeRepository;
 use App\Repositories\UtilisateurRepository;
 use App\Repositories\HoraireRepository;
+use App\Repositories\AvisRepository;
+use App\Repositories\PlatRepository;
+use App\Repositories\AllergeneRepository;
+use App\Repositories\PhotoMenuRepository;
+use App\Repositories\StatsNoSqlRepository;
 use App\Services\AuthService;
+use App\Services\MenuService;
 use App\Services\DistanceService;
 use App\Services\CommandeService;
+use App\Services\MailService;
 
 $router = new Router();
 
 $router->get('/', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
 
-    $avisController = new \App\Controllers\AvisController(
-        new \App\Repositories\AvisRepository($pdo)
+    $avisController = new AvisController(
+        new AvisRepository($pdo)
     );
 
     $horaireController = new HoraireController(
@@ -46,21 +56,21 @@ $router->get('/', function () {
 });
 
 $router->get('/menus', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
 
-    $menuController = new \App\Controllers\MenuController(
-        new \App\Repositories\MenuRepository($pdo),
-        new \App\Repositories\ThemeRepository($pdo),
-        new \App\Repositories\RegimeRepository($pdo)
+    $menuController = new MenuController(
+        new MenuRepository($pdo),
+        new ThemeRepository($pdo),
+        new RegimeRepository($pdo)
     );
 
     $horaireController = new HoraireController(
         new HoraireRepository($pdo)
     );
 
-    $menuService = new \App\Services\MenuService();
+    $menuService = new MenuService();
 
     $menus = $menuController->getAll();
     $horaires = $horaireController->getAll();
@@ -69,7 +79,7 @@ $router->get('/menus', function () {
 });
 
 $router->get('/contact', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
@@ -78,7 +88,7 @@ $router->get('/contact', function () {
 });
 
 $router->get('/nous', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
@@ -87,7 +97,7 @@ $router->get('/nous', function () {
 });
 
 $router->get('/login', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $authFlash = $_SESSION['auth_flash'] ?? null;
     unset($_SESSION['auth_flash']);
@@ -102,9 +112,9 @@ $router->get('/login', function () {
 });
 
 $router->get('/register', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (\App\Core\Session::isLoggedIn()) {
+    if (Session::isLoggedIn()) {
         header('Location: /compte');
         exit;
     }
@@ -122,7 +132,7 @@ $router->get('/register', function () {
 });
 
 $router->get('/forgot-password', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $authFlash = $_SESSION['auth_flash'] ?? null;
     unset($_SESSION['auth_flash']);
@@ -134,7 +144,7 @@ $router->get('/forgot-password', function () {
 });
 
 $router->get('/reset-password', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $authFlash = $_SESSION['auth_flash'] ?? null;
     unset($_SESSION['auth_flash']);
@@ -155,7 +165,7 @@ $router->get('/reset-password', function () {
 });
 
 $router->get('/logout', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
 
@@ -172,7 +182,7 @@ $router->get('/logout', function () {
 });
 
 $router->get('/commande', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
@@ -211,7 +221,7 @@ $router->get('/commande', function () {
 });
 
 $router->get('/compte', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
@@ -233,7 +243,7 @@ $router->get('/compte', function () {
         new CommandeRepository($pdo),
         new MenuRepository($pdo),
         new CommandeService(),
-        new \App\Repositories\AvisRepository($pdo)
+        new AvisRepository($pdo)
     );
 
     $currentUser = $compteController->getUser($userId);
@@ -244,13 +254,13 @@ $router->get('/compte', function () {
     unset($_SESSION['compte_flash']);
 
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
-    $csrfToken = \App\Core\Csrf::generate();
+    $csrfToken = Csrf::generate();
 
     require __DIR__ . '/../views/pages/compte.php';
 });
 
 $router->get('/employe', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé'
     ]);
@@ -264,8 +274,8 @@ $router->get('/employe', function () {
 
     $pdo = Database::connect();
 
-    $avisController = new \App\Controllers\AvisController(
-        new \App\Repositories\AvisRepository($pdo)
+    $avisController = new AvisController(
+        new AvisRepository($pdo)
     );
 
     $commandeController = new CommandeController(
@@ -279,9 +289,9 @@ $router->get('/employe', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo),
-        new \App\Repositories\AllergeneRepository($pdo),
-        new \App\Repositories\PhotoMenuRepository($pdo)
+        new PlatRepository($pdo),
+        new AllergeneRepository($pdo),
+        new PhotoMenuRepository($pdo)
     );
 
     $horaireController = new HoraireController(
@@ -298,13 +308,13 @@ $router->get('/employe', function () {
     $allergens = $menuController->getAllAllergens();
     $availablePhotos = $menuController->getAvailablePhotos();
     $horaires = $horaireController->getAll();
-    $csrfToken = \App\Core\Csrf::generate();
+    $csrfToken = Csrf::generate();
 
     require __DIR__ . '/../views/pages/employe.php';
 });
 
 $router->get('/admin', function () {
-    \App\Core\Session::requireRoles(['Administrateur']);
+    Session::requireRoles(['Administrateur']);
 
     $activeTab = $_GET['tab'] ?? 'employes';
     $allowedTabs = ['employes', 'statistiques'];
@@ -318,8 +328,8 @@ $router->get('/admin', function () {
     $adminController = new AdminController(
         new UtilisateurRepository($pdo),
         new CommandeRepository($pdo),
-        new \App\Services\MailService(),
-        new \App\Repositories\StatsNoSqlRepository($pdo)
+        new MailService(),
+        new StatsNoSqlRepository($pdo)
     );
 
     $menuController = new MenuController(
@@ -354,13 +364,13 @@ $router->get('/admin', function () {
     unset($_SESSION['admin_flash']);
 
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
-    $csrfToken = \App\Core\Csrf::generate();
+    $csrfToken = Csrf::generate();
 
     require __DIR__ . '/../views/pages/admin.php';
 });
 
 $router->get('/cgv', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
@@ -369,7 +379,7 @@ $router->get('/cgv', function () {
 });
 
 $router->get('/legal', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     $pdo = Database::connect();
     $horaires = (new HoraireController(new HoraireRepository($pdo)))->getAll();
@@ -393,9 +403,9 @@ $router->get('/menus/filter-values', function () {
 });
 
 $router->post('/login', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -406,9 +416,9 @@ $router->post('/login', function () {
 
     $pdo = Database::connect();
 
-    $authController = new \App\Controllers\AuthController(
-        new \App\Services\AuthService(
-            new \App\Repositories\UtilisateurRepository($pdo)
+    $authController = new AuthController(
+        new AuthService(
+            new UtilisateurRepository($pdo)
         )
     );
 
@@ -430,9 +440,9 @@ $router->post('/login', function () {
 });
 
 $router->post('/register', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -482,9 +492,9 @@ $router->post('/register', function () {
 });
 
 $router->post('/forgot-password', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -510,9 +520,9 @@ $router->post('/forgot-password', function () {
 });
 
 $router->post('/reset-password', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -551,7 +561,7 @@ $router->post('/menus/filter', function () {
         new RegimeRepository($pdo)
     );
 
-    $menuService = new \App\Services\MenuService();
+    $menuService = new MenuService();
 
     $filters = [
         'minPrice' => (int) ($_POST['minPrice'] ?? 0),
@@ -627,9 +637,9 @@ $router->post('/commande/change-menu', function () {
 });
 
 $router->post('/commande/distance', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         header('Content-Type: application/json; charset=utf-8');
 
@@ -701,12 +711,12 @@ $router->post('/commande/distance', function () {
 });
 
 $router->post('/commande/create', function () {
-    \App\Core\Session::start();
+    Session::start();
 
     header('Content-Type: application/json; charset=utf-8');
 
     // Vérification CSRF
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
 
         echo json_encode([
@@ -739,7 +749,7 @@ $router->post('/commande/create', function () {
     }
 
     // Vérification du jeton de commande dans la base de données
-    $pdo = \App\Core\Database::connect();
+    $pdo = Database::connect();
     $commandeRepository = new CommandeRepository($pdo);
 
     $existingOrderId = $commandeRepository->findIdByOrderToken(
@@ -996,9 +1006,9 @@ $router->post('/commande/create', function () {
         // Validation de la transaction
         $pdo->commit();
 
-        (new \App\Repositories\StatsNoSqlRepository($pdo))->syncFromRelational();
+        (new StatsNoSqlRepository($pdo))->syncFromRelational();
 
-        $mailService = new \App\Services\MailService();
+        $mailService = new MailService();
         $mailService->sendOrderConfirmation(
             $user->getEmail(),
             $user->getFirstName(),
@@ -1138,9 +1148,9 @@ $router->post('/commande/calculate-price', function () {
 });
 
 $router->post('/contact', function () {
-    \App\Core\Session::start();
+    Session::start();
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1160,12 +1170,12 @@ $router->post('/contact', function () {
 });
 
 $router->post('/employe/avis/statut', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1184,8 +1194,8 @@ $router->post('/employe/avis/statut', function () {
     if ($reviewId !== false) {
         $pdo = Database::connect();
 
-        $avisController = new \App\Controllers\AvisController(
-            new \App\Repositories\AvisRepository($pdo)
+        $avisController = new AvisController(
+            new AvisRepository($pdo)
         );
 
         $avisController->moderateReview((int) $reviewId, $status);
@@ -1196,12 +1206,12 @@ $router->post('/employe/avis/statut', function () {
 });
 
 $router->post('/employe/commandes/statut', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1241,12 +1251,12 @@ $router->post('/employe/commandes/statut', function () {
 });
 
 $router->post('/employe/commandes/annuler', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1288,9 +1298,9 @@ $router->post('/employe/commandes/annuler', function () {
 });
 
 $router->post('/employe/menus/create', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1302,9 +1312,9 @@ $router->post('/employe/menus/create', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo),
-        new \App\Repositories\AllergeneRepository($pdo),
-        new \App\Repositories\PhotoMenuRepository($pdo)
+        new PlatRepository($pdo),
+        new AllergeneRepository($pdo),
+        new PhotoMenuRepository($pdo)
     );
 
     $dishIds = is_array($_POST['plats'] ?? null) ? $_POST['plats'] : [];
@@ -1327,9 +1337,9 @@ $router->post('/employe/menus/create', function () {
 });
 
 $router->post('/employe/menus/update', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1341,9 +1351,9 @@ $router->post('/employe/menus/update', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo),
-        new \App\Repositories\AllergeneRepository($pdo),
-        new \App\Repositories\PhotoMenuRepository($pdo)
+        new PlatRepository($pdo),
+        new AllergeneRepository($pdo),
+        new PhotoMenuRepository($pdo)
     );
 
     $dishIds = is_array($_POST['plats'] ?? null) ? $_POST['plats'] : [];
@@ -1367,9 +1377,9 @@ $router->post('/employe/menus/update', function () {
 });
 
 $router->post('/employe/menus/delete', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1390,9 +1400,9 @@ $router->post('/employe/menus/delete', function () {
 });
 
 $router->post('/employe/plats/create', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1404,7 +1414,7 @@ $router->post('/employe/plats/create', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo)
+        new PlatRepository($pdo)
     );
 
     $allergenIds = is_array($_POST['allergenes'] ?? null) ? $_POST['allergenes'] : [];
@@ -1421,9 +1431,9 @@ $router->post('/employe/plats/create', function () {
 });
 
 $router->post('/employe/plats/update', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1435,7 +1445,7 @@ $router->post('/employe/plats/update', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo)
+        new PlatRepository($pdo)
     );
 
     $allergenIds = is_array($_POST['allergenes'] ?? null) ? $_POST['allergenes'] : [];
@@ -1453,9 +1463,9 @@ $router->post('/employe/plats/update', function () {
 });
 
 $router->post('/employe/plats/delete', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1467,7 +1477,7 @@ $router->post('/employe/plats/delete', function () {
         new MenuRepository($pdo),
         new ThemeRepository($pdo),
         new RegimeRepository($pdo),
-        new \App\Repositories\PlatRepository($pdo)
+        new PlatRepository($pdo)
     );
 
     $menuController->deleteDish((int) ($_POST['id_plat'] ?? 0));
@@ -1477,9 +1487,9 @@ $router->post('/employe/plats/delete', function () {
 });
 
 $router->post('/employe/horaires/update', function () {
-    \App\Core\Session::requireRoles(['Administrateur', 'Employé']);
+    Session::requireRoles(['Administrateur', 'Employé']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1504,9 +1514,9 @@ $router->post('/employe/horaires/update', function () {
 });
 
 $router->post('/admin/employes/create', function () {
-    \App\Core\Session::requireRoles(['Administrateur']);
+    Session::requireRoles(['Administrateur']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1531,9 +1541,9 @@ $router->post('/admin/employes/create', function () {
 });
 
 $router->post('/admin/employes/statut', function () {
-    \App\Core\Session::requireRoles(['Administrateur']);
+    Session::requireRoles(['Administrateur']);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1565,13 +1575,13 @@ $router->post('/admin/employes/statut', function () {
 });
 
 $router->post('/compte/profil/update', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1601,13 +1611,13 @@ $router->post('/compte/profil/update', function () {
 });
 
 $router->post('/compte/commandes/update', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1641,13 +1651,13 @@ $router->post('/compte/commandes/update', function () {
 });
 
 $router->post('/compte/commandes/cancel', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1674,13 +1684,13 @@ $router->post('/compte/commandes/cancel', function () {
 });
 
 $router->post('/compte/avis/create', function () {
-    \App\Core\Session::requireRoles([
+    Session::requireRoles([
         'Administrateur',
         'Employé',
         'Utilisateur'
     ]);
 
-    if (!\App\Core\Csrf::validate($_POST['csrf_token'] ?? null)) {
+    if (!Csrf::validate($_POST['csrf_token'] ?? null)) {
         http_response_code(403);
         echo 'Requête invalide (CSRF)';
         return;
@@ -1698,7 +1708,7 @@ $router->post('/compte/avis/create', function () {
         new CommandeRepository($pdo),
         new MenuRepository($pdo),
         new CommandeService(),
-        new \App\Repositories\AvisRepository($pdo)
+        new AvisRepository($pdo)
     );
 
     $_SESSION['compte_flash'] = $compteController->submitReview(
